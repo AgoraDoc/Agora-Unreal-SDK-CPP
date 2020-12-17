@@ -22,7 +22,10 @@ namespace agora {
 namespace rtc {
 namespace ue4 {
 
-/**
+/** @~chinese
+ * AgoraRtcChannel 类。
+ */
+/** @~english
 * Wrapper around agora::rtc::IRtcChannel
 */
 class AGORAPLUGIN_API AgoraRtcChannel
@@ -43,7 +46,15 @@ public:
    */
    static AgoraRtcChannel* createAgoraRtcChannel( agora::rtc::IChannel *channel );
 
-   /** Sets the channel event handler.
+   /** @~chinese
+    * 设置 AgoraRtcChannel 频道事件句柄。
+    *
+    * 设置 AgoraRtcChannel 频道事件句柄后，你可以监听 AgoraRtcChannel 的频道事件，以及相关质量数据报告。
+    *
+    * @param channelEh AgoraRtcChannel 对象的事件句柄。详见 \ref agora::rtc::IChannelEventHandler "IChannelEventHandler"。
+    */
+   /** @~english
+    Sets the channel event handler.
 
      After setting the channel event handler, you can listen for channel events and receive the statistics of the corresponding `AgoraRtcChannel` object.
 
