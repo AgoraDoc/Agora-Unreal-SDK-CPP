@@ -66,7 +66,44 @@ public:
      */
    int setChannelEventHandler( agora::rtc::IChannelEventHandler *channelEh );
 
-   /** Joins the channel with a user ID.
+    /** @~chinese
+     * 通过 UID 加入频道。
+
+     该方法与 IRtcEngine 类下的 `joinChannel` 方法有以下区别：
+
+     | IChannel::joinChannel                                                                                                                    | IRtcEngine::joinChannel                                                                                      |
+     |------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+     | 无 `channelId` 参数。因为创建 IChannel 对象时已指定了 `channelId`。                         | 需要填入可以标识频道的 `channelId`。                         |
+     | 加了 `options` 参数，可在加入频道前通过该参数设置是否订阅该频道的音视频流。                            | 无 `options` 参数。加入频道即默认订阅频道内的音视频流。 |
+     | 通过创建多个 IChannel 对象，并调用相应对象的 \ref IChannel joinChannel "joinChannel" 方法，实现同时加入多个频道。                    |只允许加入一个频道。|
+     | 通过该方法加入频道后，SDK 默认不发布本地音视频流到本频道，用户需要调用 \ref IChannel publish "publish" 方法进行发布。  |通过该方法加入频道后，SDK 默认发布音视频流发布到本频道。|
+
+     用户成功加入（切换）频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 `mute` 方法实现。
+
+     @note
+     - 该方法不支持相同的用户重复加入同一个频道。
+     - 我们建议不同频道中使用不同的 UID。
+     - 如果想要从不同的设备同时接入同一个频道，请确保每个设备上使用的 UID 是不同的。
+     - 请确保用于生成 Token 的 App ID 和创建 IRtcEngine 对象时用的 App ID 一致。
+
+     @param token 在 App 服务器端生成的用于鉴权的 Token：
+     - 安全要求不高：你可以使用控制台生成的临时 Token，详见 [获取临时 Token](https://docs.agora.io/cn/Agora%20Platform/token?platform=All%20Platforms#生成-token).
+     - 安全要求高：将值设为你的服务端生成的正式 Token，详见 [获取正式 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server?platform=All%20Platforms).
+     @param info （非必选项）开发者需加入的任何附加信息。一般可设置为空字符串，或频道相关信息。该信息不会传递给频道内的其他用户。
+     @param uid  用户 ID，32 位无符号整数。建议设置范围：1 到 2<sup>32</sup>-1，并保证唯一性。如果不指定（即设为 0），SDK 会自动分配一个，并在 \ref agora::rtc::IChannelEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" 回调中返回，App 层必须记住该返回值并维护，SDK 不对该返回值进行维护。
+     @param options 频道媒体设置选项: \ref agora::rtc::ChannelMediaOptions "ChannelMediaOptions"。
+
+     @return
+     - 0(ERR_OK): 方法调用成功。
+     - < 0: 方法调用失败。
+        - -2(ERR_INALID_ARGUMENT): 参数无效。
+        - -3(ERR_NOT_READY): SDK 初始化失败，请尝试重新初始化 SDK。
+        - -5(ERR_REFUSED): 调用被拒绝。可能有如下两个原因：
+           - 已经创建了一个同名的 IChannel 频道。
+           - 已经通过 IChannel 加入了一个频道，并在该 IChannel 频道中发布了音视频流。
+     */
+   /** @~english
+    Joins the channel with a user ID.
 
     This method differs from the `joinChannel` method in the `AgoraRtcEngine` class in the following aspects:
 
@@ -102,7 +139,46 @@ public:
                     agora::rtc::uid_t uid,
                     const agora::rtc::ChannelMediaOptions& options );
 
-   /** Joins the channel with a user account.
+    /** @~chinese
+     * 通过 User account 加入频道。
+
+     该方法与 IRtcEngine 类下的 `joinChannelWithUserAccount` 方法有以下区别：
+
+     | IChannel::joinChannelWithUserAccount                                                                                                     | IRtcEngine::joinChannelWithUserAccount                                                                                      |
+     |------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+     | 无 `channelId` 参数。因为创建 IChannel 对象时已指定了 `channelId`。                         | 需要填入可以标识频道的 `channelId`。                         |
+     | 加了 `options` 参数，可在加入频道前通过该参数设置是否订阅该频道的音视频流。                            | 无 `options` 参数。加入频道即默认订阅频道内的音视频流。 |
+     | 通过创建多个 IChannel 对象，并调用相应对象的 \ref IChannel joinChannelWithUserAccount "joinChannelWithUserAccount" 方法，实现同时加入多个频道。                    |只允许加入一个频道。|
+     | 通过该方法加入频道后，SDK 默认不发布本地音视频流到本频道，用户需要调用 \ref IChannel publish "publish" 方法进行发布。  |通过该方法加入频道后，SDK 默认发布音视频流发布到本频道。|
+
+     用户成功加入（切换）频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 `mute` 方法实现。
+
+     @note
+     - 该方法不支持相同的用户重复加入同一个频道。
+     - 我们建议不同频道中使用不同的 user account。
+     - 如果想要从不同的设备同时接入同一个频道，请确保每个设备上使用的 user account 是不同的。
+     - 请确保用于生成 Token 的 App ID 和创建 IChannel 对象时用的 App ID 一致。
+
+     @param token 在 App 服务器端生成的用于鉴权的 Token：
+     - 安全要求不高：你可以使用控制台生成的临时 Token，详见 [获取临时 Token](https://docs.agora.io/cn/Agora%20Platform/token?platform=All%20Platforms#生成-token).
+     - 安全要求高：将值设为你的服务端生成的正式 Token，详见 [获取正式 Token](https://docs.agora.io/cn/Interactive%20Broadcast/token_server?platform=All%20Platforms).
+     @param userAccount 用户 User Account。该参数为必需，最大不超过 255 字节，不可为 null。请确保加入频道的 User Account 的唯一性。 以下为支持的字符集范围（共 89 个字符）：
+     - 26 个小写英文字母 a-z
+     - 26 个大写英文字母 A-Z
+     - 10 个数字 0-9
+     - 空格
+     - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
+     @param options 频道媒体设置选项: ChannelMediaOptions。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+        - #ERR_INVALID_ARGUMENT (2)
+        - #ERR_NOT_READY (3)
+        - #ERR_REFUSED (5)
+     */
+    /** @~english
+    Joins the channel with a user account.
 
     After the user successfully joins the channel, the SDK triggers the following callbacks:
 
@@ -134,7 +210,28 @@ public:
                                    const char* userAccount,
                                    const agora::rtc::ChannelMediaOptions& options );
 
-   /** Allows a user to leave a channel, such as hanging up or exiting a call.
+    /** @~chinese
+     * 离开频道。
+
+     离开频道，即挂断或退出通话。
+
+     当调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 方法后，必须调用 leaveChannel 结束通话，否则无法开始下一次通话。 不管当前是否在通话中，都可以调用 leaveChannel，没有副作用。该方法会把会话相关的所有资源释放掉。
+     该方法是异步操作，调用返回时并没有真正退出频道。在真正退出频道后，SDK 会触发 \ref agora::rtc::IChannelEventHandler::onLeaveChannel "onLeaveChannel" 回调。
+     成功调用该方法离开频道后，本地会触发 \ref agora::rtc::IChannelEventHandler::onLeaveChannel "onLeaveChannel" 回调；通信场景下的用户和直播场景下的主播离开频道后，远端会触发 \ref agora::rtc::IChannelEventHandler::onUserOffline "onUserOffline" 回调。
+
+     @note
+     - 如果你调用了 leaveChannel 后立即调用 \ref agora::rtc::IChannel::release "release"，SDK 将无法触发 \ref agora::rtc::IChannelEventHandler::onLeaveChannel "onLeaveChannel" 回调。
+     - 如果你在旁路推流时调用 leaveChannel 方法， SDK 将自动调用 \ref IChannel::removePublishStreamUrl "removePublishStreamUrl" 方法。
+
+     @return
+     - 0(ERR_OK): 方法调用成功。
+     - < 0: 方法调用失败。
+        - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+        - -2(ERR_INALID_ARGUMENT): 参数无效。
+        - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+     */
+    /** @~english
+     Allows a user to leave a channel, such as hanging up or exiting a call.
 
     After joining a channel, the user must call the *leaveChannel* method to end the call before joining another channel.
 
@@ -156,7 +253,21 @@ public:
     */
    int leaveChannel();
 
-   /** Publishes the local stream to the channel.
+   /** @~chinese
+    将本地音视频流发布到本频道。
+
+    该方法的调用需满足以下要求，否则 SDK 会返回 #ERR_REFUSED (5) :
+    - 该方法仅支持将音视频流发布到当前 IChannel 类所对应的频道。
+    - 直播场景下，该方法仅适用于角色为主播的用户。你可以调用该 IChannel 类下的 \ref agora::rtc::IChannel::setClientRole "setClientRole" 方法设置用户角色。
+    - SDK 只支持用户同一时间在一个频道发布一路音视频流。详情请参考进阶功能《加入多频道》。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+      - ERR_REFUSED (5): 调用被拒绝
+    */
+   /** @~english
+    Publishes the local stream to the channel.
 
     You must keep the following restrictions in mind when calling this method. Otherwise, the SDK returns the #ERR_REFUSED (5):
     - This method publishes one stream only to the channel corresponding to the current `IChannel` object.
@@ -170,7 +281,18 @@ public:
     */
    int publish();
 
-   /** Stops publishing a stream to the channel.
+   /** @~chinese
+    停止将本地音视频流发布到本频道。
+
+    请确保你想要 `unpublish` 音视频流的频道 `channelId`，与当前正在 \ref IChannel publish "publish" 音视频流的频道 `channelId` 一致，否则 SDK 会返回 ERR_REFUSED (5)
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+      - ERR_REFUSED (5): 调用被拒绝
+    */
+   /** @~english
+    Stops publishing a stream to the channel.
 
     If you call this method in a channel where you are not publishing streams, the SDK returns #ERR_REFUSED (5).
 
@@ -181,6 +303,14 @@ public:
     */
    int unpublish();
 
+
+   /** @~chinese
+    获取当前频道的频道名。
+
+    @return
+    - 方法调用成功，返回 `channelId`，即当前频道的频道名。
+    - 方法调用失败，返回空字符串 ""。
+    */
    /** Gets the channel ID of the current `AgoraRtcChannel` object.
 
     @return
