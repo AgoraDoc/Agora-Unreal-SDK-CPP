@@ -40,7 +40,15 @@ public:
 
 public:
 
-   /** Creates the \ref IChannel object and returns the pointer.
+   /** @~chinese
+   * 创建 IChannel 对象。
+   * @param channel IChannel 对象的指针。
+   * @return
+   * - 方法调用成功：返回 IChannel 对象指针。
+   * - 方法调用失败：返回一个空指针。
+   */
+   /** @~english
+   Creates the \ref IChannel object and returns the pointer.
    @return   \arg Success: Pointer to the \ref IChannel object.
              \arg Failure: nullptr.
    */
@@ -311,7 +319,8 @@ public:
     - 方法调用成功，返回 `channelId`，即当前频道的频道名。
     - 方法调用失败，返回空字符串 ""。
     */
-   /** Gets the channel ID of the current `AgoraRtcChannel` object.
+   /** @~english
+   Gets the channel ID of the current `AgoraRtcChannel` object.
 
     @return
     - The channel ID of the current `AgoraRtcChannel` object, if the method call succeeds.
@@ -319,7 +328,22 @@ public:
     */
    const char *channelId();
 
-   /** Retrieves the current call ID.
+
+   /** @~chinese
+    获取当前通话 ID。
+
+    @note 该方法需要在加入频道后调用。
+
+    客户端在每次 \ref agora::rtc::IChannel::joinChannel "joinChannel" 后会生成一个对应的 callId，标识该客户端的此次通话。
+    有些方法如 \ref agora::rtc::IRtcEngine::rate "rate" 、 \ref agora::rtc::IRtcEngine::complain "complain" 需要在通话结束后调用，向 SDK 提交反馈，这些方法必须指定 CallId 参数。使用这些反馈方法，需要在通话过程中调用 \ref agora::rtc::IChannel::getCallId "getCallId" 方法获取 CallId，在通话结束后在反馈方法中作为参数传入。
+
+    @param[out] callId 当前的通话 ID。
+    @return
+    - 0: 方法调用成功，返回当前通话 ID
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Retrieves the current call ID.
 
     When a user joins a channel on a client, a `callId` is generated to identify the call from the client.
     Feedback methods, such as \ref AgoraRtcEngine::rate "rate" and \ref AgoraRtcEngine::complain "complain", must be called after the call ends to submit feedback to the SDK.
@@ -334,7 +358,27 @@ public:
     */
    int getCallId( agora::util::AString& callId );
 
-   /** Gets a new token when the current token expires after a period of time.
+   /** @~chinese
+    更新 Token。
+
+    该方法用于更新 Token。如果启用了 Token 机制，过一段时间后使用的 Token 会失效。当：
+
+    - 发生 \ref agora::rtc::IChannelEventHandler::onTokenPrivilegeWillExpire "onTokenPrivilegeWillExpire" 回调时，或发生
+    - \ref agora::rtc::IChannelEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调报告 CONNECTION_CHANGED_TOKEN_EXPIRED(9) 时。
+
+    App 应重新获取 Token，然后调用该方法更新 Token，否则 SDK 无法和服务器建立连接。
+
+    @param token 新的 Token。
+
+    @return
+    - 0(ERR_OK): 方法调用成功。
+    - < 0: 方法调用失败。
+      - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+      - -2(ERR_INALID_ARGUMENT): 参数无效。
+      - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+    */
+   /** @~english
+    Gets a new token when the current token expires after a period of time.
 
     The `token` expires after a period of time once the token schema is enabled when:
 
@@ -350,7 +394,22 @@ public:
     */
    int renewToken( const char* token );
 
-   /** Enables built-in encryption with an encryption password before users join a channel.
+   /** @~chinese
+    启用内置加密，并设置数据加密密码。
+
+    在加入频道之前，App 需调用 setEncryptionSecret 方法指定 secret 来启用内置的加密功能，同一频道内的所有用户应设置相同的 secret。当用户离开频道时，该频道的 secret 会自动清除。如果未指定 secret 或将 secret 设置为空，则无法激活加密功能。
+
+    @note
+    - 请不要在旁路推流时调用此方法。
+    - 为保证最佳传输效果，请确保加密后的数据大小不超过原始数据大小 + 16 字节。16 字节是 AES 通用加密模式下最大填充块大小。
+
+    @param secret 加密密码。
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Enables built-in encryption with an encryption password before users join a channel.
 
     All users in a channel must use the same encryption password. The encryption password is automatically cleared once a user leaves the channel.
 
@@ -368,7 +427,25 @@ public:
     */
    int setEncryptionSecret( const char* secret );
 
-   /** Sets the built-in encryption mode.
+   /** @~chinese
+    启用内置的加密方案。
+
+    Agora Video SDK 支持内置加密方案，默认支持 AES-128-XTS。如需采用其他加密方案，可以调用本方法。同一频道内的所有用户必须设置相同的加密方式和 secret 才能进行通话。关于这几种加密方式的区别，请参考 AES 加密算法的相关资料。
+
+    @note 在调用本方法前，请先调用 \ref agora::rtc::IChannel::setEncryptionSecret "setEncryptionSecret" 启用内置加密功能。
+
+    @param encryptionMode 加密模式：
+    - "aes-128-xts": 128 位 AES 加密，XTS 模式；
+    - "aes-128-ecb":128 位 AES 加密，ECB 模式；
+    - "aes-256-xts": 256 位 AES 加密，XTS 模式；
+    - "": 设置为空字符串时，默认使用加密方式 "aes-128-xts"。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+	 */
+   /** @~english
+    Sets the built-in encryption mode.
 
     The Agora SDK supports built-in encryption, which is set to the `aes-128-xts` mode by default. Call this method to use other encryption modes.
 
@@ -390,7 +467,25 @@ public:
     */
    int setEncryptionMode( const char* encryptionMode );
 
-   /** Registers a packet observer.
+   /** @~chinese
+    注册数据包观测器。
+
+    该方法注册数据包观测器 (Packet Observer)。在 Agora SDK 发送/接收（语音、视频）网络包时，会回调 IPacketObserver 定义的接口，App 可用此接口对数据做处理，例如加解密。
+
+    @note
+    - 处理后发送到网络的包大小不应超过 1200 字节，否则有可能发送失败。
+    - 若需调用此方法，需确保接收端和发送端都调用此方法，否则会出现未定义行为（例如音频无声或视频黑屏）。
+    - 若在直播场景下使用 CDN 推流、录制或储存，Agora 不建议调用此方法。
+    - 你需要在加入频道前调用该方法。
+
+    @param observer IPacketObserver 。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Registers a packet observer.
 
     The Agora SDK allows your application to register a packet observer to receive callbacks for voice or video packet transmission.
 
@@ -407,7 +502,21 @@ public:
     */
    int registerPacketObserver( agora::rtc::IPacketObserver* observer );
 
-   /** Registers the metadata observer.
+   /** @~chinese
+    注册媒体 metadata 观测器用于接收或发送 metadata。
+
+    @note
+    - 请在 \ref agora::rtc::IChannel::joinChannel "joinChannel" 前调用该方法。
+    - 该方法仅适用于直播场景。
+
+    @param observer 指向已注册的 metadata 观测器的指针。详见：IMetadataObserver。
+    @param type 用户希望在观测器中使用的 METADATA 类型 。目前仅支持 VIDEO_METADATA。详见：\ref IMetadataObserver::METADATA_TYPE "METADATA_TYPE" 。
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Registers the metadata observer.
 
     Registers the metadata observer. You need to implement the IMetadataObserver class and specify the metadata type in this method. A successful call of this method triggers the \ref IMetadataObserver::getMaxMetadataSize "getMaxMetadataSize" callback.
     This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
@@ -425,7 +534,23 @@ public:
     */
    int registerMediaMetadataObserver( agora::rtc::IMetadataObserver *observer, agora::rtc::IMetadataObserver::METADATA_TYPE type );
 
-   /** Sets the role of the user, such as a host or an audience (default), before joining a channel in a live broadcast.
+   /** @~chinese
+    设置直播场景下的用户角色。
+    *
+    * 在加入频道前，用户需要通过本方法设置观众（默认）或主播。在加入频道后，用户可以通过本方法切换用户角色。
+    *
+    * 直播场景下，如果你在加入频道后调用该方法切换用户角色，调用成功后，本地会触发 \ref agora::rtc::IChannelEventHandler::onClientRoleChanged "onClientRoleChanged" 回调；远端会触发 \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" 回调或 \ref agora::rtc::IChannelEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE) 回调。
+    *
+    * @note 该方法仅适用于直播场景。
+    *
+    * @param role 直播场景里的用户角色: #CLIENT_ROLE_TYPE
+    *
+    * @return
+    * - 0: 方法调用成功
+    * - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets the role of the user, such as a host or an audience (default), before joining a channel in a live broadcast.
 
     This method can be used to switch the user role in a live broadcast after the user joins a channel.
 
@@ -443,7 +568,25 @@ public:
     */
    int setClientRole( agora::rtc::CLIENT_ROLE_TYPE role );
 
-   /** Prioritizes a remote user's stream.
+   /** @~chinese
+    设置远端用户流的优先级。
+    *
+    * 设置远端用户的优先级。如果将某个用户的优先级设为高，那么发给这个用户的音视频流的优先级就会高于其他用户。
+    * 弱网下 SDK 会优先保证高优先级用户收到的流的质量。
+    *
+    * @note
+    * - 目前 Agora SDK 仅允许将一名远端用户设为高优先级。
+    * - 该方法需要在加入频道前调用。
+    *
+    * @param uid  远端用户的 ID。
+    * @param userPriority 远端用户的需求优先级。详见: #PRIORITY_TYPE 。
+    *
+    * @return
+    * - 0: 方法调用成功
+    * - < 0: 方法调用失败
+    */
+   /** @~english
+    Prioritizes a remote user's stream.
 
     Use this method with the \ref AgoraRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" method.
     If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
@@ -459,7 +602,32 @@ public:
     */
    int setRemoteUserPriority( agora::rtc::uid_t uid, agora::rtc::PRIORITY_TYPE userPriority );
 
-   /** Sets the sound position and gain of a remote user.
+   /** @~chinese
+    设置远端用户的语音位置。
+
+    设置远端用户声音的空间位置和音量，方便本地用户听声辨位。
+
+    通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。
+
+    @note
+    - 使用该方法需要在加入频道前调用 \ref agora::rtc::IRtcEngine::enableSoundPositionIndication "enableSoundPositionIndication" 开启远端用户的语音立体声。
+    - 为获得最佳听觉体验，我们建议使用该方法时使用立体声外放。
+    - 该方法需要在加入频道后调用。
+
+    @param uid 远端用户的 ID
+    @param pan 设置远端用户声音的空间位置，取值范围为 [-1.0,1.0]:
+    - (默认）0.0: 声音出现在正前方。
+    - -1.0: 声音出现在左边。
+    - 1.0: 声音出现在右边。
+
+    @param gain 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets the sound position and gain of a remote user.
 
     When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the
     local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games,
@@ -483,7 +651,27 @@ public:
     */
    int setRemoteVoicePosition( agora::rtc::uid_t uid, double pan, double gain );
 
-   /** Updates the display mode of the video view of a remote user.
+   /** @~chinese
+    更新远端视图显示模式。
+
+    初始化远端用户视图后，你可以调用该方法更新远端用户视图在本地显示时的渲染和镜像模式。该方法只影响本地用户看到的视频画面。
+
+    @note
+    - 请在调用 \ref agora::rtc::IRtcEngine::setupRemoteVideo "setupRemoteVideo" 方法初始化远端视图后，调用该方法。
+    - 你可以在通话中多次调用该方法，多次更新远端用户视图的显示模式。
+
+    @param userId 远端用户 ID。
+    @param renderMode 远端用户视图的渲染模式，详见 #RENDER_MODE_TYPE
+    @param mirrorMode
+    - 远端用户视图的镜像模式，详见 #VIDEO_MIRROR_MODE_TYPE
+    - **Note**: 默认关闭远端用户的镜像模式。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Updates the display mode of the video view of a remote user.
 
     After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes.
     This method affects only the video view that the local user sees.
@@ -504,7 +692,26 @@ public:
     */
    int setRemoteRenderMode( agora::rtc::uid_t userId, agora::rtc::RENDER_MODE_TYPE renderMode, agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode );
 
-   /** Sets whether to receive all remote audio streams by default.
+
+   /** @~chinese
+    设置是否默认接收所有音频流。
+
+    该方法在加入频道前后都可调用。如果在加入频道后调用 `setDefaultMuteAllRemoteAudioStreams (true)`，会接收不到设置后加入频道的用户的音频流。
+
+    @note 停止接收音频流后，如果想要恢复接收，请调用 \ref agora::rtc::IChannel::muteRemoteAudioStream "muteRemoteAudioStream (false)"，
+    并指定你想要接收的远端用户 `uid`；如果想恢复接收多个用户的音频流，则需要多次调用 `muteRemoteAudioStream`。
+    `setDefaultMuteAllRemoteAudioStreams (false)` 只能恢复接收后面加入频道的用户的音频流。
+
+    @param mute
+    - true:  默认停止接收所有音频流；
+    - false: 默认接收所有音频流（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets whether to receive all remote audio streams by default.
 
     You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteAudioStreams (true)` after joining a channel, the remote audio streams of all subsequent users are not received.
 
@@ -523,7 +730,25 @@ public:
     */
    int setDefaultMuteAllRemoteAudioStreams( bool mute );
 
-   /** Sets whether to receive all remote video streams by default.
+   /** @~chinese
+    设置是否默认停止接收视频流。
+
+    该方法在加入频道前后都可调用。如果在加入频道后调用 `setDefaultMuteAllRemoteVideoStreams (true)`，会接收不到设置后加入频道的用户的视频流。
+
+    @note 停止接收视频流后，如果想要恢复接收，请调用 \ref agora::rtc::IChannel::muteRemoteVideoStream "muteRemoteVideoStream (false)"，
+    并指定你想要接收的远端用户 `uid`；如果想恢复接收多个用户的视频流，则需要多次调用 `muteRemoteVideoStream`。`setDefaultMuteAllRemoteVideoStreams (false)`
+    只能恢复接收后面加入频道的用户的视频流。
+
+    @param mute
+    - true: 默认停止接收所有远端视频；
+    - false: 默认接收所有远端视频（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets whether to receive all remote video streams by default.
 
     You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteVideoStreams (true)` after joining a channel, 
     the remote video streams of all subsequent users are not received.
@@ -543,7 +768,21 @@ public:
     */
    int setDefaultMuteAllRemoteVideoStreams( bool mute );
 
-   /** Stops/Resumes receiving all remote users' audio streams.
+   /** @~chinese
+    接收／停止接收所有音频流。
+
+    @note 该方法在加入频道前后都能调用。
+
+    @param mute
+    - true: 停止接收所有音频流；
+    - false: 继续接收所有音频流（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Stops/Resumes receiving all remote users' audio streams.
 
     @param mute Sets whether to receive/stop receiving all remote users' audio streams.
     - true: Stops receiving all remote users' audio streams.
@@ -555,7 +794,26 @@ public:
     */
    int muteAllRemoteAudioStreams( bool mute );
 
-   /** Adjust the playback volume of the specified remote user.
+   /** @~chinese
+    调节本地播放的指定远端用户信号音量。
+
+    你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。
+
+    @note
+    - 请在加入频道后，调用该方法。
+    - 该方法调节的是本地播放的指定远端用户混音后的音量。
+
+    @param userId 远端用户 ID。
+    @param volume 播放音量，取值范围为 [0,100]:
+    - 0: 静音
+    - 100: 原始音量
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Adjust the playback volume of the specified remote user.
 
     After joining a channel, call \ref AgoraRtcEngine::adjustPlaybackSignalVolume "adjustPlaybackSignalVolume" to adjust the playback volume of different remote users,
     or adjust multiple times for one remote user.
@@ -577,7 +835,24 @@ public:
     */
    int adjustUserPlaybackSignalVolume( agora::rtc::uid_t userId, int volume );
 
-   /** Stops/Resumes receiving a specified remote user's audio stream.
+   /** @~chinese
+    接收／停止接收指定音频流。
+
+    @note
+    - 如果之前有调用过 \ref agora::rtc::IChannel::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" (true) 停止订阅所有远端音频，在调用本 API 之前请确保你已调用 \ref agora::rtc::IChannel::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" (false)。 muteAllRemoteAudioStreams 是全局控制，muteRemoteAudioStream 是精细控制。
+    - 该方法在加入频道前后都能调用。如果在加入频道前调用，需要自行维护远端用户的 `uid`。
+
+    @param userId 指定用户的 ID
+    @param mute
+    - true: 停止接收指定音频流；
+    - false: 继续接收指定音频流（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+   Stops/Resumes receiving a specified remote user's audio stream.
 
    @note If you called the \ref muteAllRemoteAudioStreams method and set `mute` as `true` to stop
     receiving all remote users' audio streams, call the `muteAllRemoteAudioStreams` method and set `mute` as `false` before calling this method.
@@ -595,7 +870,21 @@ public:
    */
    int muteRemoteAudioStream( agora::rtc::uid_t userId, bool mute );
 
-   /** Stops/Resumes receiving all video stream from a specified remote user.
+   /** @~chinese
+    接收／停止接收所有远端视频流。
+
+    @note 该方法在加入频道前后都能调用。
+
+    @param  mute
+    - true: 停止接收所有远端视频流；
+    - false: 允许接收所有远端视频流（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Stops/Resumes receiving all video stream from a specified remote user.
 
     @param  mute Sets whether to receive/stop receiving all remote users' video streams:
     - true: Stop receiving all remote users' video streams.
@@ -607,7 +896,24 @@ public:
     */
    int muteAllRemoteVideoStreams( bool mute );
 
-   /** Stops/Resumes receiving the video stream from a specified remote user.
+   /** @~chinese
+    接收／停止接收指定远端用户的视频流。
+
+    @note
+    - 该方法在加入频道前后都能调用。如果在加入频道前调用，需要自行维护远端用户的 `uid`。
+    - 如果之前调用过 \ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" (true) 停止接收放所有远端视频流，在调用本 API 之前请确保你已调用 \ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" (false) 。\ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" 是全局控制，\ref agora::rtc::IChannel::muteRemoteVideoStream "muteRemoteVideoStream" 是精细控制。
+
+    @param userId 指定用户的用户 ID。
+    @param mute
+    - true: 停止接收指定远端用户的视频流；
+    - false: 允许接收指定远端用户的视频流（默认）。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Stops/Resumes receiving the video stream from a specified remote user.
 
     @note If you called the \ref muteAllRemoteVideoStreams method and
     set `mute` as `true` to stop receiving all remote video streams, call the `muteAllRemoteVideoStreams` method and
@@ -624,7 +930,30 @@ public:
     */
    int muteRemoteVideoStream( agora::rtc::uid_t userId, bool mute );
 
-   /** Sets the stream type of the remote video.
+   /** @~chinese
+    设置订阅的视频流类型。
+
+    在网络条件受限的情况下，如果发送端没有调用 \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode" (false) 关闭双流模式，
+    接收端可以选择接收大流还是小流。其中，大流可以接为高分辨率高码率的视频流， 小流则是低分辨率低码率的视频流。
+
+    正常情况下，用户默认接收大流。如需接收小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。
+    视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
+
+    调用本方法的执行结果将在 \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" 中返回。
+
+    @note 该方法需要在加入频道后调用。如果既调用了 `setRemoteVideoStreamType`，也调用了
+    \ref IChannel::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType"，则 SDK
+    以 `setRemoteVideoStreamType` 中的设置为准。
+
+    @param userId 用户 ID。
+    @param streamType 视频流类型: #REMOTE_VIDEO_STREAM_TYPE 。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets the stream type of the remote video.
 
     Under limited network conditions, if the publisher has not disabled the dual-stream mode using
     \ref AgoraRtcEngine::enableDualStreamMode "enableDualStreamMode" (false),
@@ -648,7 +977,29 @@ public:
     */
    int setRemoteVideoStreamType( agora::rtc::uid_t userId, agora::rtc::REMOTE_VIDEO_STREAM_TYPE streamType );
 
-   /** Sets the default stream type of remote videos.
+   /** @~chinese
+    设置默认订阅的视频流类型。
+
+    在网络条件受限的情况下，如果发送端没有调用 \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode" (false) 关闭双流模式，
+    接收端可以选择接收大流还是小流。其中，大流可以接为高分辨率高码率的视频流， 小流则是低分辨率低码率的视频流。
+
+    正常情况下，用户默认接收大流。如需默认接收所有用户的视频小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。视频小流默认
+    的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
+
+    调用本方法的执行结果将在 \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" 中返回。
+
+    @note 该方法需要在加入频道后调用。如果既调用了 `setRemoteVideoStreamType`，也调用了
+    \ref IChannel::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType"，则 SDK
+    以 `setRemoteVideoStreamType` 中的设置为准。
+
+    @param streamType 视频流类型: #REMOTE_VIDEO_STREAM_TYPE 。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets the default stream type of remote videos.
 
     Under limited network conditions, if the publisher has not disabled the dual-stream mode using
     \ref AgoraRtcEngine::enableDualStreamMode "enableDualStreamMode" (false),
@@ -670,7 +1021,29 @@ public:
     */
    int setRemoteDefaultVideoStreamType( agora::rtc::REMOTE_VIDEO_STREAM_TYPE streamType );
 
-   /** Creates a data stream.
+   /** @~chinese
+    创建数据流。
+
+    该方法用于创建数据流。RtcEngine 生命周期内，每个用户最多只能创建 5 个数据流。频道内数据通道最多允许数据延迟 5 秒，若超过 5 秒接收方尚未收到数据流，则数据通道会向 App 报错。
+
+    @note
+    - 将 reliable 和 ordered 同时设为 true 或 false。不要一个设为 true 另一个设为 false。
+    - 该方法需要在加入频道后调用。
+
+    @param[out] streamId 数据流 ID。
+    @param reliable
+    - true: 接收方 5 秒内会收到发送方所发送的数据，否则会收到 \ref agora::rtc::IChannelEventHandler::onStreamMessageError "onStreamMessageError" 回调获得相应报错信息。
+    - false: 接收方不保证收到，就算数据丢失也不会报错。
+    @param ordered
+    - true: 接收方 5 秒内会按照发送方发送的顺序收到数据包；
+    - false: 接收方不保证按照发送方发送的顺序收到数据包。
+
+    @return
+    - 0: 创建数据流成功。
+    - < 0: 创建数据流失败。
+    */
+   /** @~english
+    Creates a data stream.
 
     Each user can create up to five data streams during the lifecycle of the AgoraRtcChannel.
 
@@ -692,7 +1065,23 @@ public:
     */
    int createDataStream( int* streamId, bool reliable, bool ordered );
 
-   /** Sends data stream messages to all users in a channel.
+   /** @~chinese
+    发送数据流。
+
+    该方法发送数据流消息到频道内所有用户。SDK 对该方法的实现进行了如下限制：频道内每秒最多能发送 30 个包，且每个包最大为 1 KB。 API 须对数据通道的传送速率进行控制: 每个客户端每秒最多能发送 6 KB 数据。频道内每人最多能同时有 5 个数据通道。
+    成功调用该方法后，远端会触发 \ref agora::rtc::IChannelEventHandler::onStreamMessage "onStreamMessage" 回调，远端用户可以在该回调中获取接收到的流消息；若调用失败，远端会触发 \ref agora::rtc::IChannelEventHandler::onStreamMessageError "onStreamMessageError" 回调。
+    @note 该方法仅适用于通信场景以及直播场景下的主播用户，如果直播场景下的观众调用此方法可能会造成观众变主播。
+
+    @param  streamId  由 \ref agora::rtc::IChannel::createDataStream "createDataStream" 返回的数据流 ID。
+    @param data 自定义数据。
+    @param length 数据长度。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sends data stream messages to all users in a channel.
 
     The SDK has the following restrictions on this method:
     - Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.
@@ -719,7 +1108,31 @@ public:
     */
    int sendStreamMessage( int streamId, const char* data, size_t length );
 
-   /** Publishes the local stream to a specified CDN live RTMP address.  (CDN live only.)
+   /** @~chinese
+    增加旁路推流地址。
+
+    调用该方法后，你可以向 CDN 推送 RTMP 或 RTMPS 协议的媒体流。SDK 会在本地触发 \ref agora::rtc::IChannelEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" 回调，报告增加旁路推流地址的状态。
+
+    @note
+    - 请确保在成功加入频道后才能调用该接口。
+    - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+    - 该方法每次只能增加一路旁路推流地址。若需推送多路流，则需多次调用该方法。
+    - 该方法仅适用于直播场景。
+    - Agora 目前仅支持转码时向 CDN 推送 RTMPS 协议的媒体流。
+
+    @param url CDN 推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。url 不支持中文字符等特殊字符。
+    @param  transcodingEnabled
+    - true: 转码（ [转码]( https://docs.agora.io/cn/Agora%20Platform/terms?platform=All%20Platforms#转码) 是指在旁路推流时对音视频流进行转码处理后再推送到其他 CDN 服务器。多适用于频道内有多个主播，需要进行混流、合图的场景）。如果设为 `true`，需先调用 \ref agora::rtc::IChannel::setLiveTranscoding "setLiveTranscoding" 方法。
+    - false: 不转码。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+      - #ERR_INVALID_ARGUMENT (2): URL 为空或是长度为 0 的的字符串
+      - #ERR_NOT_INITIALIZED (7): 推流时未初始化引擎
+    */
+   /** @~english
+    Publishes the local stream to a specified CDN live RTMP address.  (CDN live only.)
 
     The \ref addPublishStreamUrl method call triggers the \ref agora::rtc::IChannelEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback
     on the local client to report the state of adding a local stream to the CDN.
@@ -742,7 +1155,22 @@ public:
     */
    int addPublishStreamUrl( const char *url, bool transcodingEnabled );
 
-   /** Removes an RTMP stream from the CDN.
+   /** @~chinese
+    删除旁路推流地址。
+
+    调用该方法后，SDK 会在本地触发 \ref agora::rtc::IChannelEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" 回调，报告删除旁路推流地址的状态。
+    @note
+    - 该方法每次只能删除一路旁路推流地址。若需删除多路流，则需多次调用该方法。
+    - URL 不支持中文等特殊字符。
+    - 该方法仅适用于直播场景。
+
+    @param url 待删除的旁路推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Removes an RTMP stream from the CDN.
 
     This method removes the RTMP URL address (added by the \ref addPublishStreamUrl method) from a CDN live stream.
 
@@ -761,7 +1189,25 @@ public:
     */
    int removePublishStreamUrl( const char *url );
 
-   /** Sets the video layout and audio settings for CDN live. (CDN live only.)
+   /** @~chinese
+    设置直播推流转码。
+
+    该方法用于旁路推流的视图布局及音频设置等。调用该方法更新转码设置后本地会触发 \ref agora::rtc::IChannelEventHandler::onTranscodingUpdated "onTranscodingUpdated" 回调。
+
+    @note
+    - 该方法仅适用于直播场景。
+    - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+    - 首次调用该方法更新转码设置时，不会触发 `onTranscodingUpdated` 回调。
+    - 该方法需要在加入频道后调用。
+    - Agora 目前仅支持转码时向 CDN 推送 RTMPS 协议的媒体流。
+
+    @param transcoding 详见 LiveTranscoding 。
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+   /** @~english
+    Sets the video layout and audio settings for CDN live. (CDN live only.)
 
     The SDK triggers the \ref agora::rtc::IChannelEventHandler::onTranscodingUpdated "onTranscodingUpdated" callback when you
     call the `setLiveTranscoding` method to update the transcoding setting.
@@ -778,17 +1224,44 @@ public:
     */
    int setLiveTranscoding( const agora::rtc::LiveTranscoding &transcoding );
 
-   /** Adds a voice or video stream URL address to a live broadcast.
 
-   If this method call is successful, the server pulls the voice or video stream and injects it into a live channel.
-   This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
+   /** @~chinese
+    输入在线媒体流。
+
+    @note
+    - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+    - 该方法适用于 Native SDK v2.4.1 及之后的版本。
+    - 该方法仅适用于直播场景中的主播用户。
+    - 频道内同一时间只允许输入一个在线媒体流。
+    - 该方法需要在加入频道后调用。
+
+    该方法将正在播放的音视频作为音视频源导入到正在进行的直播中。可主要应用于赛事直播、多人看视频互动等直播场景。调用该方法后，SDK 会在本地触发 \ref agora::rtc::IChannelEventHandler::onStreamInjectedStatus "onStreamInjectedStatus" 回调，报告输入在线媒体流的状态；成功输入媒体流后，该音视频流会出现在频道中，频道内所有用户都会收到 \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" 回调，其中 uid 为 666。该音视频流会出现在频道中。
+
+    @param url 添加到直播中的视频流 URL 地址。支持 RTMP、HLS、HTTP-FLV 协议传输。
+    - 支持的音频编码格式：AAC；
+    - 支持的视频编码格式：H.264(AVC)。
+    @param config   所添加的视频流属性定义，详见: InjectStreamConfig 。
+
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+      - #ERR_INVALID_ARGUMENT (2): 输入的 URL 为空。请重新调用该方法，并确认输入的媒体流的 URL 有效。
+      - #ERR_NOT_READY (3): 用户没有加入频道。
+      - #ERR_NOT_SUPPORTED (4): 频道非直播场景。请调用 \ref agora::rtc::IRtcEngine::setChannelProfile "setChannelProfile" 并将频道设置为直播场景再调用该方法。
+      - #ERR_NOT_INITIALIZED (7): 引擎没有初始化。请确认调用该方法前已创建 IChannel 对象并完成初始化。
+    */
+   /** @~english
+    Adds a voice or video stream URL address to a live broadcast.
+
+    If this method call is successful, the server pulls the voice or video stream and injects it into a live channel.
+    This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
 
     The addInjectStreamUrl method call triggers the following callbacks:
-   - The local client:
-     - \ref agora::rtc::IChannelEventHandler::onStreamInjectedStatus "onStreamInjectedStatus", with the state of the injecting the online stream.
-     - \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" (uid: 666), if the method call is successful and the online media stream is injected into the channel.
-   - The remote client:
-     - \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" (uid: 666), if the method call is successful and the online media stream is injected into the channel.
+    - The local client:
+      - \ref agora::rtc::IChannelEventHandler::onStreamInjectedStatus "onStreamInjectedStatus", with the state of the injecting the online stream.
+      - \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" (uid: 666), if the method call is successful and the online media stream is injected into the channel.
+    - The remote client:
+      - \ref agora::rtc::IChannelEventHandler::onUserJoined "onUserJoined" (uid: 666), if the method call is successful and the online media stream is injected into the channel.
 
     @note
     - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*.
@@ -811,7 +1284,18 @@ public:
     */
    int addInjectStreamUrl( const char* url, const agora::rtc::InjectStreamConfig& config );
 
-   /** Removes the voice or video stream URL address from a live broadcast.
+   /** @~chinese
+    删除导入的外部媒体流。
+
+    @note 成功删除外部视频源 URL 地址后会触发 \ref agora::rtc::IChannelEventHandler::onUserOffline "onUserOffline" 回调，uid 为 666。
+
+    @param url 已导入、待删除的外部视频源 URL 地址。
+    @return
+    - 0: 方法调用成功
+    - < 0: 方法调用失败
+    */
+    /** @~english
+    Removes the voice or video stream URL address from a live broadcast.
 
     This method removes the URL address (added by the \ref addInjectStreamUrl method) from the live broadcast.
 
@@ -825,66 +1309,153 @@ public:
     */
    int removeInjectStreamUrl( const char* url );
 
-   /** Starts to relay media streams across channels.
+   /** @~chinese
+    * 开始跨频道媒体流转发。该方法可用于实现跨频道连麦等场景。
     *
+    * 成功调用该方法后，SDK 会触发
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged
+    *  "onChannelMediaRelayStateChanged" 和
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent
+    * "onChannelMediaRelayEvent" 回调，并在回调中报告当前的跨频道媒体流转发状态和事件。
+    * - 如果
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged
+    *  "onChannelMediaRelayStateChanged" 回调报告 #RELAY_STATE_RUNNING (2) 和
+    * #RELAY_OK (0)，且
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent
+    * "onChannelMediaRelayEvent" 回调报告
+    * #RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL (4)，
+    * 则表示 SDK 开始在源频道和目标频道之间转发媒体流。
+    * - 如果
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged
+    *  "onChannelMediaRelayStateChanged" 回调报告 #RELAY_STATE_FAILURE (3)，
+    * 则表示跨频道媒体流转发出现异常。
+    *
+    * @note
+    * - 请在成功加入频道后调用该方法。
+    * - 该方法仅对直播场景下的主播有效。
+    * - 成功调用该方法后，若你想再次调用该方法，必须先调用
+    * \ref stopChannelMediaRelay() "stopChannelMediaRelay"
+    * 方法退出当前的转发状态。
+    * - 跨频道媒体流转发功能需要[提交工单](https://agora-ticket.agora.io/)联系技术支持开通。
+    * - 该功能不支持 String 型 UID。
+    *
+    * @param configuration 跨频道媒体流转发参数配置。详见
+    * ChannelMediaRelayConfiguration。
+    *
+    * @return
+    * - 0：方法调用成功。
+    * - < 0：方法调用失败
+    */
+   /** @~english
+     Starts to relay media streams across channels.
+
      After a successful method call, the SDK triggers the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged"
      and \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent" callbacks, and these callbacks return the state and events of the media stream relay.
     - If the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" callback returns #RELAY_STATE_RUNNING (2) and #RELAY_OK (0), and the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent "onChanenlMediaRelayEvent" callback 
     returns #RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL (4), the broadcaster starts sending data to the destination channel.
      - If the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" callback returns #RELAY_STATE_FAILURE (3), an exception occurs during the media stream relay.
-    
+
      @note
      - Call this method after the \ref joinChannel method.
      - This method takes effect only when you are a broadcaster in a Live-broadcast channel.
      - After a successful method call, if you want to call this method again, ensure that you call the \ref stopChannelMediaRelay method to quit the current relay.
      - Contact sales-us@agora.io before implementing this function.
      - We do not support string user accounts in this API.
-    
+
      @param configuration The configuration of the media stream relay:
      ChannelMediaRelayConfiguration.
-    
+
      @return
      - 0: Success.
      - < 0: Failure.
     */
    int startChannelMediaRelay( const agora::rtc::ChannelMediaRelayConfiguration &configuration );
 
-   /** Updates the channels for media stream relay.
-    
+   /** @~chinese
+    * 更新媒体流转发的频道。
+    *
+    * 成功开始跨频道转发媒体流后，如果你希望将流转发到多个目标频道，
+    * 或退出当前的转发频道，可以调用该方法。
+    *
+    * 成功调用该方法后，SDK 会触发
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent
+    * "onChannelMediaRelayEvent" 回调，
+    * 并在回调中报告状态码 #RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL (7)。
+    *
+    * @note
+    * 请在 \ref startChannelMediaRelay() "startChannelMediaRelay"
+    * 方法后调用该方法，更新媒体流转发的频道。
+    *
+    * @param configuration 跨频道媒体流转发参数配置。详见
+    * ChannelMediaRelayConfiguration。
+    *
+    * @return
+    * - 0：方法调用成功。
+    * - < 0：方法调用失败
+    */
+   /** @~english
+     Updates the channels for media stream relay.
+
      After a successful \ref startChannelMediaRelay method call, if you want to relay the media stream to more channels, or leave the current relay channel, 
      you can call the \ref updateChannelMediaRelay method.
-    
+
      After a successful method call, the SDK triggers the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent" callback with the #RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL (7) state code.
-    
+
      @note
-     Call this method after the \ref startChannelMediaRelay method to update the destination channel.
-    
+     Call this method after the \ref startChannelMediaRelay method to update the destination channel.\
+
      @param configuration The media stream relay configuration: \ref ChannelMediaRelayConfiguration.
-    
+
      @return
      - 0: Success.
      - < 0: Failure.
     */
    int updateChannelMediaRelay( const agora::rtc::ChannelMediaRelayConfiguration &configuration );
 
-   /** Stops the media stream relay.
-    
+   /** @~chinese
+    停止跨频道媒体流转发。一旦停止，主播会退出所有目标频道。
+    *
+    * 成功调用该方法后，SDK 会触发
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged
+    * "onChannelMediaRelayStateChanged" 回调。如果报告 #RELAY_STATE_IDLE (0)
+    * 和 #RELAY_OK (0)，则表示已停止转发媒体流。
+    *
+    * @note
+    * 如果该方法调用不成功，SDK 会触发
+    * \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged
+    * "onChannelMediaRelayStateChanged" 回调，并报告状态码
+    * #RELAY_ERROR_SERVER_NO_RESPONSE (2) 或
+    * #RELAY_ERROR_SERVER_CONNECTION_LOST (8)。你可以调用
+    * \ref leaveChannel() "leaveChannel" 方法离开频道，跨频道媒体流转发会自动停止。
+    *
+    * @return
+    * - 0：方法调用成功。
+    * - < 0：方法调用失败
+    */
+   /** @~english
+     Stops the media stream relay.
+
      Once the relay stops, the broadcaster quits all the destination channels.
-    
+
      After a successful method call, the SDK triggers the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" callback. If the callback returns #RELAY_STATE_IDLE (0) and #RELAY_OK (0),
      the broadcaster successfully stops the relay.
-    
+
      @note
      If the method call fails, the SDK triggers the \ref agora::rtc::IChannelEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" callback with the #RELAY_ERROR_SERVER_NO_RESPONSE (2) or
      #RELAY_ERROR_SERVER_CONNECTION_LOST (8) state code. You can leave the channel by calling the \ref leaveChannel method, and the media stream relay automatically stops.
-    
+
      @return
      - 0: Success.
      - < 0: Failure.
     */
    int stopChannelMediaRelay();
 
-   /** Gets the current connection state of the SDK.
+   /** @~chinese
+    * 获取 SDK 当前的连接状态。
+    * @return SDK 连接状态：#CONNECTION_STATE_TYPE。
+    */
+   /** @~english
+    Gets the current connection state of the SDK.
 
     @return #CONNECTION_STATE_TYPE.
     */
