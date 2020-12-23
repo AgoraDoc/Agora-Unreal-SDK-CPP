@@ -61,9 +61,9 @@ public:
 
 public:
   /** @~chinese
-   * 创建 IRtcEngine 对象。
+   * 创建 AgoraRtcEngine 对象。
    * @return
-   * - 方法调用成功：返回 IRtcEngine 对象的指针。
+   * - 方法调用成功：返回 AgoraRtcEngine 对象的指针。
    * - 方法调用失败：返回一个空指针。
    */
    /** @~english
@@ -73,7 +73,15 @@ public:
    */
 	static AgoraRtcEngine* createAgoraRtcEngine();
 
-   /**
+   /** @~chinese
+   * 初始化 Agora SDK 服务。
+   * @note 请确保在调用任何其他 API 前先调用 \ref createAgoraRtcEngine 和 \ref initialize。
+   * @param rtcEngineContext AgoraRtcEngine 的配置：RtcEngineContext。
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                   Initializes the Agora SDK service.
    * @note                    Ensure that you call the \ref createAgoraRtcEngine and \ref initialize methods before calling any other API.
    * @param  rtcEngineContext Pointer to the RTC engine context. See \ref RtcEngineContext.
@@ -85,7 +93,27 @@ public:
 	//TODO:?
 	void setSyncForRelease(bool sync);
 
-   /**
+
+   /** @~chinese
+   设置频道场景。
+   *
+   * 该方法用于设置 Agora 频道场景。Agora 会针对不同的使用场景采用不同的优化策略，如通信场景偏好流畅，直播场景偏好画质。
+   *
+   * @note
+   * - 为保证实时音视频质量，我们建议相同频道内的用户使用同一种频道场景。
+   * - 该方法必须在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 前调用和进行设置，进入频道后无法再设置。
+   * - 不同的频道场景下，SDK 的默认音频路由和默认视频编码码率是不同的，详见 \ref IRtcEngine::setDefaultAudioRouteToSpeakerphone "setDefaultAudioRouteToSpeakerphone"
+   * 和 \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 方法中的说明。
+   *
+   * @param profile 频道使用场景: #CHANNEL_PROFILE_TYPE
+   *
+   * @return
+   * - 0(ERR_OK): 方法调用成功。
+   * - < 0: 方法调用失败。
+   *  - -2 (ERR_INVALID_ARGUMENT): 参数无效。
+   *  - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+   */
+   /** @~english
    * @brief          Sets the channel profile.
    * @brief          The SDK needs to know the application scenario to set the appropriate channel profile to apply different optimization methods.
    * @note           \arg  This method applies only to the Live-broadcast profile.
@@ -99,7 +127,26 @@ public:
    */
 	int setChannelProfile(agora::rtc::CHANNEL_PROFILE_TYPE profile);
 
-   /**
+   /** @~chinese
+    设置用户角色。
+    *
+    * 在加入频道前，用户需要通过本方法设置观众（默认）或主播。在加入频道后，用户可以通过本方法切换用户角色。
+    *
+    * 直播场景下，如果你在加入频道后调用该方法切换用户角色，调用成功后，本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged" 回调；
+    * 远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 回调或 \ref agora::rtc::IRtcEngineEventHandler::onUserOffline "onUserOffline" (BECOME_AUDIENCE) 回调。
+    *
+    * @note 该方法仅适用于直播场景。
+    *
+    * @param role 直播场景里的用户角色: #CLIENT_ROLE_TYPE
+    *
+    * @return
+    * - 0(ERR_OK): 方法调用成功。
+    * - < 0: 方法调用失败。
+    *  - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+    *  - -2(ERR_INALID_ARGUMENT): 参数无效。
+    *  - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+    */
+   /** @~english
    * @brief       Sets the role of the user, such as a host or an audience (default), before joining a channel in a live broadcast.
    * @brief       In the Live Broadcast profile, when a user switches user roles after joining a channel, a successful \ref setClientRole method call triggers the following callbacks:
    *              \arg  The local client: \ref agora::rtc::IRtcEngineEventHandler::onClientRoleChanged "onClientRoleChanged"
@@ -112,7 +159,41 @@ public:
    */
 	int setClientRole(agora::rtc::CLIENT_ROLE_TYPE role);
 
-   /**
+   /** @~chinese
+   加入频道。
+
+   该方法让用户加入通话频道，在同一个频道内的用户可以互相通话，多个用户加入同一个频道，可以群聊。 使用不同 App ID 的 App 是不能互通的。如果已在通话中，用户必须调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 退出当前通话，才能进入下一个频道。
+   成功调用该方加入频道后，本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" 回调；通信场景下的用户和直播场景下的主播加入频道后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 回调。
+   在网络状况不理想的情况下，客户端可能会与 Agora 的服务器失去连接；SDK 会自动尝试重连，重连成功后，本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onRejoinChannelSuccess "onRejoinChannelSuccess" 回调。
+
+   用户成功加入频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 `mute` 方法实现。
+
+   @note
+   - 频道内每个用户的用户 ID 必须是唯一的。如果将 uid 设为 0，系统将自动分配一个 uid。如果想要从不同的设备同时接入同一个频道，请确保每个设备上使用的 uid 是不同的。
+   - 请务必确保用于生成 Token 的 App ID 和 \ref agora::rtc::IRtcEngine::initialize "initialize" 方法初始化引擎时用的是同一个 App ID，否则会造成旁路推流失败。
+
+   @param token 动态秘钥。
+   - 安全要求不高: 将值设为 NULL。
+   - 安全要求高: 将值设置为 Token。如果你已经启用了 App Certificate, 请务必使用 Token。
+   @param channelId 标识通话的频道名称，长度在 64 字节以内的字符串。以下为支持的字符集范围（共 89 个字符）:
+   - 26 个小写英文字母 a~z；
+   - 26 个大写英文字母 A~Z；
+   - 10个数字 0~9；
+   - 空格；
+   - "!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、" {"、"}"、"|"、"~"、","。
+   @param info (非必选项) 开发者需加入的任何附加信息。一般可设置为空字符串，或频道相关信息。该信息不会传递给频道内的其他用户。
+   @param uid (非必选项) 用户ID，32位无符号整数。建议设置范围：1 到 2<sup>32</sup>-1，并保证唯一性。如果不指定（即设为0），SDK 会自动分配一个，并在 \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" 回调方法中返回，App 层必须记住该返回值并维护，SDK不对该返回值进行维护。
+
+   @return
+   - 0(ERR_OK): 方法调用成功。
+   - < 0: 方法调用失败。
+     - -2(ERR_INALID_ARGUMENT): 参数无效。
+     - -3(ERR_NOT_READY): SDK 初始化失败，请尝试重新初始化 SDK。
+     - -5(ERR_REFUSED): 调用被拒绝。可能有如下两个原因：
+       - 已经创建了一个同名的 IChannel 频道。
+       - 已经通过 IChannel 加入了一个频道，并在该 IChannel 频道中发布了音视频流。
+   */
+   /** @~english
    * @brief             Allows a user to join a channel.
    * @brief             Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
    * @brief             You must call the \ref leaveChannel method to exit the current call before entering another channel.
@@ -141,7 +222,46 @@ public:
    */
 	int joinChannel(const char* token, const char* channelId, const char* info, agora::rtc::uid_t uid);
 
-   /**
+   /** @~chinese
+   * 快速切换直播频道。
+   *
+   * 当直播频道中的观众想从一个频道切换到另一个频道时，可以调用该方法，实现快速切换。
+   *
+   * 成功调用该方切换频道后，本地会先收到离开原频道的回调
+   * \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel
+   * "onLeaveChannel"，再收到成功加入新频道的回调
+   * \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess
+   * "onJoinChannelSuccess"。
+   *
+   * 用户成功切换频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 `mute` 方法实现。
+   *
+   * @note 该方法仅适用于直播场景中，角色为观众的用户。
+   *
+   * @param token 在服务器端生成的用于鉴权的 Token：
+   * - 安全要求不高：你可以使用控制台生成的临时 Token，详见
+   * [获取临时 Token](https://docs.agora.io/cn/Agora%20Platform/token?platfor%20*%20m=All%20Platforms#获取临时-token)。
+   * - 安全要求高：将值设为你的服务端生成的正式 Token，详见
+   * [获取正式 Token](https://docs.agora.io/cn/Agora%20Platform/token?platfor%20*%20m=All%20Platforms#获取正式-token)。
+   * @param channelId 标识频道的频道名，最大不超过 64 字节。以下为支持的字符集范围
+   * （共 89 个字符）：
+   * - 26 个小写英文字母 a-z
+   * - 26 个大写英文字母 A-Z
+   * - 10 个数字 0-9
+   * - 空格
+   * - "!"，"#"，"$"，"%"，"&"，"("，")"，"+"，"-"，":"，";"，"<"，"="，"."，">"，
+   * "?"，"@"，"["，"]"，"^"，"_"，" {"， "}"，"|"，"~"，","
+   *
+   * @return
+   * - 0(ERR_OK): 方法调用成功。
+   * - < 0: 方法调用失败。
+   *  - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+   *  - -2(ERR_INALID_ARGUMENT): 参数无效。
+   *  - -5(ERR_REFUSED): 调用被拒绝。可能因为用户角色不是观众。
+   *  - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+   *  - -102(ERR_INVALID_CHANNEL_NAME): 频道名无效。请更换有效的频道名。
+   *  - -113(ERR_NOT_IN_CHANNEL): 用户不在频道内。
+   */
+   /** @~english
    * @brief             Switches to a different channel.
    * @brief             This method allows the audience of a Live-broadcast channel to switch to a different channel.
    * @brief             After the user successfully switches to another channel, the \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChanenl" and \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" callbacks are triggered to indicate that the user has left the original channel and joined a new one.
@@ -160,7 +280,27 @@ public:
    */
 	int switchChannel(const char* token, const char* channelId);
 
-   /**
+   /** @~chinese
+   离开频道。
+
+   离开频道，即挂断或退出通话。
+
+   当调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 方法后，必须调用 leaveChannel 结束通话，否则无法开始下一次通话。 不管当前是否在通话中，都可以调用 leaveChannel，没有副作用。该方法会把会话相关的所有资源释放掉。
+   该方法是异步操作，调用返回时并没有真正退出频道。在真正退出频道后，SDK 会触发 \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" 回调。
+   成功调用该方法离开频道后，本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" 回调；通信场景下的用户和直播场景下的主播离开频道后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserOffline "onUserOffline" 回调。
+
+   @note
+   - 如果你调用了 leaveChannel 后立即调用 \ref agora::rtc::IRtcEngine::release "release"，SDK 将无法触发 \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" 回调。
+   - 如果你在旁路推流时调用 leaveChannel 方法， SDK 将自动调用 \ref IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" 方法。
+
+   @return
+   - 0(ERR_OK): 方法调用成功。
+   - < 0: 方法调用失败。
+     - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+     - -2(ERR_INALID_ARGUMENT): 参数无效。
+     - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+   */
+   /** @~english
    * @brief    Allows a user to leave a channel, such as hanging up or exiting a call.
    * @brief    After joining a channel, the user must call the leaveChannel method to end the call before joining another channel.
    * @brief    This method returns 0 if the user leaves the channel and releases all resources related to the call.
@@ -176,7 +316,26 @@ public:
    */
 	int leaveChannel();
 
-   /**
+   /** @~chinese
+   更新 Token。
+
+   该方法用于更新 Token。如果启用了 Token 机制，过一段时间后使用的 Token 会失效。当：
+
+   - 发生 \ref agora::rtc::IRtcEngineEventHandler::onTokenPrivilegeWillExpire "onTokenPrivilegeWillExpire" 回调时，或发生
+   - \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调报告 CONNECTION_CHANGED_TOKEN_EXPIRED(9) 时。
+
+   App 应重新获取 Token，然后调用该方法更新 Token，否则 SDK 无法和服务器建立连接。
+
+   @param token 新的 Token。
+
+   @return
+   - 0(ERR_OK): 方法调用成功。
+   - < 0: 方法调用失败。
+     - -1(ERR_FAILED): 一般性的错误（未明确归类）。
+     - -2(ERR_INALID_ARGUMENT): 参数无效。
+     - -7(ERR_NOT_INITIALIZED): SDK 尚未初始化。
+   */
+  /** @~english
    * @brief       Gets a new token when the current token expires after a period of time.
    * @brief       The \a token expires after a period of time once the token schema is enabled when:
    *              \arg  The SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onTokenPrivilegeWillExpire "onTokenPrivilegeWillExpire" callback, or
@@ -188,7 +347,37 @@ public:
    */
 	int renewToken(const char* token);
 
-   /**
+   /** @~chinese
+   注册本地用户 User Account。
+
+   该方法为本地用户注册一个 User Account。注册成功后，该 User Account 即可标识该本地用户的身份，用户可以使用它加入频道。成功注册 User Account 后，本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onLocalUserRegistered "onLocalUserRegistered" 回调，告知本地用户的 UID 和 User Account。
+
+   该方法为可选。如果你希望用户使用 User Account 加入频道，可以选用以下两种方式：
+
+   - 先调用 \ref agora::rtc::IRtcEngine::registerLocalUserAccount "registerLocalUserAccount" 方法注册 Account，再调用 \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" 方法加入频道
+   - 直接调用 \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" 方法加入频道
+
+   两种方式的区别在于，提前调用 \ref agora::rtc::IRtcEngine::registerLocalUserAccount "registerLocalUserAccount"，可以缩短使用 \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" 进入频道的时间。
+
+   @note
+   - `userAccount` 不能为空，否则该方法不生效。
+   - 请确保在该方法中设置的 `userAccount` 在频道中的唯一性。
+   - 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。
+
+   @param appId 你的项目在 Agora 控制台注册的 App ID
+   @param userAccount 用户 User Account。该参数为必填，最大不超过 255 字节，不可填 `null`。请确保注册的 User Account 的唯一性。以下为支持的字符集范围（共 89 个字符）：
+   - 26 个小写英文字母 a-z
+   - 26 个大写英文字母 A-Z
+   - 10 个数字 0-9
+   - 空格
+   - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@",
+   "[", "]", "^", "_", " {", "}", "|", "~", ","
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Registers a user account.
    * @brief             Once registered, the user account can be used to identify the local user when the user joins the channel. After the user successfully registers a user account, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onLocalUserRegistered "onLocalUserRegistered" callback on the local client, reporting the user ID and user account of the local user.
    * @brief             To join a channel with a user account, you can choose either of the following:
@@ -210,7 +399,45 @@ public:
    */
 	int registerLocalUserAccount(const char* appId, const char* userAccount);
 
-   /**
+
+   /** @~chinese
+   使用 User Account 加入频道。
+
+   该方法允许本地用户使用 User Account 加入频道。成功加入频道后，会触发以下回调：
+
+   - 本地：\ref agora::rtc::IRtcEngineEventHandler::onLocalUserRegistered "onLocalUserRegistered" 和 \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" 回调
+   - 远端：通信场景下的用户和直播场景下的主播加入频道后，远端会依次触发 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 和 \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" 回调
+
+   用户成功加入（切换）频道后，默认订阅频道内所有其他用户的音频流和视频流，因此产生用量并影响计费。如果想取消订阅，可以通过调用相应的 `mute` 方法实现。
+
+   @note 为保证通信质量，请确保频道内使用同一类型的数据标识用户身份。即同一频道内需要统一使用 UID 或 User Account。
+   如果有用户通过 Agora Web SDK 加入频道，请确保 Web 加入的用户也是同样类型。
+
+   @param token 在 App 服务器端生成的用于鉴权的 Token：
+   - 安全要求不高：你可以使用控制台生成的临时 Token，详见 [获取临时 Token](https://docs.agora.io/cn/Audio%20Broadcast/token?platform=All%20Platforms#获取临时-token)。
+   - 安全要求高：将值设为你的服务端生成的正式 Token，详见 [获取正式 Token](https://docs.agora.io/cn/Audio%20Broadcast/token?platform=All%20Platforms#获取正式-token)。
+   @param channelId 标识频道的频道名，最大不超过 64 字节。以下为支持的字符集范围（共 89 个字符）：
+   - 26 个小写英文字母 a-z
+   - 26 个大写英文字母 A-Z
+   - 10 个数字 0-9
+   - 空格
+   - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ","
+   @param userAccount 用户 User Account。该参数为必需，最大不超过 255 字节，不可为 `null`。请确保注册的 User Account 的唯一性。以下为支持的字符集范围（共 89 个字符）：
+   - 26 个小写英文字母 a-z
+   - 26 个大写英文字母 A-Z
+   - 10 个数字 0-9
+   - 空格
+   - "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@",
+   "[", "]", "^", "_", " {", "}", "|", "~", ","
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+     - #ERR_INVALID_ARGUMENT (-2)
+     - #ERR_NOT_READY (-3)
+     - #ERR_REFUSED (-5)
+   */
+   /** @~english
    * @brief             Joins the channel with a user account.
    * @brief             After the user successfully joins the channel, the SDK triggers the following callbacks:
    *                    <ul>
@@ -237,7 +464,23 @@ public:
    */
 	int joinChannelWithUserAccount(const char* token, const char* channelId, const char* userAccount);
 
-   /**
+   /** @~chinese
+   通过 User Account 获取用户信息。
+
+   远端用户加入频道后，SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
+   并在本地触发 \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" 回调。收到这个回调后，你可以调用该方法，
+   通过传入 User Account 获取包含了指定用户 UID 的 `UserInfo` 对象。
+
+   @param userAccount 用户 User Account。该参数为必填
+   @param[in, out] userInfo 标识用户信息的 `UserInfo` 对象:
+   - 输入值：一个 `UserInfo` 对象
+   - 输出值：一个包含了用户 User Account 和 UID 的 `UserInfo` 对象
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Gets the user information by passing in the user account.
    * @brief             After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object (userInfo), and triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback on the local client.
    * @brief             After receiving the `onUserInfoUpdated` callback, you can call this method to get the user ID of the remote user from the userInfo object by passing in the user account.
@@ -250,7 +493,23 @@ public:
    */
 	int getUserInfoByUserAccount(const char* userAccount, UserInfo* userInfo);
 
-   /**
+   /** @~chinese
+   通过 UID 获取用户信息。
+
+   远端用户加入频道后， SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
+   并在本地触发 \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" 回调。收到这个回调后，你可以调用该方法，
+   通过传入 UID 获取包含了指定用户 User Account 的 `UserInfo` 对象。
+
+   @param uid 用户 UID。该参数为必填
+   @param[in, out] userInfo 标识用户信息的 `UserInfo` 对象:
+   - 输入值：一个 `UserInfo` 对象
+   - 输出值：一个包含了用户 User Account 和 UID 的 `UserInfo` 对象
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Gets the user information by passing in the user ID.
    * @brief             After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them in a mapping table object (userInfo), and triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserInfoUpdated "onUserInfoUpdated" callback on the local client.
    * @brief             After receiving the `onUserInfoUpdated` callback, you can call this method to get the user account of the remote user from the userInfo object by passing in the user ID.
@@ -262,8 +521,25 @@ public:
    *                    \arg  Failure: <0.
    */
 	int getUserInfoByUid(uid_t uid, UserInfo* userInfo);
+   /** @~chinese
+   开始语音通话回路测试。
 
-   /**
+   该方法启动语音通话测试，目的是测试系统的音频设备（耳麦、扬声器等）和网络连接是否正常。
+   在测试过程中，用户先说一段话，声音会在设置的时间间隔（单位为秒）后回放出来。
+   如果用户能正常听到自己刚才说的话，就表示系统音频设备和网络连接都是正常的。
+
+   @note
+   - 请在加入频道前调用该方法。
+   - 调用 startEchoTest 后必须调用 \ref agora::rtc::IRtcEngine::stopEchoTest "stopEchoTest" 以结束测试，否则不能进行下一次回声测试，也无法加入频道。
+   - 直播场景下，该方法仅能由用户角色为主播的用户调用。
+
+   @param intervalInSeconds 设置返回语音通话回路测试结果的时间间隔，取值范围为 [2, 10]，单位为秒，默认为 10 秒。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                   Starts an audio call test.
    * @brief                   This method starts an audio call test to determine whether the audio devices (for example, headset and speaker) and the network connection are working properly.
    * @brief                   In the audio call test, you record your voice. If the recording plays back within the set time interval, the audio devices and the network connection are working properly.
@@ -276,14 +552,38 @@ public:
    */
 	int startEchoTest(int intervalInSeconds);
 
-   /**
+   /** @~chinese
+   停止语音通话回路测试。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops the audio call test.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int stopEchoTest();
 
-   /**
+   /** @~chinese
+   启用视频模块。
+
+   该方法可以在加入频道前或者通话中调用，在加入频道前调用则自动开启视频模块；在通话中调用则由音频模式切换为视频模式。 调用 \ref agora::rtc::IRtcEngine::disableVideo "disableVideo" 方法可关闭视频模式。
+   成功调用该方法后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserEnableVideo "onUserEnableVideo" (true) 回调。
+   @note
+   - 该方法设置内部引擎为启用状态，在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后仍然有效。
+   - 该方法重置整个引擎，响应时间较慢，因此 Agora 建议使用如下方法来控制视频模块：
+     - \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo": 是否启动摄像头采集并创建本地视频流。
+     - \ref agora::rtc::IRtcEngine::muteLocalVideoStream "muteLocalVideoStream": 是否发布本地视频流。
+     - \ref agora::rtc::IRtcEngine::muteRemoteVideoStream "muteRemoteVideoStream": 是否接收并播放远端视频流。
+     - \ref agora::rtc::IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams": 是否接收并播放所有远端视频流。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Enables the video module.
    * @brief    Call this method either before joining a channel or during a call. If this method is called before joining a channel, the call starts in the video mode. If this method is called during an audio call, the audio mode switches to the video mode. To disable the video module, call the \ref disableVideo method.
    * @brief    A successful \ref enableVideo method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserEnableVideo "onUserEnableVideo" (true) callback on the remote client.
@@ -302,7 +602,24 @@ public:
    */
 	int enableVideo();
 
-   /**
+   /** @~chinese
+   关闭视频模块。
+
+   该方法可以在加入频道前或者通话中调用，在加入频道前调用，则自动开启纯音频模式，在通话中调用则由视频模式切换为纯音频频模式。 调用 \ref agora::rtc::IRtcEngine::enableVideo "enableVideo" 方法可开启视频模式。
+   成功调用该方法后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserEnableVideo "onUserEnableVideo" (false) 回调
+   @note
+   - 该方法设置内部引擎为禁用状态，在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后仍然有效。
+   - 该方法重置整个引擎，响应时间较慢，因此声网建议使用如下方法来控制视频模块：
+     - \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo": 是否启动摄像头采集并创建本地视频流。
+     - \ref agora::rtc::IRtcEngine::muteLocalVideoStream "muteLocalVideoStream": 是否发布本地视频流。
+     - \ref agora::rtc::IRtcEngine::muteRemoteVideoStream "muteRemoteVideoStream": 是否接收并播放远端视频流。
+     - \ref agora::rtc::IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams": 是否接收并播放所有远端视频流。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Disables the video module.
    * @brief    This method can be called before joining a channel or during a call. If this method is called before joining a channel, the call starts in audio mode. If this method is called during a video call, the video mode switches to the audio mode. To enable the video module, call the \ref enableVideo method.
    * @brief    A successful \ref disableVideo method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserEnableVideo "onUserEnableVideo" (false) callback on the remote client.
@@ -321,7 +638,22 @@ public:
    */
 	int disableVideo();
 
-   /**
+   /** @~chinese
+   设置视频编码属性。
+
+   设置本地视频的编码属性。视频编码属性包含视频分辨率、帧率、码率等影响视频质量的参数设置。
+
+   该方法设置的值均为理想情况下的最大值。如果因网络环境等原因无法达到设置的值时，会取最接近最大值的那个值。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param config 视频编码参数配置。详见: VideoEncoderConfiguration。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the video encoder configuration.
    * @brief          Each video encoder configuration corresponds to a set of video parameters, including the resolution, frame rate, bitrate, and video orientation.
    * @brief          The parameters specified in this method are the maximum values under ideal network conditions. If the video engine cannot render the video using the specified parameters due to poor network conditions, the parameters further down the list are considered until a successful configuration is found.
@@ -332,7 +664,24 @@ public:
    */
 	int setVideoEncoderConfiguration(const VideoEncoderConfiguration& config);
 
-   /**
+   /** @~chinese
+   设置摄像头采集偏好。
+
+   一般的视频通话或直播中，默认由 SDK 自动控制摄像头的输出参数。在如下特殊场景中，默认的参数通常无法满足需求，或可能引起设备性能问题，我们推荐调用该方法设置摄像头的采集偏好：
+
+   - 使用原始音视频数据自采集接口时，如果 SDK 输出的分辨率和帧率高于 \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 中指定的参数，在后续处理视频帧的时候，比如美颜功能时，会需要更高的 CPU 及内存，容易导致性能问题。在这种情况下，我们推荐将摄像头采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE = 1，避免性能问题。
+   - 如果没有本地预览功能或者对预览质量没有要求，我们推荐将采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE = 1，以优化 CPU 和内存的资源分配。
+   - 如果用户希望本地预览视频比实际编码发送的视频清晰，可以将采集偏好设置为 CAPTURER_OUTPUT_PREFERENCE_PREVIEW = 2。
+
+   @note 请在启动摄像头之前调用该方法，如 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel"，\ref agora::rtc::IRtcEngine::enableVideo "enableVideo" 或者 \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo" 之前。
+
+   @param config 摄像头采集偏好，详见 CameraCapturerConfiguration 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the camera capture configuration.
    * @brief          For a video call or live broadcast, generally the SDK controls the camera output parameters. When the default camera capturer settings do not meet special requirements or cause performance problems, we recommend using this method to set the camera capturer configuration:
    *                 <ul>
@@ -347,7 +696,23 @@ public:
    */
 	int setCameraCapturerConfiguration(const CameraCapturerConfiguration& config);
 
-   /**
+   /** @~chinese
+   初始化本地视图。
+
+   该方法初始化本地视图并设置本地用户视频显示信息，只影响本地用户看到的视频画面，不影响本地发布视频。调用该方法绑定本地视频流的显示视窗(view)，并设置本地用户视图的渲染模式和镜像模式。
+
+   在 App 开发中，通常在初始化后调用该方法进行本地视频设置，然后再加入频道。退出频道后，绑定仍然有效，如果需要解除绑定，可以指定空(NULL)View 调用 setupLocalVideo。
+
+   @note
+   - 该方法在加入频道前后都能调用。
+   - 如果你希望在通话中更新本地用户视图的渲染或镜像模式，请使用 \ref agora::rtc::IRtcEngine::setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode" 方法。
+
+   @param canvas 视频画布信息: VideoCanvas。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the local video view and configures the video display settings on the local machine.
    * @brief          The application calls this method to bind each video window (view) of the local video streams and configures the video display settings. Call this method after initialization to configure the local video display settings before joining a channel. The binding is still valid after the user leaves the channel, which means that the window still displays. To unbind the view, set the view in \ref VideoCanvas to NULL.
    * @param canvas   Pointer to the local video view and settings. See \ref VideoCanvas.
@@ -356,7 +721,26 @@ public:
    */
 	int setupLocalVideo(const VideoCanvas& canvas);
 
-   /**
+   /** @~chinese
+   初始化远端用户视图。
+
+   该方法绑定远端用户和显示视图，并设置远端用户视图在本地显示时的渲染模式和镜像模式，只影响本地用户看到的视频画面。
+
+   调用该接口时需要指定远端视频的 uid，一般可以在进频道前提前设置好。
+
+   如果 App 不能事先知道对方的 uid，可以在 APP 收到 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 事件时设置。
+   如果启用了视频录制功能，视频录制服务会做为一个哑客户端加入频道，因此其他客户端也会收到它的 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 事件，App
+   不应给它绑定视图（因为它不会发送视频流），如果 App 不能识别哑客户端，可以在 \ref agora::rtc::IRtcEngineEventHandler::onFirstRemoteVideoDecoded "onFirstRemoteVideoDecoded" 事件时再绑定视图。
+   解除某个用户的绑定视图可以把 view 设置为空。退出频道后，SDK 会把远端用户的绑定关系清除掉。
+
+   @note 如果你希望在通话中更新远端用户视图的渲染或镜像模式，请使用 \ref IRtcEngine::setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setRemoteRenderMode" 方法。
+
+   @param canvas 视频画布信息: VideoCanvas 。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the remote video view.
    * @brief          This method binds the remote user to the video display window (sets the view for the remote user by the specified uid in \ref VideoCanvas).
    * @brief          The application specifies the uid of the remote video in this method before the remote user joins the channel.
@@ -369,7 +753,20 @@ public:
    */
 	int setupRemoteVideo(const VideoCanvas& canvas);
 
-   /**
+   /** @~chinese
+   开启视频预览。
+
+   该方法用于在进入频道前启动本地视频预览。调用该 API 前，必须：
+
+   - 调用 \ref agora::rtc::IRtcEngine::setupLocalVideo "setupLocalVideo" 设置预览窗口及属性；
+   - 调用 \ref agora::rtc::IRtcEngine::enableVideo "enableVideo" 开启视频功能。
+
+   启用了本地视频预览后，如果调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 退出频道，本地预览依然处于启动状态，如需要关闭本地预览，需要调用 \ref agora::rtc::IRtcEngine::stopPreview "stopPreview"。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Starts the local video preview before joining the channel.
    * @brief    Before calling this method, you must:
    *           <ul>
@@ -382,7 +779,24 @@ public:
    */
 	int startPreview();
 
-   /**
+   /** @~chinese
+   设置远端用户流的优先级。
+   *
+   * 设置远端用户的优先级。如果将某个用户的优先级设为高，那么发给这个用户的音视频流的优先级就会高于其他用户。
+   * 弱网下 SDK 会优先保证高优先级用户收到的流的质量。
+   *
+   * @note
+   * - 目前 Agora SDK 仅允许将一名远端用户设为高优先级。
+   * - 该方法需要在加入频道前调用。
+   *
+   * @param uid  远端用户的 ID。
+   * @param userPriority 远端用户的需求优先级。详见: #PRIORITY_TYPE 。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Prioritizes a remote user's stream.
    * @brief                Use this method with the \ref setRemoteSubscribeFallbackOption method. If the fallback function is enabled for a subscribed stream, the SDK ensures the high-priority user gets the best possible stream quality.
    * @note                 The Agora SDK supports setting userPriority as high for one user only.
@@ -393,14 +807,38 @@ public:
    */
 	int setRemoteUserPriority(agora::rtc::uid_t uid, agora::rtc::PRIORITY_TYPE userPriority);
 
-   /**
+   /** @~chinese
+   停止视频预览。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops the local video preview and disables video.
    * @return               \arg  Success: 0.
    *                       \arg  Failure: <0.
    */
 	int stopPreview();
 
-   /**
+   /** @~chinese
+   启用音频模块。
+
+   启用音频模块（默认为开启状态）。
+
+   @note
+   - 该方法设置音频模块为启用状态，在频道内和频道外均可调用。在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后仍然有效。
+   - 该方法开启整个音频模块，响应时间较慢，因此 Agora 建议使用如下方法来控制音频模块：
+     - \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio": 是否启动麦克风采集并创建本地音频流。
+     - \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream": 是否发布本地音频流。
+     - \ref agora::rtc::IRtcEngine::muteRemoteAudioStream "muteRemoteAudioStream": 是否接收并播放远端音频流。
+     - \ref agora::rtc::IRtcEngine::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams": 是否接收并播放所有远端音频流。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Enables the audio module.
    * @brief    The audio mode is enabled by default.
    * @note     <ul>
@@ -418,7 +856,31 @@ public:
    */
 	int enableAudio();
 
-   /**
+   /** @~chinese
+   开关本地音频采集。
+   *
+   * 当用户加入频道时，语音功能默认是开启的。该方法可以关闭或重新开启本地语音功能，即停止或重新开始本地音频采集。
+   *
+   * 该方法不影响接收或播放远端音频流，\ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio"(false) 适用于只听不发的用户场景。
+   *
+   * 语音功能关闭或重新开启后，会收到回调 \ref agora::rtc::IRtcEngineEventHandler::onLocalAudioStateChanged "onLocalAudioStateChanged"，
+   * 并报告 `LOCAL_AUDIO_STREAM_STATE_STOPPED(0)` 或 `LOCAL_AUDIO_STREAM_STATE_RECORDING(1)`。
+   *
+   * @note
+   * - 该方法与 \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" 的区别在于：
+   *   - \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio": 开启或关闭本地语音采集及处理。使用 `enableLocalAudio` 关闭或开启本地采集后，本地听远端播放会有短暂中断。
+   *   - \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream": 停止或继续发送本地音频流。
+   * - 该方法在加入频道前后都能调用。
+   *
+   * @param enabled
+   * - true: 重新开启本地语音功能，即开启本地语音采集（默认）；
+   * - false: 关闭本地语音功能，即停止本地语音采集。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Disables/Re-enables the local audio function.
    * @brief          The audio function is enabled by default. This method disables or re-enables the local audio function, that is, to stop or restart local audio capturing.
    * @brief          This method does not affect receiving or playing the remote audio streams, and enableLocalAudio(false) is applicable to scenarios where the user wants to receive remote audio streams without sending any audio stream to other users in the channel.
@@ -440,7 +902,22 @@ public:
    */
 	int enableLocalAudio(bool enabled);
 
-   /**
+   /** @~chinese
+   关闭音频模块。
+
+   @note
+   - 该方法设置内部引擎为禁用状态，在频道内和频道外均可调用。在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后仍然有效。
+   - 该方法重置整个引擎，响应时间较慢，因此声网建议使用如下方法来控制音频模块：
+     - \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio": 是否启动麦克风采集并创建本地音频流。
+     - \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream": 是否发布本地音频流。
+     - \ref agora::rtc::IRtcEngine::muteRemoteAudioStream "muteRemoteAudioStream": 是否接收并播放远端音频流。
+     - \ref agora::rtc::IRtcEngine::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams": 是否接收并播放所有远端音频流。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Disables the audio module.
    * @note     \arg  This method affects the internal engine and can be called after the \ref leaveChannel method. You can call this method either before or after joining a channel.
    *           \arg  This method resets the internal engine and takes some time to take effect. We recommend using the \ref enableLocalAudio and \ref muteLocalAudioStream methods to capture, process, and send the local audio streams.
@@ -449,7 +926,22 @@ public:
    */
 	int disableAudio();
 
-   /**
+	/** @~chinese
+   设置音频编码属性。
+
+   @note
+   - 该方法需要在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 之前设置好， \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 之后设置不生效。
+   - 通信和直播场景下，音质（码率）会有网络自适应的调整，通过该方法设置的是一个最高码率。
+   - 在有高音质需求的场景（例如音乐教学场景）中，建议将 profile 设置为 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4)，scenario 设置为 #AUDIO_SCENARIO_GAME_STREAMING (3)。
+
+   @param  profile 设置采样率，码率，编码模式和声道数: #AUDIO_PROFILE_TYPE 。
+   @param  scenario 设置音频应用场景: #AUDIO_SCENARIO_TYPE 。不同的音频场景下，设备的音量类型是不同的。详见[如何区分媒体音量和通话音量](https://docs.agora.io/cn/faq/system_volume)。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the audio parameters and application scenarios.
    * @note           \arg  The \a setAudioProfile method must be called before the \ref joinChannel method.
    *                 \arg  In the Communication and Live-broadcast profiles, the bitrate may be different from your settings due to network self-adaptation.
@@ -461,7 +953,25 @@ public:
    */
 	int setAudioProfile(agora::rtc::AUDIO_PROFILE_TYPE profile, agora::rtc::AUDIO_SCENARIO_TYPE scenario);
 
-   /**
+   /** @~chinese
+   开关本地音频发送。
+   *
+   * 该方法用于允许/禁止往网络发送本地音频流。
+   * 成功调用该方法后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserMuteAudio "onUserMuteAudio" 回调。
+   *
+   * @note
+   * - 该方法不影响音频采集状态，因为并没有禁用音频采集设备。
+   * - 该方法在加入频道前后都能调用。如果你在该方法后调用 \ref agora::rtc::IRtcEngine::setChannelProfile "setChannelProfile" 方法，SDK 会根据你设置的频道场景以及用户角色，重新设置是否停止发送本地音频。因此我们建议在 `setChannelProfile` 后调用该方法。
+   *
+   * @param mute
+   * - true: 停止发送本地音频流；
+   * - false: 继续发送本地音频流（默认）。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes sending the local audio stream.
    * @brief       A successful \ref muteLocalAudioStream method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserMuteAudio "onUserMuteAudio" callback on the remote client.
    * @note        \arg When `mute` is set as `true`, this method does not disable the microphone, which does not affect any ongoing recording.
@@ -474,7 +984,20 @@ public:
    */
 	int muteLocalAudioStream(bool mute);
 
-   /**
+   /** @~chinese
+   接收／停止接收所有音频流。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param mute
+   - true: 停止接收所有音频流；
+   - false: 继续接收所有音频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes receiving all remote users' audio streams.
    * @param mute  Sets whether to receive/stop receiving all remote users' audio streams.
    *              \arg  true: Stops receiving all remote users' audio streams.
@@ -484,7 +1007,26 @@ public:
    */
 	int muteAllRemoteAudioStreams(bool mute);
 
-   /**
+   /** @~chinese
+   设置是否默认接收所有音频流。
+
+   该方法在加入频道前后都可调用。如果在加入频道后调用 `setDefaultMuteAllRemoteAudioStreams(true)`，
+   会接收不到后面加入频道的用户的音频流。
+
+   @note
+   停止接收音频流后，如果想要恢复接收，请调用 `muteRemoteAudioStream(false)`，并指定你想要接收的远端用户的 ID。
+   如果想恢复接收多个用户的音频流，则需要多次调用 `muteRemoteAudioStream`。 `setDefaultMuteAllRemoteAudioStreams(false)`
+   只能恢复接收后面加入频道的用户的音频流。
+
+   @param mute
+   - true:  默认停止接收所有音频流；
+   - false: 默认接收所有音频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes receiving all remote users' audio streams by default.
    * @param mute  Sets whether to receive/stop receiving all remote users' audio streams by default:
    *              \arg  true: Stops receiving all remote users' audio streams by default.
@@ -493,7 +1035,29 @@ public:
    *              \arg  Failure: <0.
    */
 	int setDefaultMuteAllRemoteAudioStreams(bool mute);
-   /** Adjusts the playback volume of a specified remote user.
+
+   /** @~chinese
+   调节本地播放的指定远端用户信号音量。
+
+   @since v3.0.0
+
+   你可以在通话中调用该方法调节指定远端用户在本地播放的音量。如需调节多个用户在本地播放的音量，则需多次调用该方法。
+
+   @note
+   - 请在加入频道后，调用该方法。
+   - 该方法调节的是本地播放的指定远端用户混音后的音量。
+
+   @param uid 远端用户 ID。
+   @param volume 播放音量，取值范围为 [0,100]:
+   - 0: 静音
+   - 100: 原始音量
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
+    Adjusts the playback volume of a specified remote user.
 
      You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
 
@@ -513,7 +1077,23 @@ public:
      */
     int adjustUserPlaybackSignalVolume( unsigned int uid, int volume );
 
-   /**
+   /** @~chinese
+   接收／停止接收指定音频流。
+
+   @note
+   - 如果之前有调用过 \ref agora::rtc::IRtcEngine::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" (true) 停止订阅所有远端音频，在调用本 API 之前请确保你已调用 \ref agora::rtc::IRtcEngine::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" (false)。 muteAllRemoteAudioStreams 是全局控制，muteRemoteAudioStream 是精细控制。
+   - 该方法在加入频道前后都能调用。如果在加入频道前调用，需要自行维护远端用户的 `uid`。
+
+   @param userId 指定用户的 ID
+   @param mute
+   - true: 停止接收指定音频流；
+   - false: 继续接收指定音频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Stops/Resumes receiving a specified remote user's audio stream.
    * @note           If you called the \ref muteAllRemoteAudioStreams method and set \a mute as \a true to stop receiving all remote users' audio streams, call the \a muteAllRemoteAudioStreams method and set \a mute as \a false before calling this method. 
    *                 The \a muteAllRemoteAudioStreams method sets all remote audio streams, while the \a muteRemoteAudioStream method sets a specified remote audio stream.
@@ -526,7 +1106,24 @@ public:
    */
 	int muteRemoteAudioStream(agora::rtc::uid_t userId, bool mute);
 
-   /**
+   /** @~chinese
+   开关本地视频发送。
+
+   成功调用该方法后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserMuteVideo "onUserMuteVideo" 回调。
+
+   @note
+   - 调用该方法时，SDK 不再发送本地视频流，但摄像头仍然处于工作状态。相比于 \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo" (false) 用于控制本地视频流发送的方法，该方法响应速度更快。该方法不影响本地视频流获取，没有禁用摄像头。
+   - 该方法在加入频道前后都能调用。如果你在该方法后调用 \ref agora::rtc::IRtcEngine::setChannelProfile "setChannelProfile" 方法，SDK 会根据你设置的频道场景以及用户角色，重新设置是否停止发送本地视频。因此我们建议在 `setChannelProfile` 后调用该方法。
+
+   @param mute
+   - true: 不发送本地视频流
+   - false: 发送本地视频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes sending the local video stream.
    * @brief       A successful \ref muteLocalVideoStream method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserMuteVideo "onUserMuteVideo" callback on the remote client.
    * @note        \arg  When set to `true`, this method does not disable the camera which does not affect the retrieval of the local video streams. This method executes faster than the \ref enableLocalVideo method which controls the sending of the local video stream.
@@ -539,7 +1136,28 @@ public:
    */
 	int muteLocalVideoStream(bool mute);
 
-   /**
+   /** @~chinese
+   开关本地视频采集。
+
+   该方法禁用或重新启用本地视频采集，不影响接收远端视频。
+
+   调用 \ref agora::rtc::IRtcEngine::enableVideo "enableVideo" 后，本地视频即默认开启。你可以调用 \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo(false)" 关闭本地视频采集。关闭后如果想要重新开启，则可调用 \ref agora::rtc::IRtcEngine::enableLocalVideo "enableLocalVideo(true)"。
+
+   成功禁用或启用本地视频采集后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserEnableLocalVideo "onUserEnableLocalVideo" 回调。
+
+   @note
+   - 该方法在加入频道前后都能调用。
+   - 该方法设置内部引擎为启用状态，在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后仍然有效。
+
+   @param  enabled
+   - true: 开启本地视频采集和渲染 (默认)；
+   - false: 关闭使用本地摄像头设备。关闭后，远端用户会接收不到本地用户的视频流；但本地用户依然可以接收远端用户的视频流。设置为 false 时，该方法不需要本地有摄像头。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Enables/Disables the local video capture.
    * @brief          This method disables or re-enables the local video capturer, and does not affect receiving the remote video stream.
    * @brief          After you call the \ref enableVideo method, the local video capturer is enabled by default. You can call \ref enableLocalVideo "enableLocalVideo"(false) to disable the local video capturer. If you want to re-enable it, call `enableLocalVideo(true)`.
@@ -553,7 +1171,20 @@ public:
    */
 	int enableLocalVideo(bool enabled);
 
-   /**
+   /** @~chinese
+   接收／停止接收所有远端视频流。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param  mute
+   - true: 停止接收所有远端视频流；
+   - false: 允许接收所有远端视频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes receiving all video stream from a specified remote user.
    * @param mute  Sets whether to receive/stop receiving all remote users' video streams:
    *              \arg  true: Stop receiving all remote users' video streams.
@@ -563,7 +1194,23 @@ public:
    */
 	int muteAllRemoteVideoStreams(bool mute);
 
-   /**
+   /** @~chinese
+   设置是否默认停止接收视频流。
+
+   该方法在加入频道前后都可调用。如果在加入频道后调用 `setDefaultMuteAllRemoteVideoStreams (true)`，会接收不到设置后加入频道的用户的视频流。
+
+   @note 停止接收视频流后，如果想要恢复接收，请调用 \ref agora::rtc::IRtcEngine::muteRemoteVideoStream "muteRemoteVideoStream (false)"，并指定你想要接收的远端用户 `uid`；
+   如果想恢复接收多个用户的视频流，则需要多次调用 `muteRemoteVideoStream`。`setDefaultMuteAllRemoteVideoStreams (false)` 只能恢复接收后面加入频道的用户的视频流。
+
+   @param mute
+   - true: 默认停止接收所有远端视频；
+   - false: 默认接收所有远端视频（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Stops/Resumes receiving all remote users' video streams by default.
    * @param mute  Sets whether to receive/stop receiving all remote users' video streams by default:
    *              \arg  true: Stop receiving all remote users' video streams by default.
@@ -573,7 +1220,23 @@ public:
    */
 	int setDefaultMuteAllRemoteVideoStreams(bool mute);
 
-   /**
+   /** @~chinese
+   接收／停止接收指定远端用户的视频流。
+
+   @note
+   - 该方法在加入频道前后都能调用。如果在加入频道前调用，需要自行维护远端用户的 `uid`。
+   - 如果之前调用过 \ref agora::rtc::IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" (true) 停止接收放所有远端视频流，在调用本 API 之前请确保你已调用 \ref agora::rtc::IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" (false) 。\ref agora::rtc::IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" 是全局控制，\ref agora::rtc::IRtcEngine::muteRemoteVideoStream "muteRemoteVideoStream" 是精细控制。
+
+   @param userId 指定用户的用户 ID。
+   @param mute
+   - true: 停止接收指定远端用户的视频流；
+   - false: 允许接收指定远端用户的视频流（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @english
    * @brief          Stops/Resumes receiving the video stream from a specified remote user.
    * @note           If you called the \ref muteAllRemoteVideoStreams method and set mute as true to stop receiving all remote video streams, call the \a muteAllRemoteVideoStreams method and set \a mute as \a false before calling this method.
    * @param userId   User ID of the specified remote user.
@@ -585,7 +1248,29 @@ public:
    */
 	int muteRemoteVideoStream(agora::rtc::uid_t userId, bool mute);
 
-   /**
+   /** @~chinese
+   设置订阅的视频流类型。
+
+   在网络条件受限的情况下，如果发送端没有调用 \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode" (false) 关闭双流模式，接收端可以选择接收大流还是小流。其中，大流可以接为高分辨率高码率的视频流， 小流则是低分辨率低码率的视频流。
+
+   正常情况下，用户默认接收大流。如需接收小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。
+
+   视频小流默认的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
+
+   调用本方法的执行结果将在 \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" 中返回。
+
+   @note 该方法需要在加入频道后调用。如果既调用了 `setRemoteVideoStreamType`，也调用了
+   \ref IRtcEngine::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType"，则 SDK
+   以 `setRemoteVideoStreamType` 中的设置为准。
+
+   @param userId 用户 ID。
+   @param streamType 视频流类型: #REMOTE_VIDEO_STREAM_TYPE。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the remote user's video stream type received by the local user when the remote user sends dual streams.
    * @brief             This method allows the application to adjust the corresponding video-stream type based on the size of the video window to reduce the bandwidth and resources.
    *                    \arg  If the remote user enables the dual-stream mode by calling the \ref enableDualStreamMode method, the SDK receives the high-stream video by default.
@@ -600,7 +1285,28 @@ public:
    */
 	int setRemoteVideoStreamType(agora::rtc::uid_t userId, agora::rtc::REMOTE_VIDEO_STREAM_TYPE streamType);
 
-   /**
+   /** @~chinese
+   设置默认订阅的视频流类型。
+
+   在网络条件受限的情况下，如果发送端没有调用 \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode" (false) 关闭双流模式，
+   接收端可以选择接收大流还是小流。其中，大流可以接为高分辨率高码率的视频流， 小流则是低分辨率低码率的视频流。
+
+   正常情况下，用户默认接收大流。如需默认接收所有用户的视频小流，可以调用本方法进行切换。SDK 会根据视频窗口的大小动态调整对应视频流的大小，以节约带宽和计算资源。视频小流默认
+   的宽高比和视频大流的宽高比一致。根据当前大流的宽高比，系统会自动分配小流的分辨率、帧率及码率。
+
+   调用本方法的执行结果将在 \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" 中返回。
+
+   @note 该方法需要在加入频道后调用。如果既调用了 `setRemoteVideoStreamType`，也调用了
+   \ref IRtcEngine::setRemoteDefaultVideoStreamType "setRemoteDefaultVideoStreamType"，则 SDK
+   以 `setRemoteVideoStreamType` 中的设置为准。
+
+   @param streamType 视频流类型: #REMOTE_VIDEO_STREAM_TYPE 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the default video-stream type for the video received by the local user when the remote user sends dual streams.
    *                    \arg  If the dual-stream mode is enabled by calling the \ref enableDualStreamMode method, the user receives the high-stream video by default. The `setRemoteDefaultVideoStreamType` method allows the application to adjust the corresponding video-stream type according to the size of the video window, reducing the bandwidth and resources.
    *                    \arg  If the dual-stream mode is not enabled, the user receives the high-stream video by default.
@@ -611,7 +1317,28 @@ public:
    */
 	int setRemoteDefaultVideoStreamType(agora::rtc::REMOTE_VIDEO_STREAM_TYPE streamType);
 
-   /**
+   /** @~chinese
+   启用用户音量提示。
+
+   该方法允许 SDK 定期向 app 报告本地发流用户和瞬时音量最高的远端用户（最多 3 位）的音量相关信息。启用该方法后，只要频道内有发流用户，
+   SDK 会在加入频道后按设置的时间间隔触发 \ref agora::rtc::IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" 回调。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param interval 指定音量提示的时间间隔：
+   - &le; 0: 禁用音量提示功能。
+   - > 0: 返回音量提示的间隔，单位为毫秒。建议设置到大于 200 毫秒。最小不得少于 10 毫秒，否则会
+   收不到 \ref agora::rtc::IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" 回调。
+   @param smooth 平滑系数，指定音量提示的灵敏度。取值范围为 [0,10]，建议值为 3。数字越大，波动越灵敏；数字越小，波动越平滑。
+   @param report_vad
+   - true：开启本地人声检测功能。开启后，`onAudioVolumeIndication` 回调的 `vad` 参数会报告是否在本地检测到人声。
+   - false：（默认）关闭本地人声检测功能。除引擎自动进行本地人声检测的场景外，`onAudioVolumeIndication` 回调的 `vad` 参数不会报告是否在本地检测到人声。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Enables the \ref agora::rtc::IRtcEngineEventHandler::onAudioVolumeIndication "onAudioVolumeIndication" callback at a set time interval to report on which users are speaking and the speakers' volume.
    * @brief             Once this method is enabled, the SDK returns the volume indication in the `onAudioVolumeIndication` callback at the set time interval, whether or not any user is speaking in the channel.
    * @param interval    Sets the time interval between two consecutive volume indications:
@@ -625,7 +1352,31 @@ public:
    */
 	int enableAudioVolumeIndication(int interval, int smooth, bool report_vad);
 
-   /**
+   /** @~chinese
+   开始客户端录音。
+
+   Agora SDK 支持通话过程中在客户端进行录音。调用该方法后，你可以录制频道内所有用户的音频，并得到一个包含所有用户声音的录音文件。录音文件格式可以为:
+   - .wav: 文件大，音质保真度较高。
+   - .aac: 文件小，音质保真度较低。
+
+   @note
+   - 请确保你在该方法中指定的路径存在并且可写。
+   - 该接口需在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 之后调用。如果调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 时还在录音，录音会自动停止。
+   - 为保证录音效果，当 `sampleRate` 设为 44.1 kHz 或 48 kHz 时，建议将 `quality` 设为 #AUDIO_RECORDING_QUALITY_MEDIUM 或 #AUDIO_RECORDING_QUALITY_HIGH 。
+
+   @param filePath 录音文件在本地保存的绝对路径，由用户自行指定，需精确到文件名及格式，例如：c:/music/audio.aac。
+   @param sampleRate 录音采样率（Hz），可以设为以下值：
+   - 16000
+   - 32000（默认）
+   - 44100
+   - 48000
+   @param quality 录音音质。详见 #AUDIO_RECORDING_QUALITY_TYPE 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Starts an audio recording on the client.
    * @brief             The SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file. Supported formats of the recording file are as follows:
    *                    <ul>
@@ -647,7 +1398,16 @@ public:
    */
 	int startAudioRecording(const char* filePath, int sampleRate, AUDIO_RECORDING_QUALITY_TYPE quality);
 
-   /**
+   /** @~chinese
+   停止客户端录音。
+
+   停止录音。该接口需要在 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 之前调用，不然会在调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 时自动停止。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops an audio recording on the client.
    * @brief    You can call this method before calling the \ref leaveChannel method else, the recording automatically stops when the \ref leaveChannel method is called.
    * @return   \arg  Success: 0.
@@ -655,7 +1415,36 @@ public:
    */
 	int stopAudioRecording();
 
-   /**
+   /** @~chinese
+   开始播放音乐文件。
+
+   指定本地或在线音频文件来和麦克风采集的音频流进行混音和替换。替换是指用音频文件替换音频采集设备采集的音频流。该方法可以选择是否让对方听到本地播
+   放的音频并指定循环播放的次数。成功调用该方法后，本地会触发
+   \ref agora::rtc::IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (PLAY) 回调。播放结束后，
+   会收到 \ref agora::rtc::IRtcEngineEventHandler::onAudioMixingStateChanged "onAudioMixingStateChanged" (STOPPED) 回调。
+
+   @note
+   - 请在频道内调用该方法，如果在频道外调用该方法可能会出现问题。
+   - 如果本地音乐文件不存在、文件格式不支持、无法访问在线音乐文件 URL 都会返回警告码 WARN_AUDIO_MIXING_OPEN_ERROR = 701。
+
+   @param filePath 指定需要混音的本地或在线音频文件的绝对路径，例如：c:/music/audio.mp4。建议填写文件后缀名。若无法确定文件后缀名，可不填。
+   支持的音频格式包括：3GP、ASF、ADTS、AVI、MP3、MP4、MPEG-4、SAMI 和 WAVE。
+   详见 [Supported Media Formats in Media Foundation](https://docs.microsoft.com/zh-cn/windows/desktop/medfound/supported-media-formats-in-media-foundation) 。
+   @param loopback
+   - true: 只有本地用户可以听到混音的音频；
+   - false: 本地用户和远端用户都能听到混音的音频。
+   @param replace
+   - true: 只推送指定的本地音频文件或者线上音频文件，不传输麦克风收录的音频。
+   - false: 本地音频文件与来自麦克风的音频流混音。
+   @param cycle 循环播放次数：
+   - 正整数: 循环播放的次数；
+   - -1: 无限循环。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Starts playing and mixing the music file.
    * @brief             This method mixes the specified local audio file with the audio stream from the microphone, or replaces the microphone's audio stream with the specified local audio file. 
    *                    You can choose whether the other user can hear the local audio playback and specify the number of playback loops. This method also supports online music playback.
@@ -677,32 +1466,69 @@ public:
    *                    \arg  Failure: <0.
    */
 	int startAudioMixing(const char* filePath, bool loopback, bool replace, int cycle);
+   /** @~chinese
+   停止播放音乐文件。
 
-   /**
+   该方法停止播放音乐文件。请在频道内调用该方法。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops playing and mixing the music file.
    * @brief    Call this method when you are in a channel.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int stopAudioMixing();
+   /** @~chinese
+   暂停播放音乐文件。
 
-   /**
+   该方法暂停播放音乐文件。请在频道内调用该方法。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Pauses playing and mixing the music file.
    * @brief    Call this method when you are in a channel.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int pauseAudioMixing();
+   /** @~chinese
+   恢复播放音乐文件。
 
-   /**
+   该方法恢复混音，继续播放音乐文件。请在频道内调用该方法。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Resumes playing and mixing the music file.
    * @brief    Call this method when you are in a channel.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int resumeAudioMixing();
+   /** @~chinese
+   调节音乐文件的播放音量。
 
-   /**
+   该方法调节混音音乐文件在本端和远端的播放音量大小。
+
+   @note
+   - 该方法需要在 \ref IRtcEngine::startAudioMixing "startAudioMixing" 后调用。
+   - 调用该方法不影响调用 \ref agora::rtc::IRtcEngine::playEffect "playEffect" 播放音效文件的音量。
+
+   @param volume 音乐文件音量范围为 0~100。100 （默认值）为原始文件音量。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Adjusts the volume during audio mixing.
    * @brief          Call this method when you are in a channel.
    * @note           Calling this method does not affect the volume of audio effect file playback invoked by the \ref playEffect method.
@@ -712,7 +1538,19 @@ public:
    */
 	int adjustAudioMixingVolume(int volume);
 
-   /**
+   /** @~chinese
+   调节音乐文件本端播放音量。
+
+   该方法调节混音音乐文件在本端的播放音量大小。
+
+   @note 该方法需要在 \ref IRtcEngine::startAudioMixing "startAudioMixing" 后调用。
+
+   @param volume 音乐文件音量范围为 0~100。100 （默认值） 为原始文件音量。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Adjusts the audio mixing volume for local playback.
    * @note           Call this method when you are in a channel.
    * @param volume   Audio mixing volume for local playback. The value ranges between 0 and 100 (default).
@@ -721,7 +1559,18 @@ public:
    */
 	int adjustAudioMixingPlayoutVolume(int volume);
 
-   /**
+   /** @~chinese
+   获取音乐文件的本地播放音量。
+
+   该方法获取混音的音乐文件本地播放音量，方便排查音量相关问题。
+
+   @note 请在频道内调用该方法。
+
+   @return
+   - &ge; 0: 方法调用成功则返回音量值，范围为 [0,100]
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Retrieves the audio mixing volume for local playback.
    * @brief    This method helps troubleshoot audio volume related issues.
    * @note     Call this method when you are in a channel.
@@ -729,8 +1578,19 @@ public:
    *           \arg  < 0: Failure.
    */
 	int getAudioMixingPlayoutVolume();
+   /** @~chinese
+   调节音乐文件远端播放音量。
 
-   /**
+   该方法调节混音音乐文件在远端的播放音量大小。
+
+   @note 该方法需要在 \ref IRtcEngine::startAudioMixing "startAudioMixing" 后调用。
+
+   @param volume 音乐文件音量范围为 0~100。100 （默认值） 为原始文件音量。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Adjusts the audio mixing volume for publishing (for remote users).
    * @note           Call this method when you are in a channel.
    * @param volume   Audio mixing volume for publishing. The value ranges between 0 and 100 (default).
@@ -748,15 +1608,32 @@ public:
    */
 	int getAudioMixingPublishVolume();
 
-   /**
+   /** @~chinese
+   获取音乐文件总时长。
+
+   该方法获取音乐文件总时长，单位为毫秒。请在频道内调用该方法。
+
+   @return
+   - &ge; 0: 方法调用成功返回音乐文件时长。
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Retrieves the duration (ms) of the music file.
    * @brief    Call this method when you are in a channel.
    * @return   \arg  ≥ 0: The audio mixing duration, if this method call succeeds.
    *           \arg  < 0: Failure.
    */
 	int getAudioMixingDuration();
+   /** @~chinese
+   获取音乐文件的播放进度。
 
-   /**
+   该方法获取当前音乐文件播放进度，单位为毫秒。请在频道内调用该方法。
+
+   @return
+   - &ge; 0: 方法调用成功返回音乐文件播放进度。
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Retrieves the playback position (ms) of the music file.
    * @brief    Call this method when you are in a channel.
    * @return   \arg  ≥ 0: The current playback position of the audio mixing, if this method call succeeds.
@@ -764,7 +1641,19 @@ public:
    */
 	int getAudioMixingCurrentPosition();
 
-   /**
+   /** @~chinese
+   设置音乐文件的播放位置。
+
+   该方法可以设置音频文件的播放位置，这样你可以根据实际情况播放文件，而非从头到尾播放整个文件。
+
+   @note 该方法需要在 \ref IRtcEngine::startAudioMixing "startAudioMixing" 后调用。
+
+   @param pos 整数。进度条位置，单位为毫秒。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Sets the playback position of the music file to a different starting position (the default plays from the beginning).
    * @param pos   The playback starting position (ms) of the music file.
    * @return         \arg  Success: 0.
@@ -772,7 +1661,19 @@ public:
    */
 	int setAudioMixingPosition(int pos /*in ms*/);
 
-   /** 
+   /** @~chinese
+     * 调整本地播放的音乐文件的音调。
+     *
+     * 本地人声和播放的音乐文件混音时，调用该方法可以仅调节音乐文件的音调。
+     * @note
+     * 该方法需在 `startAudioMixing` 后调用。
+     * @param pitch 按半音音阶调整本地播放的音乐文件的音调，默认值为 0，即不调整音调。取值范围为 [-12,12]，
+     * 每相邻两个值的音高距离相差半音。取值的绝对值越大，音调升高或降低得越多。
+     * @return
+     * - 0：方法调用成功
+     * - < 0：方法调用失败
+     */
+   /** @~english
     * @brief Sets the pitch of the local music file.
     * @since v3.0.1
     * @note
@@ -787,16 +1688,37 @@ public:
     *                 \arg  Failure: <0.
     */
    int setAudioMixingPitch( int pitch );
+   /** @~chinese
+   获取音效文件的播放音量。
 
-   /**
+   音量范围为 0~100。100 （默认值）为原始文件音量。
+
+   @note 该方法需要在 \ref IRtcEngine::playEffect "playEffect" 后调用。
+
+   @return
+   - 音效文件的音量。
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Retrieves the volume of the audio effects.
    * @brief    The value ranges between 0.0 and 100.0.
    * @return   \arg  ≥ 0: Volume of the audio effects, if this method call succeeds.
    *           \arg  < 0: Failure.
    */
 	int getEffectsVolume();
+   /** @~chinese
+   设置音效文件的播放音量。
 
-   /**
+   音量范围为 0~100。100 （默认值）为原始文件音量。
+
+   @note 该方法需要在 \ref IRtcEngine::playEffect "playEffect" 后调用。
+
+   @param volume 该方法设置音效的音量。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the volume of the audio effects.
    * @param volume   Sets the volume of the audio effects. The value ranges between 0 and 100 (default).
    * @return         \arg  Success: 0.
@@ -804,7 +1726,18 @@ public:
    */
 	int setEffectsVolume(int volume);
 
-   /**
+   /** @~chinese
+   实时调整音效文件的播放音量。
+
+   @note 该方法需要在 \ref IRtcEngine::playEffect "playEffect" 后调用。
+
+   @param soundId 指定音效的 ID。每个音效均有唯一的 ID。
+   @param volume 播放音量。音量范围为 0~100。100 （默认值）为原始文件音量。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the volume of a specified audio effect.
    * @param soundId  ID of the audio effect. Each audio effect has a unique ID.
    * @param volume   Sets the volume of the specified audio effect. The value ranges between 0 and 100 (default).
@@ -813,7 +1746,37 @@ public:
    */
 	int setVolumeOfEffect(int soundId, int volume);
 
-   /**
+   /** @~chinese
+   播放指定音效文件。
+
+   你可以多次调用该方法，通过传入不同的音效文件的 `soundID` 和 `filePath`，同时播放多个音效文件，实现音效叠加。为获得最佳用户体验，我们建议同时播放的音效文件不要超过 3 个。在 macOS 和 Windows 上，该方法不支持同时播放多个在线音效文件。
+
+   @note 该方法需要在加入频道后调用。
+
+   @param soundId 指定音效的 ID。每个音效均有唯一的 ID。
+   @note 如果你已通过 \ref agora::rtc::IRtcEngine::preloadEffect "preloadEffect" 将音效加载至内存，确保这里设置的 soundId 与 \ref agora::rtc::IRtcEngine::preloadEffect "preloadEffect" 设置的 soundId 相同。
+   @param filePath 音效文件的绝对路径或 URL 地址，例如：c:/music/audio.mp4。建议填写文件后缀名。若无法确定文件后缀名，可不填。
+   支持的音频格式包括：mp3、mp4、m4a、aac、3gp、mkv 及 wav。
+   详见 [Supported Media Formats in Media Foundation](https://docs.microsoft.com/zh-cn/windows/desktop/medfound/supported-media-formats-in-media-foundation) 。
+   @param loopCount 设置音效循环播放的次数：
+   - 0: 播放音效一次；
+   - 1: 播放音效两次；
+   - -1: 无限循环播放音效，直至调用 \ref agora::rtc::IRtcEngine::stopEffect "stopEffect" 或 \ref agora::rtc::IRtcEngine::stopAllEffects "stopAllEffects" 后停止。
+   @param pitch 设置音效的音调 取值范围为 [0.5, 2]。默认值为 1.0，表示不需要修改音调。取值越小，则音调越低。
+   @param pan 设置是否改变音效的空间位置。取值范围为 [-1.0, 1.0]:
+   - 0.0: 音效出现在正前方；
+   - 1.0: 音效出现在右边；
+   - -1.0: 音效出现在左边。
+   @param gain 设置是否改变单个音效的音量。取值范围为 [0.0, 100.0]。默认值为 100.0。取值越小，则音效的音量越低。
+   @param publish 设置是否将音效传到远端：
+   - true: 音效在本地播放的同时，会发布到 Agora 云端，因此远端用户也能听到该音效；
+   - false: 音效不会发布到 Agora 云端，因此只能在本地听到该音效。
+
+   @return
+   - 0：方法调用成功
+   - < 0：方法调用失败
+   */
+   /** @~english
    * @brief             Plays a specified local or online audio effect file.
    * @brief             This method allows you to set the loop count, pitch, pan, and gain of the audio effect file, as well as whether the remote user can hear the audio effect.
    * @brief             To play multiple audio effect files simultaneously, call this method multiple times with different soundIds and filePaths. We recommend playing no more than three audio effect files at the same time.
@@ -846,22 +1809,51 @@ public:
 		int gain,
 		bool publish = false);
 
-   /**
+   /** @~chinese
+   停止播放指定音效文件。
+
+   @param soundId 指定音效文件的 ID。每个音效文件均有唯一的 ID。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Stops playing a specified audio effect.
    * @param soundId  ID of the audio effect to stop playing. Each audio effect has a unique ID.
    * @return         \arg  Success: 0.
    *                 \arg  Failure: <0.
    */
 	int stopEffect(int soundId);
+   /** @~chinese
+   停止播放所有音效文件。
 
-   /**
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops playing all audio effects.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int stopAllEffects();
 
-   /**
+   /** @~chinese
+   将音效文件加载至内存。
+
+   该方法将指定音效文件预加载至内存。
+
+   @note 该方法不支持在线音频文件。
+
+   为保证通信畅通，请注意控制预加载音效文件的大小，并在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 前就使用该方法完成音效预加载。音频文件支持以下音频格式: mp3、aac、m4a、3gp，和 wav。
+
+   @param soundId 指定音效文件的 ID。每个音效文件均有唯一的 ID。
+   @param filePath 音效文件的绝对路径。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Preloads a specified audio effect file into the memory.
    * @note           This method does not support online audio effect files.
    * @brief          To ensure smooth communication, limit the size of the audio effect file. We recommend using this method to preload the audio effect before calling the \ref joinChannel method.
@@ -873,7 +1865,15 @@ public:
    */
 	int preloadEffect(int soundId, const char* filePath);
 
-   /**
+   /** @~chinese
+   从内存释放某个预加载的音效文件。
+
+   @param soundId 指定音效文件的 ID。每个音效文件均有唯一的 ID
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Releases a specified preloaded audio effect from the memory.
    * @param soundId  ID of the audio effect. Each audio effect has a unique ID.
    * @return         \arg  Success: 0.
@@ -881,37 +1881,76 @@ public:
    */
 	int unloadEffect(int soundId);
 
-   /**
+   /** @~chinese
+   暂停音效文件播放。
+
+   @param soundId 指定音效文件的 ID。每个音效文件均有唯一的 ID。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Pauses a specified audio effect.
    * @param soundId  ID of the audio effect. Each audio effect has a unique ID.
    * @return         \arg  Success: 0.
    *                 \arg  Failure: <0.
    */
 	int pauseEffect(int soundId);
+   /** @~chinese
+   暂停所有音效文件播放。
 
-   /**
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Pauses all audio effects.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int pauseAllEffects();
+   /** @~chinese
+   恢复播放指定音效文件。
 
-   /**
+   @param soundId 指定音效文件的 ID。每个音效文件均有唯一的 ID。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Resumes playing a specified audio effect.
    * @param soundId  ID of the audio effect. Each audio effect has a unique ID.
    * @return         \arg  Success: 0.
    *                 \arg  Failure: <0.
    */
 	int resumeEffect(int soundId);
+   /** @~chinese
+   恢复播放所有音效文件。
 
-   /**
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Resumes playing all audio effects.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int resumeAllEffects();
+   /** @~chinese
+   开启/关闭远端用户的语音立体声。
 
-   /**
+   如果想调用 \ref agora::rtc::IRtcEngine::setRemoteVoicePosition "setRemoteVoicePosition" 实现听声辨位的功能，请确保在加入频道前调用该方法开启远端用户的语音立体声。
+
+   @param enabled 是否开启远端用户语音立体声：
+   - true: 开启
+   - false: 关闭
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Enables/Disables stereo panning for remote users.
    * @brief          Ensure that you call this method before joinChannel to enable stereo panning for remote users so that the local user can track the position of a remote user by calling \ref setRemoteVoicePosition.
    * @param enabled  Sets whether or not to enable stereo panning for remote users:
@@ -922,7 +1961,30 @@ public:
    */
 	int enableSoundPositionIndication(bool enabled);
 
-   /**
+   /** @~chinese
+   设置远端用户的语音位置。
+
+   设置远端用户声音的空间位置和音量，方便本地用户听声辨位。
+
+   通过调用该接口设置远端用户声音出现的位置，左右声道的声音差异会产生声音的方位感，从而判断出远端用户的实时位置。在多人在线游戏场景，如吃鸡游戏中，该方法能有效增加游戏角色的方位感，模拟真实场景。
+
+   @note
+   - 为获得最佳听觉体验，我们建议使用该方法时使用立体声外放。
+   - 该方法需要在加入频道后调用。
+
+   @param uid 远端用户的 ID
+   @param pan 设置远端用户声音的空间位置，取值范围为 [-1.0,1.0]:
+   - (默认）0.0: 声音出现在正前方。
+   - -1.0: 声音出现在左边。
+   - 1.0: 声音出现在右边。
+
+   @param gain 设置远端用户声音的音量，取值范围为 [0.0,100.0]，默认值为 100.0，表示该用户的原始音量。取值越小，则音量越低。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Sets the sound position and gain of a remote user.
    * @brief       When the local user calls this method to set the sound position of a remote user, the sound difference between the left and right channels allows the local user to track the real-time position of the remote user, creating a real sense of space. This method applies to massively multiplayer online games, such as Battle Royale games.
    * @note        \arg  For this method to work, enable stereo panning for remote users by calling the \ref enableSoundPositionIndication method before joining a channel.
@@ -938,7 +2000,17 @@ public:
    */
 	int setRemoteVoicePosition(uid_t uid, double pan, double gain);
 
-   /**
+   /** @~chinese
+   设置本地语音音调。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param pitch 语音频率可以 [0.5,2.0] 范围内设置。取值越小，则音调越低。默认值为 1.0，表示不需要修改音调。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief       Changes the voice pitch of the local speaker.
    * @param pitch Sets the voice pitch. The value ranges between 0.5 and 2.0. The lower the value, the lower the voice pitch. The default value is 1.0 (no change to the local voice pitch).
    * @return      \arg  Success: 0.
@@ -946,7 +2018,19 @@ public:
    */
 	int setLocalVoicePitch(double pitch);
 
-   /**
+   /** @~chinese
+   设置本地语音音效均衡。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param bandFrequency 频谱子带索引。取值范围是 [0,9]，分别代表音效的 10 个频带。对应的中心频率为 [31，62，125，250，500，1k，2k，4k，8k，16k] Hz。详见 #AUDIO_EQUALIZATION_BAND_FREQUENCY 。
+   @param bandGain  每个 band 的增益，单位是 dB，每一个值的范围是 [-15,15]。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the local voice equalization effect.
    * @param bandFrequency  Sets the band frequency. The value ranges between 0 and 9, representing the respective 10-band center frequencies of the voice effects, including 31, 62, 125, 500, 1k, 2k, 4k, 8k, and 16k Hz. See \ref AUDIO_EQUALIZATION_BAND_FREQUENCY.
    * @param bandGain       Sets the gain of each band in dB. The value ranges between -15 and 15.
@@ -954,8 +2038,18 @@ public:
    *                       \arg  Failure: <0.
    */
 	int setLocalVoiceEqualization(agora::rtc::AUDIO_EQUALIZATION_BAND_FREQUENCY bandFrequency, int bandGain);
+   /** @~chinese
+   设置本地音效混响。
 
-   /**
+   @note 该方法在加入频道前后都能调用。
+
+   @param reverbKey 混响音效 Key。该方法共有 5 个混响音效 Key:  #AUDIO_REVERB_TYPE 。
+   @param value 各混响音效 Key 所对应的值：
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the local voice reverberation.
    * @brief             v2.4.0 adds the \ref setLocalVoiceReverbPreset method, a more user-friendly method for setting the local voice reverberation. You can use this method to set the local reverberation effect, such as pop music, R&B, rock music, and hip-hop.
    * @param reverbKey   Sets the reverberation key. See \ref AUDIO_REVERB_TYPE.
@@ -965,7 +2059,29 @@ public:
    */
 	int setLocalVoiceReverb(agora::rtc::AUDIO_REVERB_TYPE reverbKey, int value);
 
-   /**
+   /** @~chinese
+   设置本地语音变声、美音或语聊美声效果。
+   *
+   * @deprecated 该方法从 v3.2.0 起废弃，请改用 \ref IRtcEngine::setAudioEffectPreset "setAudioEffectPreset" 或 \ref IRtcEngine::setVoiceBeautifierPreset "setVoiceBeautifierPreset"。
+   *
+   * 通信场景下的用户或直播场景下的主播均可调用该方法为本地语音设置以下效果。成功设置以后，频道内的所有用户均可听到声音效果。
+   * - 变声效果：枚举值以 `VOICE_CHANGER` 为前缀。效果包括老男人、小男孩、小女孩、猪八戒、空灵和绿巨人，通常用于语聊场景。
+   * - 美音效果：枚举值以 `VOICE_BEAUTY` 为前缀。效果包括浑厚、低沉、圆润、假音、饱满、清澈、高亢、嘹亮和空旷，通常用于语聊和唱歌场景。
+   * - 语聊美声效果：枚举值以 `GENERAL_BEAUTY_VOICE` 为前缀。效果包括磁性（男）、清新（女）和活力（女），通常用于语聊场景。该功能主要细化了男声和女声各自的特点。
+   *
+   * @note
+   * - 为达到更好的声音效果，Agora 推荐在调用该方法前将 \ref IRtcEngine::setAudioProfile "setAudioProfile" 的 `profile` 参数设置为 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) 或 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO (5)
+   * - 该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含人声和音乐的音频数据。
+   * - 该方法不能与 \ref IRtcEngine::setLocalVoiceReverbPreset "setLocalVoiceReverbPreset" 方法一同使用，否则先调的方法会不生效。更多注意事项，详见进阶功能《变声与混响》。
+   * - 该方法在加入频道前后都能调用。
+   *
+   * @param voiceChanger 预设本地语音变声、美音或语聊美声效果选项，默认值为 #VOICE_CHANGER_OFF ，即原声。详见 #VOICE_CHANGER_PRESET 。
+   * 设置语聊美声效果时，Agora 推荐使用 #GENERAL_BEAUTY_VOICE_MALE_MAGNETIC 处理男声，使用 #GENERAL_BEAUTY_VOICE_FEMALE_FRESH 或 #GENERAL_BEAUTY_VOICE_FEMALE_VITALITY 处理女声，否则音频可能会产生失真。
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the local voice changer option.
    * @note                 Do not use this method together with the \ref setLocalVoiceReverbPreset method, because the method called later overrides the one called earlier.
    * @param voiceChanger   Sets the local voice changer option. See \ref VOICE_CHANGER_PRESET.
@@ -973,8 +2089,28 @@ public:
    *                       \arg  Failure: <0.
    */
 	int setLocalVoiceChanger(agora::rtc::VOICE_CHANGER_PRESET voiceChanger);
+   /** @~chinese
+   设置本地语音混响（含虚拟立体声效果）。
 
-   /**
+   @deprecated 该方法从 v3.2.0 起废弃，请改用 \ref IRtcEngine::setAudioEffectPreset "setAudioEffectPreset" 或 \ref IRtcEngine::setVoiceBeautifierPreset "setVoiceBeautifierPreset"。
+
+   通信场景下的用户或直播场景下的主播均可调用该方法设置本地语音混响。成功设置以后，频道内的所有用户均可听到声音效果。
+
+   @note
+   - 当使用以 `AUDIO_REVERB_FX` 为前缀的枚举值时，请确保在调用该方法前将 \ref IRtcEngine::setAudioProfile "setAudioProfile" 的 `profile` 参数设置为 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) 或 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO (5) ，否则该方法设置无效。
+   - 当使用 #AUDIO_VIRTUAL_STEREO 时，Agora 推荐在调用该方法前将 `setAudioProfile` 的 `profile` 参数设置为 #AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO (5)
+   - 该方法对人声的处理效果最佳，Agora 不推荐调用该方法处理含人声和音乐的音频数据。
+   - 该方法不能与 \ref IRtcEngine::setLocalVoiceChanger "setLocalVoiceChanger" 方法一同使用，否则先调的方法会不生效。更多注意事项，详见进阶功能《变声与混响》。
+   - 该方法在加入频道前后都能调用。
+
+   @param reverbPreset 本地语音混响选项，默认值为 #AUDIO_REVERB_OFF ，即原声。详见 #AUDIO_REVERB_PRESET 。
+   为达到更好的混响效果，Agora 推荐使用以 `AUDIO_REVERB_FX` 为前缀的枚举值。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the preset local voice reverberation effect.
    * @note                 \arg  Do not use this method together with \ref setLocalVoiceReverb.
    *                       \arg  Do not use this method together with the \ref setLocalVoiceChanger method, because the method called later overrides the one called earlier.
@@ -984,7 +2120,25 @@ public:
    */
 	int setLocalVoiceReverbPreset(agora::rtc::AUDIO_REVERB_PRESET reverbPreset);
 
-   /**
+   /** @~chinese
+   设置 Agora SDK 输出的日志文件。
+   *
+   * 默认情况下，SDK 会生成 `agorasdk.log`、`agorasdk_1.log`、`agorasdk_2.log`、`agorasdk_3.log`、`agorasdk_4.log` 这 5 个日志文件。
+   * 每个文件的默认大小为 1024 KB。日志文件为 UTF-8 编码。最新的日志永远写在 `agorasdk.log` 中。`agorasdk.log` 写满后，SDK 会从 1-4 中删除修改时间最早的一个文件，
+   * 然后将 `agorasdk.log` 重命名为该文件，并建立新的 `agorasdk.log` 写入最新的日志。
+   *
+   * @note 如需调用本方法，请在调用 \ref agora::rtc::IRtcEngine::initialize "initialize" 方法初始化 IRtcEngine 对象后立即调用，否则可能造成输出日志不完整。
+   *
+   * @see \ref IRtcEngine::setLogFileSize "setLogFileSize"
+   * @see \ref IRtcEngine::setLogFilter "setLogFilter"
+   *
+   * @param filePath 日志文件的完整路径。默认路径为 `C:\Users\<user_name>\AppData\Local\Agora\<process_name>\agorasdk.log`。请确保指定的目录存在而且可写。你可通过该参数修改日志文件名。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Specifies an SDK output log file.
    * @brief          The log file records all SDK operations during runtime. If it does not exist, the SDK creates one.
    * @note           \arg  The default log file is located at: C:\\Users\\<user_name>\\AppData\\Local\\Agora\\<process_name\>.
@@ -995,7 +2149,23 @@ public:
    */
 	int setLogFile(const char* filePath);
 
-   /**
+   /** @~chinese
+   设置日志输出等级。
+
+   设置 Agora SDK 的输出日志输出等级。不同的输出等级可以单独或组合使用。日志级别顺序依次为 OFF、CRITICAL、ERROR、WARNING、INFO 和 DEBUG。选择一个级别，你就可以看到在该级别之前所有级别的日志信息。
+
+   例如，你选择 WARNING 级别，就可以看到在 CRITICAL、ERROR 和 WARNING 级别上的所有日志信息。
+
+   @see \ref IRtcEngine::setLogFile "setLogFile"
+   @see \ref IRtcEngine::setLogFileSize "setLogFileSize"
+
+   @param filter 设置过滤等级: #LOG_FILTER_TYPE 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the output log level of the SDK.
    * @brief          You can use one or a combination of the log filter levels. The log level follows the sequence of OFF, CRITICAL, ERROR, WARNING, INFO, and DEBUG. Choose a level to see the logs preceding that level.
    * @brief          If you set the log level to WARNING, you see the logs within levels CRITICAL, ERROR, and WARNING.
