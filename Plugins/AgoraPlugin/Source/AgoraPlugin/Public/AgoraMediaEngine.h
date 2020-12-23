@@ -41,7 +41,7 @@ namespace media
 namespace ue4
 {
 /** @~chinese
- * AgoraMediaEngine 类。
+ * AgoraMediaEngine 类是基于 IMediaEngine 封装的类。
  */
 /** @~english
  * Wrapper around agora::media::IMediaEngine

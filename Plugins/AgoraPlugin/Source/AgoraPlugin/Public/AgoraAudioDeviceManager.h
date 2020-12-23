@@ -30,7 +30,7 @@ namespace ue4
 class AgoraRtcEngine;
 
 /** @~chinese
- * AudioDeviceCollection 类。
+ * AudioDeviceCollection 类是基于 IAudioDeviceCollection 封装的类。
  */
 /** @~english
  * Wrapper around agora::rtc::IAudioDeviceCollection

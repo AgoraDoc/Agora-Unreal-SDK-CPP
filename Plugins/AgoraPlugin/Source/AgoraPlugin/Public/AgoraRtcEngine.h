@@ -43,7 +43,10 @@ namespace ue4
 {
 class AParameter;
 
-/**
+/** @~chinese
+ * AgoraRtcEngine 类是基于 IRtcEngine 封装的类。
+ */
+/** @~english
 * Wrapper around agora::rtc::IRtcEngine
 */
 class AGORAPLUGIN_API AgoraRtcEngine
@@ -57,7 +60,13 @@ public:
 	~AgoraRtcEngine();
 
 public:
-   /**
+  /** @~chinese
+   * 创建 IRtcEngine 对象。
+   * @return
+   * - 方法调用成功：返回 IRtcEngine 对象的指针。
+   * - 方法调用失败：返回一个空指针。
+   */
+   /** @~english
    * @brief    Creates the \ref IRtcEngine object and returns the pointer.
    * @return   \arg Success: Pointer to the \ref IRtcEngine object.
    *           \arg Failure: nullptr.
