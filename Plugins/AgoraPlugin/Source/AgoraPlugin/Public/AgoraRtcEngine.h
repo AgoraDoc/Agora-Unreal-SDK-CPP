@@ -2174,8 +2174,25 @@ public:
    *                 \arg  Failure: <0.
    */
 	int setLogFilter(unsigned int filter);
-
-   /**
+   /** @~chinese
+   设置 Agora SDK 输出的单个日志文件大小。
+   *
+   * 默认情况下，SDK 会生成 `agorasdk.log`、`agorasdk_1.log`、`agorasdk_2.log`、`agorasdk_3.log`、`agorasdk_4.log` 这 5 个日志文件。
+   * 每个文件的默认大小为 1024 KB。日志文件为 UTF-8 编码。最新的日志永远写在 `agorasdk.log` 中。`agorasdk.log` 写满后，SDK 会从 1-4 中删除修改时间最早的一个文件，
+   * 然后将 `agorasdk.log` 重命名为该文件，并建立新的 `agorasdk.log` 写入最新的日志。
+   *
+   * @note 如果想要设置日志文件的大小，则需要在 \ref IRtcEngine::setLogFile "setLogFile" 前调用该方法，否则日志会被清空。
+   *
+   * @see \ref IRtcEngine::setLogFile "setLogFile"
+   * @see \ref IRtcEngine::setLogFilter "setLogFilter"
+   *
+   * @param fileSizeInKBytes 单个日志文件的大小，单位为 KB。默认值为 1024 KB。如果你将 `fileSizeInKByte` 设为 1024 KB，SDK 会最多输出 5 MB 的日志文件。如果你将 `fileSizeInKByte` 设为小于 1024 KB，单个日志文件最大仍为 1024 KB。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                   Sets the log file size (KB).
    * @brief                   The SDK has two log files, each with a default size of 512 KB. If you set \a fileSizeInBytes as 1024 KB, the SDK outputs log files with a total maximum size of 2 MB. If the total size of the log files exceed the set value, the new output log files overwrite the old output log files.
    * @param fileSizeInKBytes  The SDK log file size (KB).
@@ -2183,8 +2200,18 @@ public:
    *                          \arg  Failure: <0.
    */
 	int setLogFileSize(unsigned int fileSizeInKBytes);
+   /** @~chinese
+   @deprecated 该方法已废弃，请改用 \ref IRtcEngine::setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode"2。
 
-   /**
+   设置本地视图显示模式。
+
+   该方法设置本地视图显示模式。 App 可以多次调用此方法更改显示模式。
+   @param renderMode #RENDER_MODE_TYPE 。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @deprecated        This method is deprecated, use the \ref  AgoraRtcEngine::setLocalRenderMode( RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode ) "setLocalRenderMode"2 method instead.
    * @brief             Sets the local video display mode.
    * @brief             This method can be called multiple times during a call to change the display mode.
@@ -2194,7 +2221,25 @@ public:
    */
 	int setLocalRenderMode(agora::rtc::RENDER_MODE_TYPE renderMode);
 
-   /** 
+   /** @~chinese
+   更新本地视图显示模式。
+
+   初始化本地用户视图后，你可以调用该方法更新本地用户视图的渲染和镜像模式。该方法只影响本地用户看到的视频画面，不影响本地发布视频。
+
+   @note
+   - 请在调用 \ref IRtcEngine::setupLocalVideo "setupLocalVideo" 方法初始化本地视图后，调用该方法。
+   - 你可以在通话中多次调用该方法，多次更新本地用户视图的显示模式。
+
+   @param renderMode 本地视图的渲染模式，详见 #RENDER_MODE_TYPE
+   @param mirrorMode
+   - 本地视图的镜像模式，详见 #VIDEO_MIRROR_MODE_TYPE
+   - **Note**: 如果你使用前置摄像头，默认启动本地用户视图镜像模式；如果你使用后置摄像头，默认关闭本地视图镜像模式。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Updates the display mode of the local video view.
    * @since             v3.0.0
    * @brief             Ensure that you have called the \ref AgoraRtcEngine::setupLocalVideo "setupLocalVideo" method to initialize the local video view before calling this method.
@@ -2206,8 +2251,20 @@ public:
    *                    \arg  Failure: <0.
    */
     int setLocalRenderMode( agora::rtc::RENDER_MODE_TYPE renderMode, agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode );
+   /** @~chinese
+   @deprecated 该方法已废弃，请使用 \ref IRtcEngine::setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setRemoteRenderMode"2。
 
-   /**
+   设置远端视图显示模式。
+
+   该方法设置远端视图显示模式。App 可以多次调用此方法更改显示模式。
+
+   @param userId 远端用户 ID。
+   @param renderMode  #RENDER_MODE_TYPE 。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @deprecated        This method is deprecated, use the \ref AgoraRtcEngine::setRemoteRenderMode(agora::rtc::uid_t userId, agora::rtc::RENDER_MODE_TYPE renderMode, agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode) "setRemoteRenderMode"2 method instead.
    * @brief             Sets the video display mode of a specified remote user.
    * @brief             This method can be called multiple times during a call to change the display mode.
@@ -2218,7 +2275,27 @@ public:
    */
 	int setRemoteRenderMode(agora::rtc::uid_t userId, agora::rtc::RENDER_MODE_TYPE renderMode);
 
-   /**
+   /** @~chinese
+
+   更新远端视图显示模式。
+
+   初始化远端用户视图后，你可以调用该方法更新远端用户视图在本地显示时的渲染和镜像模式。该方法只影响本地用户看到的视频画面。
+
+   @note
+   - 请在调用 \ref IRtcEngine::setupRemoteVideo "setupRemoteVideo" 方法初始化远端视图后，调用该方法。
+   - 你可以在通话中多次调用该方法，多次更新远端用户视图的显示模式。
+
+   @param userId 远端用户 ID。
+   @param renderMode 远端用户视图的渲染模式，详见 #RENDER_MODE_TYPE
+   @param mirrorMode
+   - 远端用户视图的镜像模式，详见 #VIDEO_MIRROR_MODE_TYPE
+   - **Note**: 默认关闭远端用户的镜像模式。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Updates the display mode of the video view of a remote user.
    * @since             v3.0.0 
    * @brief             Ensure that you have called the \ref AgoraRtcEngine::setupRemoteVideo "setupRemoteVideo" method to initialize the remote video view before calling this method.
@@ -2230,8 +2307,21 @@ public:
    *                    \arg  Failure: <0.
    */
    int setRemoteRenderMode( agora::rtc::uid_t userId, agora::rtc::RENDER_MODE_TYPE renderMode, agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode );
+   /** @~chinese
+   @deprecated 该方法已废弃，请改用 \ref IRtcEngine::setupLocalVideo "setupLocalVideo"
+   或 \ref IRtcEngine::setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode"
 
-   /**
+   设置本地视频镜像模式。
+
+   @warning 请在调用 \ref agora::rtc::IRtcEngine::setupLocalVideo "setupLocalVideo" 方法初始化本地视图后，调用该方法。
+
+   @param mirrorMode  详见 #VIDEO_MIRROR_MODE_TYPE
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @deprecated This method is deprecated, use the \ref AgoraRtcEngine::setupLocalVideo "setupLocalVideo" or \ref AgoraRtcEngine::setLocalRenderMode(agora::rtc::RENDER_MODE_TYPE renderMode, agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode" method instead.
    * @brief             Sets the local video mirror mode.
    * @brief             You must call this method before calling the \ref startPreview method, otherwise the mirror mode will not work.
@@ -2242,7 +2332,18 @@ public:
    */
 	int setLocalVideoMirrorMode(agora::rtc::VIDEO_MIRROR_MODE_TYPE mirrorMode);
 
-   /**
+   /** @~chinese
+   开关双流模式。
+
+   该方法设置单流（默认）或者双流模式。发送端开启双流模式后，接收端可以选择接收大流还是小流。其中，大流指高分辨率、高码率的视频流，小流指低分辨率、低码率的视频流。
+
+   @note 该方法在加入频道前后都能调用。
+
+   @param enabled
+   - true: 双流。
+   - false: 单流。
+   */
+   /** @~english
    * @brief          Sets the stream mode to the single-stream (default) or dual-stream mode. (Live broadcast only.)
    * @brief          If the dual-stream mode is enabled, the receiver can choose to receive the high stream (high-resolution and high-bitrate video stream), or the low stream (low-resolution and low-bitrate video stream).
    * @param enabled  Sets the stream mode:
@@ -2252,8 +2353,24 @@ public:
    *                 \arg  Failure: <0.
    */
 	int enableDualStreamMode(bool enabled);
+   /** @~chinese
+   设置外部音频采集参数。
 
-   /**
+   @note 请在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 和 \ref IRtcEngine::startPreview "startPreview" 前调用该方法。
+
+   @param enabled
+   - true: 开启使用外部音频源的功能；
+   - false: 关闭使用外部音频源的功能（默认）。
+   @param sampleRate 外部音频源的采样率 (Hz)，可设置为 8000，16000，32000，44100 或 48000。
+   @param channels 外部音频源的通道数，可设置为 1 或 2:
+   - 1: 单声道
+   - 2: 双声道
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the external audio source. Please call this method before \ref joinChannel.
    * @param enabled     Sets whether to enable/disable the external audio source:
    *                    \arg  true: Enables the external audio source.
@@ -2267,7 +2384,31 @@ public:
    */
 	int setExternalAudioSource(bool enabled, int sampleRate, int channels);
 
-   /**
+   /** @~chinese
+   设置外部音频渲染。
+   *
+   * 该方法适用于需要自行渲染音频的场景。开启外部音频渲染后，你可以通过调用
+   * \ref agora::media::IMediaEngine::pullAudioFrame "pullAudioFrame" 方法拉取远端音频数据。
+   * App 可以对拉取到的原始音频数据进行处理后再渲染，获取想要的音频效果。
+   *
+   * @note
+   * - 开启外部音频渲染后，App 会无法从
+   * \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 回调中获得数据。
+   * - 该方法需要在加入频道前调用。
+   *
+   * @param enabled
+   * - true: 开启外部音频渲染。
+   * - false: （默认）关闭外部音频渲染。
+   * @param sampleRate 外部音频渲染的采样率 (Hz)，可设置为 16000，32000，44100 或 48000。
+   * @param channels 外部音频渲染的声道数，可设置为 1 或 2:
+   * - 1: 单声道
+   * - 2: 双声道
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the external audio sink. This method applies to scenarios where you want to use external audio data for playback. After enabling the external audio sink, you can call the \ref agora::media::ue4::AgoraMediaEngine::pullAudioFrame "pullAudioFrame" method to pull the remote audio data, process it, and play it with the audio effects that you want.
    * @note              Once you enable the external audio sink, the app will not retrieve any audio data from the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
    * @param enabled     \arg  true: Enables the external audio sink.
@@ -2281,7 +2422,27 @@ public:
    */
 	int setExternalAudioSink(bool enabled, int sampleRate, int channels);
 
-   /**
+   /** @~chinese
+   设置采集的音频格式。
+
+   该方法设置 \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 回调的采集音频格式。
+
+   @note 该方法需要在加入频道前调用。
+
+   @param sampleRate 指定 \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 中返回数据的采样率，可设置为 8000、 16000、 32000、 44100 或 48000。
+   @param channel 指定 \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 中返回数据的通道数，可设置为 1 或 2:
+   - 1: 单声道
+   - 2: 双声道
+   @param mode \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 回调的使用模式: #RAW_AUDIO_FRAME_OP_MODE_TYPE 。
+   @param samplesPerCall 指定 \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 中返回数据的采样点数，如 RTMP/RTMPS 推流应用中通常为 1024。
+
+   @note SDK 会根据该采样间隔触发 `onRecordAudioFrame` 回调。请确保采样间隔不得小于 0.01 (s)。其中，采样间隔 = samplesPerCall/(sampleRate × channel)。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the audio recording format for the \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" callback.
    * @param sampleRate     Sets the sample rate (`samplesPerSec`) returned in the `onRecordAudioFrame` callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
    * @param channel        Sets the number of audio channels (`channels`) returned in the `onRecordAudioFrame` callback:
@@ -2296,7 +2457,25 @@ public:
 	int setRecordingAudioFrameParameters(
 		int sampleRate, int channel, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall);
 
-   /**
+   /** @~chinese
+   设置播放的声音格式。
+
+   @note 该方法需要在加入频道前调用。
+
+   @param sampleRate 指定 \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 中返回数据的采样率，可设置为 8000，16000，32000，44100 或 48000。
+   @param channel 指定 \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 中返回数据的通道数，可设置为 1 或 2:
+   - 1: 单声道
+   - 2: 双声道
+   @param mode 指定 \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 的使用模式: #RAW_AUDIO_FRAME_OP_MODE_TYPE 。
+   @param samplesPerCall 指定 \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 中返回数据的采样点数，如RTMP推流应用中通常为 1024。
+
+   @note SDK 会根据该采样间隔触发 `onPlaybackAudioFrame` 回调。请确保采样间隔不得小于 0.01 (s)。其中，采样间隔 = samplesPerCall/(sampleRate × channel)。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the audio playback format for the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
    * @param sampleRate     Sets the sample rate (`samplesPerSec`) returned in the `onPlaybackAudioFrame` callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
    * @param channel        Sets the number of channels (`channels`) returned in the `onPlaybackAudioFrame` callback:
@@ -2310,8 +2489,21 @@ public:
    */
 	int setPlaybackAudioFrameParameters(
 		int sampleRate, int channel, agora::rtc::RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall);
+   /** @~chinese
+   设置采集与播放声音混音后的数据格式
 
-   /**
+   @note 该方法需要在加入频道前调用。
+
+   @param sampleRate 指定 \ref agora::media::IAudioFrameObserver::onMixedAudioFrame "onMixedAudioFrame" 中返回数据的采样率，可设置为 8000，16000，32000，44100 或 48000。
+   @param samplesPerCall 指定 \ref agora::media::IAudioFrameObserver::onMixedAudioFrame "onMixedAudioFrame" 中返回数据的采样点数，如 RTMP/RTMPS 推流应用中通常为 1024。
+
+   @note SDK 会根据该采样间隔触发 `onMixedAudioFrame` 回调。请确保采样间隔不得小于 0.01 (s)。其中，采样间隔 = samplesPerCall/(sampleRate × channels)。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                Sets the mixed audio format for the \ref agora::media::IAudioFrameObserver::onMixedAudioFrame "onMixedAudioFrame" callback.
    * @param sampleRate     Sets the sample rate (`samplesPerSec`) returned in the `onMixedAudioFrame` callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
    * @param samplesPerCall Sets the sample points (`samples`) returned in the `onMixedAudioFrame` callback. samplesPerCall is usually set as 1024 for stream pushing.
@@ -2320,8 +2512,21 @@ public:
    *                       \arg  Failure: <0.
    */
 	int setMixedAudioFrameParameters(int sampleRate, int samplesPerCall);
+   /** @~chinese
+   调节音频采集信号音量。
 
-   /**
+   @note 该方法在加入频道前后都能调用。
+
+   @param volume 录音信号音量。为避免回声并提升通话质量，Agora 建议将 volume 值设为 [0,100]。如果
+   volume 值需超过 100，联系[技术支持](https://agora-ticket.agora.io/):
+   - 0: 静音；
+   - 100: 原始音量。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Adjusts the recording volume.
    * @param volume   Recording volume. The value ranges between 0 and 400:
    *                 \arg  0: Mute.
@@ -2331,8 +2536,23 @@ public:
    *                 \arg  Failure: <0.
    */
 	int adjustRecordingSignalVolume(int volume);
+   /** @~chinese
+   调节本地播放的所有远端用户信号音量。
+   @note
+   - 该方法调节的是本地播放的所有远端用户混音后的音量。
+   - 从 v2.3.2 开始，静音本地音频需同时调用 `adjustPlaybackSignalVolume` 和 \ref IRtcEngine::adjustAudioMixingPlayoutVolume "adjustAudioMixingPlayoutVolume" 方法，并将 `volume` 设置为 `0`。
+   - 该方法在加入频道前后都能调用。
 
-   /**
+   @param volume 播放音量。为避免回声并提升通话质量，Agora 建议将 volume 值设为 [0,100]。如果
+   volume 值需超过 100，联系[技术支持](https://agora-ticket.agora.io/):
+   - 0: 静音；
+   - 100: 原始音量。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Adjusts the playback volume of the voice.
    * @param volume   The playback volume of the voice. The value ranges between 0 and 400:
    *                 \arg  0: Mute.
@@ -2343,7 +2563,24 @@ public:
    */
 	int adjustPlaybackSignalVolume(int volume);
 
-   /**
+   /** @~chinese
+   @deprecated 该方法已废弃。自 Native SDK v3.0.0 及之后，SDK 自动开启与 Web SDK 的互通，无需调用该方法开启。
+
+   打开直播场景下与 Agora Web SDK 的互通。
+
+   @note
+   - 该方法仅适用于直播场景。通信场景默认打开与 Web SDK 的互通。
+   - 如果有用户通过 Web SDK 加入频道，请确保调用该方法，否则 Web 端用户看 Native 端的画面会是黑屏。
+
+   @param enabled
+   - true: 打开互通；
+   - false: 关闭互通（默认）。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @deprecated This method is deprecated. The Native SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
    * @brief          Enables interoperability with the Agora Web SDK.
    * @note           \arg  This method applies only to the Live-broadcast profile. In the Communication profile, interoperability with the Agora Web SDK is enabled by default.
@@ -2356,7 +2593,24 @@ public:
    */
 	int enableWebSdkInteroperability(bool enabled);
 
-   /**
+   /** @~chinese
+   设置弱网条件下发布的音视频流回退选项。
+
+   网络不理想的环境下，实时通信音视频的质量都会下降。使用该接口并将 `option` 设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY (2) 后，SDK 会在上行弱网且音视频质量严重受影响时，自动关断视频流，从而保证或提高音频质量。同时 SDK 会持续监控网络质量，并在网络质量改善时恢复音视频流。当本地推流回退为音频流时，或由音频流恢复为音视频流时，SDK 会触发本地发布的媒体流已回退为音频流 \ref agora::rtc::IRtcEngineEventHandler::onLocalPublishFallbackToAudioOnly "onLocalPublishFallbackToAudioOnly" 回调。
+
+   @note
+   - 视频直播场景下，旁路推流的发流用户（即主播）设置 `STREAM_FALLBACK_OPTION_AUDIO_ONLY (2)` 可能导致 CDN 观众听到的声音有所延迟。Agora 不建议主播使用视频流回退机制。
+   - 该方法需要在加入频道前调用。
+
+   @param option 本地发流回退处理选项：
+   - #STREAM_FALLBACK_OPTION_DISABLED (0)：（默认）上行网络较弱时，不对音视频流作回退处理，但不能保证音视频流的质量
+   - #STREAM_FALLBACK_OPTION_AUDIO_ONLY (2)：上行网络较弱时只发布音频流
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the fallback option for the locally published video stream based on the network conditions.
    * @brief          If *option* is set as `STREAM_FALLBACK_OPTION_AUDIO_ONLY(2)`, the SDK will:
    *                 \arg  Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
@@ -2371,7 +2625,23 @@ public:
    */
 	int setLocalPublishFallbackOption(agora::rtc::STREAM_FALLBACK_OPTIONS option);
 
-   /**
+   /** @~chinese
+   设置弱网条件下订阅的音视频流的回退选项。
+
+   默认 `option` 为 #STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW (1) 。
+   如果你使用本方法并将 `option` 设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY (2)，
+   SDK 会在下行弱网且音视频质量严重受影响时，将视频流切换为小流，或关断视频流，从而保证或提高音频质量。
+   同时 SDK 会持续监控网络质量，并在网络质量改善时恢复音视频流。
+   当远端订阅流回退为音频流时，或由音频流恢复为音视频流时，SDK 会触发 \ref agora::rtc::IRtcEngineEventHandler::onRemoteSubscribeFallbackToAudioOnly "onRemoteSubscribeFallbackToAudioOnly" 回调。
+
+   @note 该方法需要在加入频道前调用。
+
+   @param  option 详见 #STREAM_FALLBACK_OPTIONS 。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the fallback option for the remotely subscribed video stream based on the network conditions.
    * @brief          The default setting for @p option is \ref STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW, where the remotely subscribed video stream falls back to the low-stream video (low resolution and low bitrate) under poor downlink network conditions.
    * @brief          If *option* is set as \ref STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK automatically switches the video from a high-stream to a low-stream, or disables the video when the downlink network conditions cannot support both audio and video to guarantee the quality of the audio. The SDK monitors the network quality and restores the video stream when the network conditions improve.
@@ -2383,7 +2653,18 @@ public:
 	int setRemoteSubscribeFallbackOption(agora::rtc::STREAM_FALLBACK_OPTIONS option);
 
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
-   /**
+   /** @~chinese
+   切换前置/后置摄像头
+
+   @note
+   - 该方法仅适用于 Android 和 iOS 平台。
+   - 该方法需要在相机启动（如通过调用 \ref IRtcEngine::startPreview "startPreview" 或 \ref IRtcEngine::joinChannel "joinChannel" 实现）后调用。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Switches between front and rear cameras.
    * @note     This method is for Android and iOS only.
    * @return   \arg  Success: 0.
@@ -2391,7 +2672,7 @@ public:
    */
 	int switchCamera();
 
-   /**
+   /** @~english
    * @brief             Switches between front and rear cameras.
    * @note              This method is for Android and iOS only.
    * @param direction   Sets the camera to be used:
@@ -2402,7 +2683,31 @@ public:
    */
 	int switchCamera(CAMERA_DIRECTION direction);
 
-   /**
+   /** @~chinese
+   设置默认的语音路由。
+
+   该方法设置接收到的语音从听筒或扬声器出声。如果用户不调用本方法，语音默认从听筒出声。
+
+   各频道场景下默认的语音路由：
+   - 语音通话：听筒
+   - 视频通话：扬声器。如果有用户在频道中使用 \ref IRtcEngine::disableVideo "disableVideo" 、 \ref IRtcEngine::muteLocalVideoStream "muteLocalVideoStream" 或 \ref IRtcEngine::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" 方法关闭视频，则语音路由会自动切换回听筒。
+   - 直播：扬声器
+   - 游戏语音：扬声器
+
+   @note
+   - 该方法仅适用于 Android 和 iOS 平台。
+   - 在 iOS 平台上，该方法只在纯音频模式下工作，在有视频的模式下不工作。
+   - 该方法需要在 \ref IRtcEngine::joinChannel "joinChannel" 前设置，否则不生效。如需在加入频道后更改默认语音路由，请调用 \ref IRtcEngine::setEnableSpeakerphone "setEnableSpeakerphone" 方法。
+
+   @param defaultToSpeaker 设置默认的语音路由
+   - true: 语音路由为外放（扬声器）。如果设备连接了耳机或蓝牙，则无法切换到外放。
+   - false:（默认）语音路由为听筒。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief                   Sets the default audio playback route.
    * @brief                   This method sets whether the received audio is routed to the earpiece or speakerphone by default before joining a channel. If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the  \ref setEnableSpeakerphone method.
    * @brief                   The default setting for each mode:
@@ -2424,7 +2729,31 @@ public:
    */
 	int setDefaultAudioRouteToSpeakerphone(bool defaultToSpeaker);
 
-   /**
+   /** @~chinese
+   启用/关闭扬声器播放
+
+   该方法设置是否将语音路由设到扬声器（外放）。 你可以在 \ref IRtcEngine::setDefaultAudioRouteToSpeakerphone "setDefaultAudioRouteToSpeakerphone" 方法中查看默认的语音路由。
+
+   在 Android 上，\ref IRtcEngine::setAudioProfile "setAudioProfile" 中 `scenario` 及 \ref IRtcEngine::setChannelProfile "setChannelProfile" 的设置
+   会影响 `setEnableSpeakerphone` 的行为。`setEnableSpeakerphone` 不生效的情况如下：
+   - 当 `scenario` 为 #AUDIO_SCENARIO_GAME_STREAMING 时，所有用户都无法切换音频播放路由。
+   - 当 `scenario` 为 #AUDIO_SCENARIO_DEFAULT 或 #AUDIO_SCENARIO_SHOWROOM 时，直播场景中的观众无法切换音频播放路由，且当频道中只有一个主播时，该主播也无法切换音频播放路由。
+   - 当 `scenario` 为 #AUDIO_SCENARIO_EDUCATION 时，直播场景中的观众无法切换音频播放路由。
+
+   @note
+   - 该方法仅适用于 Android 和 iOS 平台。
+   - 请确保在调用此方法前已调用过 \ref IRtcEngine::joinChannel "joinChannel" 方法。
+   - 调用该方法后，SDK 将返回 \ref IRtcEngineEventHandler::onAudioRouteChanged "onAudioRouteChanged" 回调提示状态已更改。
+
+   @param speakerOn 设置是否切换语音路由到扬声器（外放）：
+   - true: 切换到外放。如果设备连接了耳机或蓝牙，则无法切换到外放。
+   - false: 切换到听筒。如果设备连接了耳机，则语音路由走耳机。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** 
    * @brief             Enables/Disables the audio playback route to the speakerphone.
    * @brief             This method sets whether the audio is routed to the speakerphone or earpiece.
    * @brief             See the default audio route explanation in the \ref setDefaultAudioRouteToSpeakerphone method and check whether it is necessary to call this method.
@@ -2440,7 +2769,21 @@ public:
    */
 	int setEnableSpeakerphone(bool speakerOn);
 
-   /**
+   /** @~chinese
+   设置耳返音量。
+
+   @note
+   - 该方法仅适用于 Android 和 iOS 平台。
+   - 用户必须使用有线耳机才能听到耳返效果。
+   - 该方法在加入频道前后都能调用。
+
+   @param volume 设置耳返音量，取值范围在 [0,100]。默认值为 100
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Sets the volume of the in-ear monitor.
    * @param volume   Sets the volume of the in-ear monitor. The value ranges between 0 and 100 (default).
    * @note           This method is for Android and iOS only.
@@ -2449,7 +2792,18 @@ public:
    */
 	int setInEarMonitoringVolume(int volume);
 
-   /**
+   /** @~chinese
+   查询扬声器启用状态。
+
+   @note
+   - 该方法仅适用于 Android 和 iOS 平台。
+   - 该方法在加入频道前后都能调用。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Checks whether the speakerphone is enabled.
    * @note           This method is for Android and iOS only.
    * @return         \arg  Success: 0.
@@ -2459,7 +2813,24 @@ public:
 #endif
     
 #if defined(__ANDROID__)
-   /**
+   /** @~chinese
+    * 开启/关闭本地人脸检测。仅适用于 Android 和 iOS。
+    *
+    * @note 该方法在加入频道前后都能调用.
+    *
+    * 开启本地人脸检测后，SDK 会触发 \ref IRtcEngineEventHandler::onFacePositionChanged "onFacePositionChanged" 回调向你报告人脸检测的信息：
+    * - 摄像头采集的画面大小
+    * - 人脸在画面中的位置
+    * - 人脸距设备屏幕的距离
+    *
+    * @param enable 是否开启人脸检测：
+    * - true：开启人脸检测
+    * - false：（默认）关闭人脸检测
+    * @return
+    * - 0：方法调用成功
+    * - < 0：方法调用失败
+    */
+   /** @~english
     * @brief         Enables/Disables face detection for the local user. Applies to Android and iOS only.
     * @brief         Once face detection is enabled, the SDK triggers the \ref IRtcEngineEventHandler::onFacePositionChanged "onFacePositionChanged" callback
     * @brief         to report the face information of the local user, which includes the following aspects:
@@ -2477,7 +2848,24 @@ public:
 #endif
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
-   /**
+   /** @~chinese
+   设置 SDK 对 Audio Session 的控制权限
+
+   该接口可以在任意时候调用，可以在任意时候通过该方法把控制权交还给 SDK。
+
+   @note
+   - 该方法仅适用于 iOS 平台。
+   - 该方法限制 Agora SDK 对 Audio Session 的操作权限。在默认情况下，SDK 和 App 对 Audio Session 都有控制权，但某些场景下，App 会希望限制 Agora SDK 对 Audio Session 的控制权限，而使用其他应用或第三方组件对 Audio Session 进行操控。调用该方法可以实现该功能。
+   - 一旦调用该方法限制了 Agora SDK 对 Audio Session 的控制权限， SDK 将无法对 Audio Session 进行相关设置，而需要用户自己或第三方组件进行维护。
+   - 该方法在加入频道前后都能调用。
+
+   @param restriction Agora SDK 对 Audio Session 的控制权限，详见: #AUDIO_SESSION_OPERATION_RESTRICTION 。该 restriction 为 Bit Mask，每个 Bit 对应一个权限。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the audio session’s operational restriction.
    * @brief             The SDK and the app can both configure the audio session by default. The app may occasionally use other apps or third-party components to manipulate the audio session and restrict the SDK from doing so. This method allows the app to restrict the SDK’s manipulation of the audio session.
    * @brief             You can call this method at any time to return the control of the audio sessions to the SDK.
@@ -2491,7 +2879,23 @@ public:
 #endif
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
-   /**
+   /** @~chinese
+   开启声卡采集。
+
+   启用声卡采集功能后，声卡播放的声音会被合到本地音频流中，从而可以发送到远端。
+
+   @note
+   - 该方法仅适用于 macOS 和 Windows 平台。
+   - macOS 系统默认声卡不支持采集功能，如需开启此功能需要 App 自己启用一个虚拟声卡，并将该虚拟声卡的名字作为 deviceName 传入 SDK。 Agora 测试并推荐 soundflower 作为虚拟声卡。
+   - 该方法在加入频道前后都能调用。
+
+   @param enabled 设置是否开启声卡采集：
+   - true: 开启声卡采集
+   - false: （默认）关闭声卡采集
+   @param deviceName 声卡的设备名。默认设为 NULL，即使用当前声卡采集。
+   如果用户使用虚拟声卡，如 “Soundflower”，可以将虚拟声卡名称 “Soundflower” 作为参数，SDK 会找到对应的虚拟声卡设备，并开始采集。
+   */
+   /** @~english
    * @brief             Enables loopback recording.
    * @brief             If you enable loopback recording, the output of the sound card is mixed into the audio stream sent to the other end.
    * @param enabled     Sets whether to enable/disable loopback recording.
@@ -2505,7 +2909,24 @@ public:
    */
 	int enableLoopbackRecording(bool enabled, const char* deviceName = nullptr);
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE)
-   /**
+   /** @~chinese
+   通过屏幕 ID 共享屏幕。
+
+   共享一个屏幕或该屏幕的部分区域。用户需要在该方法中指定想要共享的屏幕 ID。
+
+   @note
+   - 该方法仅适用于 macOS。
+   - 该方法需要在加入频道后调用。
+
+   @param  displayId 指定待共享的屏幕 ID。开发者需要通过该参数指定你要共享的那个屏幕。关于如何获取屏幕 ID，请参考进阶功能《共享屏幕》。
+   @param  regionRect （可选）指定待共享区域相对于整个屏幕的位置。如不填，则表示共享整个屏幕。详见: Rectangle 。如果设置的共享区域超出了屏幕的边界，则只共享屏幕视窗内的内容；如果宽或高为 0，则共享整个屏幕。
+   @param  captureParams 屏幕共享的参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见: ScreenCaptureParameters 。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败:
+     - #ERR_INVALID_ARGUMENT: 传入的参数无效。
+   */
+   /** @~english
    * @brief                Shares the whole or part of a screen by specifying the display ID.
    * @note                 This method is for macOS only.
    * @param displayId      The display ID of the screen to be shared. This parameter specifies which screen you want to share.
@@ -2523,7 +2944,26 @@ public:
 #endif
 
 #if defined(_WIN32)
-   /**
+  /** @~chinese
+   通过指定区域共享屏幕。
+   *
+   * 共享一个屏幕或该屏幕的部分区域。用户需要在该方法中指定想要共享的屏幕区域。
+   *
+   * @note
+   * - 该方法需要在加入频道后调用。
+   * - 该方法仅适用于 Windows 平台。
+   *
+   * @param  screenRect 指定待共享的屏幕相对于虚拟屏的位置。关于如何获取屏幕位置，请参考进阶功能《共享屏幕》。
+   * @param  regionRect (可选）指定待共享区域相对于整个屏幕的位置。如不填，则表示共享整个屏幕。详见: Rectangle 。
+   * 如果设置的共享区域超出了屏幕的边界，则只共享屏幕内的内容；如果将 width 或 height 设为 0 ，则共享整个屏幕。
+   * @param  captureParams 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见: ScreenCaptureParameters 。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败:
+   *    - #ERR_INVALID_ARGUMENT: 传入的参数无效。
+   */
+   /** @~english
    * @brief                Shares the whole or part of a screen by specifying the screen rect.
    * @param screenRect     Sets the relative location of the screen to the virtual screen. For information on how to get screenRect, see Share the Screen.
    * @param regionRect     (Optional) Sets the relative location of the region to the screen. NULL means sharing the whole screen. See \ref Rectangle. If the specified region overruns the screen, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen.
@@ -2539,7 +2979,141 @@ public:
 		const ScreenCaptureParameters& captureParams);
 #endif
 
-   /**
+   /** @~chinese
+   通过窗口 ID 共享窗口。
+   *
+   * 共享一个窗口或该窗口的部分区域。用户需要在该方法中指定想要共享的窗口 ID。
+   *
+   * @note
+   * - 该方法需要在加入频道后调用。
+   * - 该方法仅适用于 macOS 和 Windows 平台。
+   *
+   * 自 v3.0.0 起，该方法支持共享通用 Windows 平台（UWP）应用窗口。
+   *
+   * 声网使用最新版 SDK 对主流的 UWP 应用进行了测试，结果如下：
+   *
+   * <table>
+   *     <tr>
+   *         <td><b>系统版本</b></td>
+   *         <td><b>软件</b></td>
+   *         <td><b>软件版本</b></td>
+   *         <td><b>是否支持</b></td>
+   *     </tr>
+   *     <tr>
+   *         <td rowspan="8">win10</td>
+   *         <td >Chrome</td>
+   *         <td>76.0.3809.100</td>
+   *         <td>否</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office Word</td>
+   *         <td rowspan="3">18.1903.1152.0</td>
+   *         <td>是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Office Excel</td>
+   *         <td>否</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office PPT</td>
+   *         <td>是</td>
+   *     </tr>
+   *  <tr>
+   *         <td>WPS Word</td>
+   *         <td rowspan="3">11.1.0.9145</td>
+   *         <td rowspan="3">是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>WPS Excel</td>
+   *     </tr>
+   *     <tr>
+   *         <td>WPS PPT</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Media Player（系统自带）</td>
+   *         <td>全部</td>
+   *         <td>是</td>
+   *     </tr>
+   * 	 <tr>
+   *         <td rowspan="8">win8</td>
+   *         <td >Chrome</td>
+   *         <td>全部</td>
+   *         <td>是</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office Word</td>
+   *         <td rowspan="3">全部</td>
+   *         <td rowspan="3">是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Office Excel</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office PPT</td>
+   *     </tr>
+   *  <tr>
+   *         <td>WPS Word</td>
+   *         <td rowspan="3">11.1.0.9098</td>
+   *         <td rowspan="3">是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>WPS Excel</td>
+   *     </tr>
+   *     <tr>
+   *         <td>WPS PPT</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Media Player（系统自带）</td>
+   *         <td>全部</td>
+   *         <td>是</td>
+   *     </tr>
+   *   <tr>
+   *         <td rowspan="8">win7</td>
+   *         <td >Chrome</td>
+   *         <td>73.0.3683.103</td>
+   *         <td>否</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office Word</td>
+   *         <td rowspan="3">全部</td>
+   *         <td rowspan="3">是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Office Excel</td>
+   *     </tr>
+   *     <tr>
+   *         <td>Office PPT</td>
+   *     </tr>
+   *  <tr>
+   *         <td>WPS Word</td>
+   *         <td rowspan="2">11.1.0.9098</td>
+   *         <td rowspan="2">否</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>WPS Excel</td>
+   *     </tr>
+   *     <tr>
+   *         <td>WPS PPT</td>
+   *         <td>11.1.0.9098</td>
+   *         <td>是</td>
+   *     </tr>
+   * 	    <tr>
+   *         <td>Media Player（系统自带）</td>
+   *         <td>全部</td>
+   *         <td>否</td>
+   *     </tr>
+   * </table>
+   *
+   * @param  windowId 指定待共享的窗口 ID。关于如何获取窗口 ID，请参考进阶功能《共享屏幕》。
+   * @param  regionRect （可选）指定待共享的区域相对于整个窗口的位置。如不填，则表示共享整个窗口。详见: Rectangle 。如果设置的共享区域超出了窗口的边界，则只共享窗口内的内容；如果宽或高为 0，则共享整个窗口。
+   * @param  captureParams 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见 ScreenCaptureParameters 。
+   *
+   * @return
+   * - 0: 方法调用成功
+   * - < 0: 方法调用失败:
+   *   - #ERR_INVALID_ARGUMENT: 传入的参数无效。
+   */
+   /** @~english
    * @brief                Shares the whole or part of a window by specifying the window ID.
    * @brief                Since v3.0.0, this method supports sharing with common Windows platforms. Agora tests the mainstream Windows applications, see details as follows:
      <table>
@@ -2664,7 +3238,20 @@ public:
 		const Rectangle& regionRect,
 		const ScreenCaptureParameters& captureParams);
 
-   /**
+   /** @~chinese
+   设置屏幕共享内容类型。
+
+   设置屏幕共享的内容类型。Agora SDK 会根据不同的内容类型，使用不同的算法对共享效果进行优化。如果不调用该方法，SDK 会将屏幕共享的内容默认为 CONTENT_HINT_NONE ，即无指定的内容类型。
+
+   @note 该方法在开始屏幕共享前后都能调用。
+
+   @param  contentHint 指定屏幕共享的内容类型。详见: #VideoContentHint 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Sets the content hint for screen sharing.
    * @brief             A content hint suggests the type of the content being shared, so that the SDK applies different optimization algorithm to different types of content.
    * @param contentHint Sets the content hint for screen sharing. See VideoContentHint.
@@ -2673,7 +3260,17 @@ public:
    */
 	int setScreenCaptureContentHint(VideoContentHint contentHint);
 
-   /**
+   /** @~chinese
+   更新屏幕共享的参数配置。
+
+   @param captureParams 屏幕共享的编码参数配置。默认的分辨率为 1920 x 1080，即 2073600 像素。该像素值为计费标准。详见: ScreenCaptureParameters 。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败:
+     - #ERR_NOT_READY: 如果当前没有共享的屏幕，会返回该错误码。
+   */
+   /** @~english
    * @brief                Updates the screen sharing parameters.
    * @param captureParams  Sets the screen sharing encoding parameters. See \ref ScreenCaptureParameters.
    * @return               \arg  Success: 0.
@@ -2682,7 +3279,17 @@ public:
    */
 	int updateScreenCaptureParameters(const ScreenCaptureParameters& captureParams);
 
-   /**
+   /** @~chinese
+   更新屏幕共享区域。
+
+   @param  regionRect 待共享区域相对于整个屏幕或窗口的位置，如不填，则表示共享整个屏幕或窗口。详见: Rectangle 。如果设置的共享区域超出了屏幕或窗口的边界，则只共享屏幕或窗口内的内容；如果将 width 或 height 设为 0 ，则共享整个屏幕或窗口。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败:
+     - #ERR_NOT_READY: 如果当前没有共享的屏幕，会返回该错误码。
+   */
+   /** @~english
    * @brief             Updates the screen sharing region.
    * @param regionRect  Sets the relative location of the region to the screen or window. NULL means sharing the whole screen or window. See \ref Rectangle. If the specified region overruns the screen or window, the SDK shares only the region within it; if you set width or height as 0, the SDK shares the whole screen or window.
    * @return               \arg  Success: 0.
@@ -2691,7 +3298,14 @@ public:
    */
 	int updateScreenCaptureRegion(const Rectangle& regionRect);
 
-   /**
+   /** @~chinese
+   停止屏幕共享。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stop screen sharing.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
@@ -2699,8 +3313,19 @@ public:
 	int stopScreenCapture();
 
 #endif
+   /** @~chinese
+   获取当前通话 ID。
 
-   /**
+   客户端在每次 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 后会生成一个对应的 callId，标识该客户端的此次通话。有些方法如 \ref agora::rtc::IRtcEngine::rate "rate" 、 \ref agora::rtc::IRtcEngine::complain "complain" 需要在通话结束后调用，向 SDK 提交反馈，这些方法必须指定 CallId 参数。使用这些反馈方法，需要在通话过程中调用 \ref agora::rtc::IRtcEngine::getCallId "getCallId" 方法获取 CallId，在通话结束后在反馈方法中作为参数传入。
+
+   @note 该方法需要在加入频道后调用。
+
+   @param callId 当前的通话 ID。
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Retrieves the current call ID.
    * @brief          When a user joins a channel on a client, a *callId* is generated to identify the call from the client. Feedback methods, such as \ref rate and \ref complain, must be called after the call ends to submit feedback to the SDK.
    * @brief          The \ref rate and \ref complain methods require the *callId* parameter retrieved from the \a getCallId method during a call. *callId* is passed as an argument into the \ref rate and \ref complain methods after the call ends.
@@ -2710,7 +3335,22 @@ public:
    */
 	int getCallId(agora::util::AString& callId);
 
-   /**
+   /** @~chinese
+   给通话评分。
+
+   该方法能够让用户为通话评分，一般在通话结束后调用。
+
+   @note 该方法需要在离开频道后调用。
+
+   @param callId 通话 \ref agora::rtc::IRtcEngine::getCallId "getCallId" 函数获取的通话 ID。
+   @param rating  给通话的评分，最低 1 分，最高 5 分。如超过这个范围，SDK 会返回 #ERR_INVALID_ARGUMENT (2) 错误。
+   @param description (非必选项) 给通话的描述，可选，长度应小于 800 字节。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Allows a user to rate a call after the call ends.
    * @param callId      Pointer to the ID of the call, retrieved from the \ref getCallId method.
    * @param rating      Rating of the call. The value is between 1 (lowest score) and 5 (highest score). If you set a value out of this range, the \ref ERR_INVALID_ARGUMENT (2) error returns.
@@ -2720,7 +3360,21 @@ public:
    */
 	int rate(const char* callId, int rating, const char* description);
 
-   /**
+   /** @~chinese
+   投诉通话质量。
+
+   该方法让用户就通话质量进行投诉。一般在通话结束后调用。
+
+   @note 该方法需要在离开频道后调用。
+
+   @param callId 通话 \ref agora::rtc::IRtcEngine::getCallId "getCallId" 函数获取的通话 ID。
+   @param description (非必选项) 给通话的描述，可选，长度应小于 800 字节。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief             Allows a user to complain about the call quality after a call ends.
    * @param callId      Pointer to the ID of the call, retrieved from the \ref getCallId method.
    * @param description (Optional) Pointer to the description of the complaint, with a string length of less than 800 bytes.
@@ -2729,14 +3383,43 @@ public:
    */
 	int complain(const char* callId, const char* description);
 
-   /**
+   /** @~chinese
+   查询 SDK 版本号。
+
+   @param build 编译号。
+
+   @return 当前的 SDK 版本号，格式为字符串，如 2.4.0。
+   */
+   /** @~english
    * @brief       Retrieves the SDK version number.
    * @param build Pointer to the build number.
    * @return      The version of the current SDK in the string format. For example, 2.3.1.
    */
 	const char* getVersion(int* build);
 
-   /**
+   /** @~chinese
+   启动网络测试。
+
+   该方法启用网络连接质量测试，用于检测用户目前的网络接入质量（上行网络质量）。默认该功能为关闭状态。该方法主要用于以下场景:
+
+   - 用户加入频道前，可以调用该方法判断和预测目前的上行网络质量是否足够好。
+   - 直播场景下，当用户角色由观众切换为主播时，可以调用该方法判断和预测目前的上行网络质量是否足够好。
+
+   启用该方法会消耗网络流量，影响通话质量。用户必须在收到 \ref agora::rtc::IRtcEngineEventHandler::onLastmileQuality "onLastmileQuality"
+   回调后须调用 \ref agora::rtc::IRtcEngine::disableLastmileTest "disableLastmileTest" 停止测试，再加入频道或切换为主播。
+
+   @note
+   - 该方法请勿与 \ref agora::rtc::IRtcEngine::startLastmileProbeTest "startLastmileProbeTest" 同时使用。
+   - 调用该方法后，在收到 \ref agora::rtc::IRtcEngineEventHandler::onLastmileQuality "onLastmileQuality" 回调前请勿调用其他方法，否则可能由于 API 操作过于频繁导致回调无法执行。
+   - 在直播场景中，如果本地用户为主播，请勿加入频道后调用该方法。
+   - 加入频道前调用该方法检测网络质量后，SDK 会占用一路视频的带宽，码率与 \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 中设置的码率相同。
+   加入频道后，无论是否调用了 \ref IRtcEngine::disableLastmileTest "disableLastmileTest" ，SDK 均会自动停止带宽占用。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Enables the network connection quality test.
    * @brief    This method tests the quality of the users' network connections and is disabled by default.
    * @brief    Before a user joins a channel or before an audience switches to a host, call this method to check the uplink network quality.
@@ -2750,14 +3433,45 @@ public:
    */
 	int enableLastmileTest();
 
-   /**
+   /** @~chinese
+   关闭网络测试。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Disables the network connection quality test.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int disableLastmileTest();
 
-   /**
+   /** @~chinese
+   开始通话前网络质量探测。
+
+   开始通话前网络质量探测，向用户反馈上下行网络的带宽、丢包、网络抖动和往返时延数据。
+
+   启用该方法后，SDK 会依次返回如下 2 个回调：
+   - \ref agora::rtc::IRtcEngineEventHandler::onLastmileQuality "onLastmileQuality"，视网络情况约 2 秒内返回。该回调通过打分反馈上下行网络质量，更贴近用户的主观感受。
+   - \ref agora::rtc::IRtcEngineEventHandler::onLastmileProbeResult "onLastmileProbeResult"，视网络情况约 30 秒内返回。该回调通过具体数据反馈上下行网络质量，更加客观。
+
+   该方法主要用于以下两种场景：
+   - 用户加入频道前，可以调用该方法判断和预测目前的上行网络质量是否足够好。
+   - 直播场景下，当用户角色想由观众切换为主播时，可以调用该方法判断和预测目前的上行网络质量是否足够好。
+
+   @note
+   - 该方法会消耗一定的网络流量，影响通话质量，因此我们建议不要和 \ref agora::rtc::IRtcEngine::enableLastmileTest "enableLastmileTest" 同时使用。
+   - 调用该方法后，在收到 \ref agora::rtc::IRtcEngineEventHandler::onLastmileQuality "onLastmileQuality" 和 \ref agora::rtc::IRtcEngineEventHandler::onLastmileProbeResult "onLastmileProbeResult" 回调之前请不要调用其他方法，否则可能会由于 API 操作过于频繁导致此方法无法执行。
+   - 在直播场景中，如果本地用户为主播，请勿加入频道后调用该方法。
+
+   @param config Last mile 网络探测配置，详见 LastmileProbeConfig。
+
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief          Starts the last-mile network probe test.
    * @brief          This method starts the last-mile network probe test before joining a channel to get the uplink and downlink last-mile network statistics, including the bandwidth, packet loss, jitter, and round-trip time (RTT).
    * @brief          Call this method to check the uplink network quality before users join a channel or before an audience switches to a host. Once this method is enabled, the SDK returns the following callbacks:
@@ -2773,19 +3487,48 @@ public:
    *                 \arg  Failure: <0.
    */
 	int startLastmileProbeTest(const LastmileProbeConfig& config);
+   /** @~chinese
+   停止通话前网络质量探测。
 
-   /**
+   @return
+   - 0: 方法调用成功
+   - < 0: 方法调用失败
+   */
+   /** @~english
    * @brief    Stops the last-mile network probe test.
    */
 	int stopLastmileProbeTest();
 
-   /**
+   /** @~chinese
+   获取警告或错误描述。
+
+   @param code \ref agora::rtc::IRtcEngineEventHandler::onWarning "onWarning" 或 \ref agora::rtc::IRtcEngineEventHandler::onError "onError" 提供的警告码或错误码。
+
+   @return #WARN_CODE_TYPE 或 #ERROR_CODE_TYPE 。
+   */
+   /** @~english
    * @brief    Retrieves the warning or error description.
    * @return   code \ref WARN_CODE_TYPE or \ref ERROR_CODE_TYPE returned in the \ref agora::rtc::IRtcEngineEventHandler::onWarning "onWarning" or \ref agora::rtc::IRtcEngineEventHandler::onError "onError" callback.
    */
 	const char* getErrorDescription(int code);
 
-   /**
+   /** @~chinese
+    启用内置加密，并设置数据加密密码。
+
+     @deprecated 该方法自 v3.1.0 起废弃。请改用 \ref IRtcEngine::enableEncryption "enableEncryption" 方法。
+
+     在加入频道之前，App 需调用 setEncryptionSecret 方法指定 secret 来启用内置的加密功能，同一频道内的所有用户应设置相同的 secret。当用户离开频道时，该频道的 secret 会自动清除。如果未指定 secret 或将 secret 设置为空，则无法激活加密功能。
+
+     @note
+     - 请不要在旁路推流时调用此方法。
+     - 为保证最佳传输效果，请确保加密后的数据大小不超过原始数据大小 + 16 字节。16 字节是 AES 通用加密模式下最大填充块大小。
+
+     @param secret 加密密码。
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
+   /** @~english
    * @brief          Enables built-in encryption with an encryption password before users join a channel.
    * @brief          All users in a channel must use the same encryption password. The encryption password is automatically cleared once a user leaves the channel.
    * @brief          If an encryption password is not specified, the encryption functionality will be disabled.
@@ -2797,7 +3540,26 @@ public:
    */
 	int setEncryptionSecret(const char* secret);
 
-   /**
+	/** @~chinese
+    启用内置的加密方案。
+
+     @deprecated 该方法自 v3.1.0 起废弃。请改用 \ref IRtcEngine::enableEncryption "enableEncryption" 方法。
+
+     Agora Video SDK 支持内置加密方案，默认支持 AES-128-XTS。如需采用其他加密方案，可以调用本方法。同一频道内的所有用户必须设置相同的加密方式和 secret 才能进行通话。关于这几种加密方式的区别，请参考 AES 加密算法的相关资料。
+
+     @note 在调用本方法前，请先调用 \ref agora::rtc::IRtcEngine::setEncryptionSecret "setEncryptionSecret" 启用内置加密功能。
+
+     @param encryptionMode 加密模式：
+     - "aes-128-xts": 128 位 AES 加密，XTS 模式；
+     - "aes-128-ecb":128 位 AES 加密，ECB 模式；
+     - "aes-256-xts": 256 位 AES 加密，XTS 模式；
+     - "": 设置为空字符串时，默认使用加密方式 "aes-128-xts"。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+	 */
+   /** @~english
    * @brief                Sets the built-in encryption mode.
    * @brief                The Agora SDK supports built-in encryption, which is set to the *aes-128-xts* mode by default. Call this method to use other encryption modes.
    * @brief                All users in the same channel must use the same encryption mode and password.
@@ -2812,8 +3574,24 @@ public:
    *                       \arg  Failure: <0.
    */
 	int setEncryptionMode(const char* encryptionMode);
+    /** @~chinese
+     注册数据包观测器。
 
-   /**
+     该方法注册数据包观测器 (Packet Observer)。在 Agora SDK 发送/接收（语音、视频）网络包时，会回调 IPacketObserver 定义的接口，App 可用此接口对数据做处理，例如加解密。
+
+     @note
+     - 处理后发送到网络的包大小不应超过 1200 字节，否则有可能发送失败。
+     - 若需调用此方法，需确保接收端和发送端都调用此方法，否则会出现未定义行为（例如音频无声或视频黑屏）。
+     - 若在直播场景下使用 CDN 推流、录制或储存，Agora 不建议调用此方法。
+     - 你需要在加入频道前调用该方法。
+
+     @param observer IPacketObserver 。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
+   /** @~english
    * @brief          Registers a packet observer.
    * @brief          The Agora SDK allows your application to register a packet observer to receive callbacks for voice or video packet transmission.
    * @note           \arg  The size of the packet sent to the network after processing should not exceed 1200 bytes, otherwise, the packet may fail to be sent.
@@ -2824,7 +3602,27 @@ public:
    *                 \arg  Failure: <0.
    */
 	int registerPacketObserver(IPacketObserver* observer);
+    /** @~chinese
+     创建数据流。
 
+     该方法用于创建数据流。RtcEngine 生命周期内，每个用户最多只能创建 5 个数据流。频道内数据通道最多允许数据延迟 5 秒，若超过 5 秒接收方尚未收到数据流，则数据通道会向 App 报错。
+
+     @note
+     - 将 reliable 和 ordered 同时设为 true 或 false。不要一个设为 true 另一个设为 false。
+     - 该方法需要在加入频道后调用。
+
+     @param[out] streamId 数据流 ID。
+     @param reliable
+     - true: 接收方 5 秒内会收到发送方所发送的数据，否则会收到 \ref agora::rtc::IRtcEngineEventHandler::onStreamMessageError "onStreamMessageError" 回调获得相应报错信息。
+     - false: 接收方不保证收到，就算数据丢失也不会报错。
+     @param ordered
+     - true: 接收方 5 秒内会按照发送方发送的顺序收到数据包；
+     - false: 接收方不保证按照发送方发送的顺序收到数据包。
+
+     @return
+     - 0: 创建数据流成功。
+     - < 0: 创建数据流失败。
+     */
    /**
    * @brief          Creates a data stream.
    * @brief          Each user can create up to five data streams during the lifecycle of the RtcEngine.
@@ -2841,7 +3639,24 @@ public:
    */
 	int createDataStream(int* streamId, bool reliable, bool ordered);
 
-   /**
+    /** @~chinese
+     发送数据流。
+
+     该方法发送数据流消息到频道内所有用户。SDK 对该方法的实现进行了如下限制：频道内每秒最多能发送 30 个包，且每个包最大为 1 KB。 API 须对数据通道的传送速率进行控制: 每个客户端每秒最多能发送 6 KB 数据。频道内每人最多能同时有 5 个数据通道。
+     成功调用该方法后，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onStreamMessage "onStreamMessage" 回调，远端用户可以在该回调中获取接收到的流消息；若调用失败，远端会触发 \ref agora::rtc::IRtcEngineEventHandler::onStreamMessageError "onStreamMessageError" 回调。
+     @note
+     - 请确保在调用该方法前，已调用 \ref agora::rtc::IRtcEngine::createDataStream "createDataStream" 创建了数据流。
+     - 该方法仅适用于通信场景以及直播场景下的主播用户，如果直播场景下的观众调用此方法可能会造成观众变主播。
+
+     @param  streamId  由 \ref agora::rtc::IRtcEngine::createDataStream "createDataStream" 返回的数据流 ID。
+     @param data 自定义数据。
+     @param length 数据长度。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
+   /** @~english
    * @brief          Sends data stream messages to all users in a channel.
    * @brief          The SDK has the following restrictions on this method:
    *                 -  Up to 30 packets can be sent per second in a channel with each packet having a maximum size of 1 kB.
@@ -2858,7 +3673,30 @@ public:
    */
 	int sendStreamMessage(int streamId, const char* data, size_t length);
 
-   /**
+    /** @~chinese
+     增加旁路推流地址。
+
+     调用该方法后，你可以向 CDN 推送 RTMP 或 RTMPS 协议的媒体流。SDK 会在本地触发 \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" 回调，报告增加旁路推流地址的状态。
+
+     @note
+     - 请确保在成功加入频道后才能调用该接口。
+     - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+     - 该方法每次只能增加一路旁路推流地址。若需推送多路流，则需多次调用该方法。
+     - 在直播场景中，只有角色为主播的用户才能调用该方法。
+     - Agora 目前仅支持转码时向 CDN 推送 RTMPS 协议的媒体流。
+
+     @param url CDN 推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。url 不支持中文字符等特殊字符。
+     @param transcodingEnabled
+     - true: 转码（ [转码]( https://docs.agora.io/cn/Agora%20Platform/terms?platform=All%20Platforms#转码) 是指在旁路推流时对音视频流进行转码处理后再推送到其他 CDN 服务器。多适用于频道内有多个主播，需要进行混流、合图的场景）。如果设为 `true`，需先调用 \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" 方法。
+     - false: 不转码。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+          - #ERR_INVALID_ARGUMENT (2): URL 为空或是长度为 0 的的字符串
+          - #ERR_NOT_INITIALIZED (7): 推流时未初始化引擎
+     */
+   /** @~english
    * @brief                      Publishes the local stream to a specified CDN live RTMP address. (CDN live only.)
    * @brief                      The SDK returns the result of this method call in the \ref agora::rtc::IRtcEngineEventHandler::onStreamPublished "onStreamPublished" callback.
    * @brief                      The *addPublishStreamUrl* method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback on the local client to report the state of adding a local stream to the CDN.
@@ -2877,7 +3715,22 @@ public:
    */
 	int addPublishStreamUrl(const char* url, bool transcodingEnabled);
 
-   /**
+   /** @~chinese
+    删除旁路推流地址。
+    *
+    * 调用该方法后，SDK 会在本地触发 \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" 回调，报告删除旁路推流地址的状态。
+    *
+    * @note
+    * - 该方法每次只能删除一路旁路推流地址。若需删除多路流，则需多次调用该方法。
+    * - URL 不支持中文等特殊字符。
+    * - 在直播场景中，只有角色为主播的用户才能调用该方法。
+    *
+    * @param url 待删除的旁路推流地址，格式为 RTMP。该字符长度不能超过 1024 字节。
+    * @return
+    * - 0: 方法调用成功
+    * - < 0: 方法调用失败
+    */
+   /** @~english
    * @brief       Removes an RTMP stream from the CDN. (CDN live only.)
    * @brief       This method removes the RTMP URL address (added by the \ref addPublishStreamUrl method) from a CDN live stream. The SDK returns the result of this method call in the \ref agora::rtc::IRtcEngineEventHandler::onStreamUnpublished "onStreamUnpublished" callback.
    * @brief       The \ref removePublishStreamUrl method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback on the local client to report the state of removing an RTMP stream from the CDN.
@@ -2890,7 +3743,24 @@ public:
    */
 	int removePublishStreamUrl(const char* url);
 
-   /**
+    /** @~chinese
+     设置直播推流转码。
+
+     该方法用于旁路推流的视图布局及音频设置等。调用该方法更新转码设置后本地会触发 \ref agora::rtc::IRtcEngineEventHandler::onTranscodingUpdated "onTranscodingUpdated" 回调。
+
+     @note
+     - 在直播场景中，只有角色为主播的用户才能调用该方法。
+     - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+     - 首次调用该方法更新转码设置时，不会触发 `onTranscodingUpdated` 回调。
+     - 该方法需要在加入频道后调用。
+     - Agora 目前仅支持转码时向 CDN 推送 RTMPS 协议的媒体流。
+
+     @param transcoding 详见 LiveTranscoding 。
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+    */
+   /** @~english
    * @brief             Sets the video layout and audio settings for CDN live. (CDN live only.)
    * @brief             The SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onTranscodingUpdated "onTranscodingUpdated" callback when you call the `setLiveTranscoding` method to update the transcoding setting.
    * @note              \arg  This method applies to Live Broadcast only.
@@ -2902,7 +3772,33 @@ public:
    */
 	int setLiveTranscoding(const LiveTranscoding& transcoding);
 
-   /**
+    /** @~chinese
+     添加本地视频水印。
+
+     该方法将一张 PNG 图片作为水印添加到本地发布的直播视频流上，同一直播频道中的观众、旁路直播观众和采集设备都能看到或采集到该水印图片。Agora 当前只支持在直播视频流中添加一个水印，后添加的水印会替换掉之前添加的水印。
+
+     水印坐标和 \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 方法中的设置有依赖关系：
+
+     - 如果视频编码方向/ #ORIENTATION_MODE 固定为横屏或自适应模式下的横屏，那么水印使用横屏坐标。
+     - 如果视频编码方向/ #ORIENTATION_MODE 固定为竖屏或自适应模式下的竖屏，那么水印使用竖屏坐标。
+     - 设置水印坐标时，水印的图像区域不能超出 `setVideoEncoderConfiguration` 方法中设置的视频尺寸，否则超出部分将被裁剪。
+
+     @note
+     - 你需要在调用 \ref agora::rtc::IRtcEngine::enableVideo "enableVideo" 方法之后再调用本方法。
+     - 如果你只是在旁路直播（推流到CDN）中添加水印，你可以使用本方法或 \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" 方法设置水印。
+     - 待添加水印图片必须是 PNG 格式。本方法支持所有像素格式的 PNG 图片：RGBA、RGB、Palette、Gray 和 Alpha_gray。
+     - 如果待添加的 PNG 图片的尺寸与你在本方法中设置的尺寸不一致，SDK 会对 PNG 图片进行缩放或裁剪，以与设置相符。
+     - 如果你已经使用 \ref agora::rtc::IRtcEngine::startPreview "startPreview" 方法开启本地视频预览，那么本方法的 `visibleInPreview` 可设置水印在预览时是否可见。
+     - 如果你已设置本地视频为镜像模式，那么此处的本地水印也为镜像。为避免本地用户看本地视频时的水印也被镜像，Agora 建议你不要对本地视频同时使用镜像和水印功能，请在应用层实现本地水印功能。
+
+     @param watermarkUrl 待添加的水印图片的本地路径。本方法支持从本地绝对/相对路径添加水印图片。
+     @param options 待添加的水印图片的设置选项，详见 WatermarkOptions。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
+   /** @~english
    * @brief                Adds a watermark image to the local video.
    * @brief                This method adds a PNG watermark image to the local video in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included), and the recording device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
    * @brief                The watermark position depends on the settings in the \ref setVideoEncoderConfiguration method:
@@ -2924,14 +3820,37 @@ public:
    */
 	int addVideoWatermark(const char* watermarkUrl, const WatermarkOptions& options);
 
-   /**
+    /** @~chinese
+     删除已添加的视频水印。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+    */
+   /** @~english
    * @brief    Removes the watermark image from the video stream added by the \ref addVideoWatermark method.
    * @return   \arg  Success: 0.
    *           \arg  Failure: <0.
    */
 	int clearVideoWatermarks();
+    /** @~chinese
 
-   /**
+    设置美颜效果选项。
+
+    开启本地美颜功能，并设置美颜效果选项。
+
+    @note 请在调用 \ref IRtcEngine::enableVideo "enableVideo" 方法后，调用该方法。
+
+    @param enabled 是否开启美颜功能：
+    - true: 开启。
+    - false: （默认）关闭。
+    @param options 美颜选项。详见: BeautyOptions 。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+    */
+   /** @~english
    * @brief          Enables/Disables image enhancement and sets the options.
    * @note           Supports Android and iOS only!
    * @param enabled  Sets whether or not to enable image enhancement:
@@ -2941,7 +3860,32 @@ public:
    */
 	int setBeautyEffectOptions(bool enabled, BeautyOptions options);
 
-   /**
+    /** @~chinese
+     输入在线媒体流。
+
+     @note
+     - 请确保已开通旁路推流的功能，详见进阶功能《推流到 CDN》中的前提条件。
+     - 该方法适用于 Native SDK v2.4.1 及之后的版本。
+     - 在直播场景中，只有角色为主播的用户才能调用该方法。
+     - 频道内同一时间只允许输入一个在线媒体流。
+     - 该方法需要在加入频道后调用。
+
+     该方法将正在播放的音视频作为音视频源导入到正在进行的直播中。可主要应用于赛事直播、多人看视频互动等直播场景。调用该方法后，SDK 会在本地触发 \ref agora::rtc::IRtcEngineEventHandler::onStreamInjectedStatus "onStreamInjectedStatus" 回调，报告输入在线媒体流的状态；成功输入媒体流后，该音视频流会出现在频道中，频道内所有用户都会收到 \ref agora::rtc::IRtcEngineEventHandler::onUserJoined "onUserJoined" 回调，其中 uid 为 666。该音视频流会出现在频道中。
+
+     @param url 添加到直播中的视频流 URL 地址。支持 RTMP、HLS、HTTP-FLV 协议传输。
+     - 支持的音频编码格式：AAC；
+     - 支持的视频编码格式：H.264(AVC)。
+     @param config   所添加的视频流属性定义，详见: InjectStreamConfig 。
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+        - #ERR_INVALID_ARGUMENT (2): 输入的 URL 为空。请重新调用该方法，并确认输入的媒体流的 URL 有效。
+        - #ERR_NOT_READY (3): 用户没有加入频道。
+        - #ERR_NOT_SUPPORTED (4): 频道非直播场景。请调用 \ref agora::rtc::IRtcEngine::setChannelProfile "setChannelProfile" 并将频道设置为直播场景再调用该方法。
+        - #ERR_NOT_INITIALIZED (7): 引擎没有初始化。请确认调用该方法前已创建 IRtcEngine 对象并完成初始化。
+     */
+   /** @~english
    * @brief          Adds a voice or video stream URL address to a live broadcast.
    * @brief          The \ref agora::rtc::IRtcEngineEventHandler::onStreamPublished "onStreamPublished" callback returns the inject status. If this method call is successful, the server pulls the voice or video stream and injects it into a live channel. This is applicable to scenarios where all audience members in the channel can watch a live show and interact with each other.
    * @brief          The `addInjectStreamUrl` method call triggers the following callbacks:
@@ -2971,7 +3915,44 @@ public:
    */
 	int addInjectStreamUrl(const char* url, const InjectStreamConfig& config);
 
-   /**
+    /** @~chinese
+     * 开始跨频道媒体流转发。该方法可用于实现跨频道连麦等场景。
+     *
+     * 成功调用该方法后，SDK 会触发
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged
+     *  "onChannelMediaRelayStateChanged" 和
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayEvent
+     * "onChannelMediaRelayEvent" 回调，并在回调中报告当前的跨频道媒体流转发状态和事件。
+     * - 如果
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged
+     *  "onChannelMediaRelayStateChanged" 回调报告 #RELAY_STATE_RUNNING (2) 和
+     * #RELAY_OK (0)，且
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayEvent
+     * "onChannelMediaRelayEvent" 回调报告
+     * #RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL (4)，
+     * 则表示 SDK 开始在源频道和目标频道之间转发媒体流。
+     * - 如果
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged
+     *  "onChannelMediaRelayStateChanged" 回调报告 #RELAY_STATE_FAILURE (3)，
+     * 则表示跨频道媒体流转发出现异常。
+     *
+     * @note
+     * - 请在成功加入频道后调用该方法。
+     * - 在直播场景中，只有角色为主播的用户才能调用该方法。
+     * - 成功调用该方法后，若你想再次调用该方法，必须先调用
+     * \ref stopChannelMediaRelay() "stopChannelMediaRelay"
+     * 方法退出当前的转发状态。
+     * - 跨频道媒体流转发功能需要[提交工单](https://agora-ticket.agora.io/)联系技术支持开通。
+     * - 该功能不支持 String 型 UID。
+     *
+     * @param configuration 跨频道媒体流转发参数配置。详见
+     * ChannelMediaRelayConfiguration 。
+     *
+     * @return
+     * - 0：方法调用成功。
+     * - < 0：方法调用失败
+     */
+   /** @~english
    * @brief                Starts to relay media streams across channels.
    * @brief                After a successful method call, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" and \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent" callbacks, and these callbacks return the state and events of the media stream relay.
    *                       <ul>
@@ -2987,7 +3968,29 @@ public:
    */
 	int startChannelMediaRelay(const ChannelMediaRelayConfiguration& configuration);
 
-   /**
+    /** @~chinese
+     * 更新媒体流转发的频道。
+     *
+     * 成功开始跨频道转发媒体流后，如果你希望将流转发到多个目标频道，
+     * 或退出当前的转发频道，可以调用该方法。
+     *
+     * 成功调用该方法后，SDK 会触发
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayEvent
+     * "onChannelMediaRelayEvent" 回调，
+     * 并在回调中报告状态码 #RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL (7)。
+     *
+     * @note
+     * 请在 \ref startChannelMediaRelay() "startChannelMediaRelay"
+     * 方法后调用该方法，更新媒体流转发的频道。
+     *
+     * @param configuration 跨频道媒体流转发参数配置。详见
+     * ChannelMediaRelayConfiguration 。
+     *
+     * @return
+     * - 0：方法调用成功。
+     * - < 0：方法调用失败
+     */
+   /** @~english
    * @brief                Updates the channels for media stream relay. After a successful \ref startChannelMediaRelay method call, if you want to relay the media stream to more channels, or leave the current relay channel, you can call the \ref updateChannelMediaRelay method.
    * @brief                After a successful method call, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayEvent "onChannelMediaRelayEvent" callback with the \ref RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL (7) state code.
    * @note                 Call this method after the \ref startChannelMediaRelay method to update the destination channel.
@@ -2997,7 +4000,27 @@ public:
    */
 	int updateChannelMediaRelay(const ChannelMediaRelayConfiguration& configuration);
 
-   /**
+    /** @~chinese
+     * 停止跨频道媒体流转发。一旦停止，主播会退出所有目标频道。
+     *
+     * 成功调用该方法后，SDK 会触发
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged
+     * "onChannelMediaRelayStateChanged" 回调。如果报告 #RELAY_STATE_IDLE (0)
+     * 和 #RELAY_OK (0)，则表示已停止转发媒体流。
+     *
+     * @note
+     * 如果该方法调用不成功，SDK 会触发
+     * \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged
+     * "onChannelMediaRelayStateChanged" 回调，并报告状态码
+     * #RELAY_ERROR_SERVER_NO_RESPONSE (2) 或
+     * #RELAY_ERROR_SERVER_CONNECTION_LOST (8)。你可以调用
+     * \ref leaveChannel() "leaveChannel" 方法离开频道，跨频道媒体流转发会自动停止。
+     *
+     * @return
+     * - 0：方法调用成功。
+     * - < 0：方法调用失败
+     */
+   /** @~english
    * @brief       Stops the media stream relay.
    * @brief       Once the relay stops, the broadcaster quits all the destination channels.
    * @brief       After a successful method call, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onChannelMediaRelayStateChanged "onChannelMediaRelayStateChanged" callback. If the callback returns \ref RELAY_STATE_IDLE (0) and \ref RELAY_OK (0), the broadcaster successfully stops the relay.
@@ -3007,6 +4030,16 @@ public:
    */
 	int stopChannelMediaRelay();
 
+    /** @~chinese
+     删除导入的外部媒体流。
+
+     @note 成功删除外部视频源 URL 地址后会触发 \ref agora::rtc::IRtcEngineEventHandler::onUserOffline "onUserOffline" 回调，uid 为 666。
+
+     @param url 已导入、待删除的外部视频源 URL 地址。
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
    /**
    * @brief       Removes the voice or video stream URL address from a live broadcast.
    * @brief       This method removes the URL address (added by the \ref addInjectStreamUrl method) from the live broadcast.
@@ -3021,12 +4054,32 @@ public:
 
 	bool unregisterEventHandler(IRtcEngineEventHandler* eventHandler);
 
-   /**
+    /** @~chinese
+     获取当前网络连接状态。
+
+     @note 该方法在加入频道前后都能调用。
+
+     @return #CONNECTION_STATE_TYPE 。
+     */
+   /** @~english
    * @brief    Gets the current connection state of the SDK.
    * @return   \ref  CONNECTION_STATE_TYPE.
    */
 	agora::rtc::CONNECTION_STATE_TYPE getConnectionState();
 
+    /** @~chinese
+     注册媒体 metadata 观测器用于接收或发送 metadata。
+
+     @note
+     - 请在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 前调用该方法。
+     - 该方法仅使用于直播场景。
+
+     @param observer 指向已注册的 metadata 观测器的指针。详见： IMetadataObserver 。
+     @param type 用户希望在观测器中使用的 METADATA 类型 。目前仅支持 VIDEO_METADATA 。详见： \ref IMetadataObserver::METADATA_TYPE "METADATA_TYPE" 。
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
    /**
    * @brief          Registers the metadata observer.
    * @brief          Registers the metadata observer. You need to implement the \ref IMetadataObserver class and specify the metadata type in this method. A successful call of this method triggers the \ref agora::rtc::IMetadataObserver::getMaxMetadataSize "getMaxMetadataSize" callback. This method enables you to add synchronized metadata in the video stream for more diversified live broadcast interactions, such as sending shopping links, digital coupons, and online quizzes.
@@ -3039,7 +4092,18 @@ public:
    */
 	int registerMediaMetadataObserver(IMetadataObserver* observer, IMetadataObserver::METADATA_TYPE type);
 
-	/** Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
+    /** @~chinese
+     通过 JSON 配置 SDK 提供技术预览或特别定制功能。
+
+     JSON 选项默认不公开。声网工程师正在努力寻求以标准化方式公开 JSON 选项。
+     @param parameters JSON 字符串形式的参数
+
+     @return
+     - 0: 方法调用成功
+     - < 0: 方法调用失败
+     */
+	/** @~english
+    Provides technical preview functionalities or special customizations by configuring the SDK with JSON options.
 
 	 The JSON options are not public by default. Agora is working on making commonly used JSON options public in a standard way.
 
@@ -3051,7 +4115,31 @@ public:
 	 */
 	int setParameters( const char* parameters );
 
-   /** Creates and gets an `AgoraRtcChannel` object.
+    /** @~chinese
+     创建并获取一个 IChannel 对象。
+
+     你可以多次调用该方法，创建多个 `IChannel` 对象，再调用各 `IChannel` 对象中的 \ref IChannel::joinChannel "joinChannel" 方法，实现同时加入多个频道。
+
+     加入多个频道后，你可以同时订阅各个频道的音、视频流；但是同一时间只能在一个频道发布一路音、视频流。
+
+     @param channelId 能标识频道的频道名，长度在 64 字节以内的字符。以下为支持的字符集范围（共 89 个字符）：
+     - 26 个小写英文字母 a~z；
+     - 26 个大写英文字母 A~Z；
+     - 10 个数字 0~9；
+     - 空格；
+     - "!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、" {"、"}"、"|"、"~"、","。
+
+     @note
+     - 该参数没有默认值，请确保对参数设值。
+     - 请勿将该参数设为空字符 ""，否则 SDK 会返回 `ERR_REFUSED(5)`
+
+     @return
+     - 方法调用成功，返回 IChannel 对象的指针
+     - 方法调用失败，返回一个空指针 NULL
+     - 如果将 `channelId` 设为空字符 ""，SDK 会返回 `ERR_REFUSED(5)`
+     */
+   /** @~english
+    Creates and gets an `AgoraRtcChannel` object.
 
     To join more than one channel, call this method multiple times to create as many `AgoraRtcChannel` objects as needed, and
     call the \ref AgoraRtcChannel::joinChannel "joinChannel" method of each created `AgoraRtcChannel` object.
