@@ -115,13 +115,15 @@ enum INTERFACE_ID_TYPE
     AGORA_IID_SIGNALING_ENGINE = 8,
 };
 
-    /** Warning code.
-     */
+/** Warning code.
+ */
 enum WARN_CODE_TYPE
 {
   /** 8: The specified view is invalid. Specify a view when using the video call function.
   */
     WARN_INVALID_VIEW = 8,
+    /** 16: 初始化视频功能失败。有可能是因视频资源被占用导致的。用户无法看到视频画面，但不影响语音通信。
+    */
     /** 16: Failed to initialize the video function, possibly caused by a lack of resources. The users cannot see the video while the voice communication is not affected.
     */
     WARN_INIT_VIDEO = 16,

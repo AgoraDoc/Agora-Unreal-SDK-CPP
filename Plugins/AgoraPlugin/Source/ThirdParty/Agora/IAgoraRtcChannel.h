@@ -10,9 +10,22 @@
 
 namespace agora {
 namespace rtc {
-/** The channel media options. */
+/** @~chinese
+ * 频道媒体设置选项。
+ */
+/** @~english
+ * The channel media options.
+ */
 struct ChannelMediaOptions {
-    /** Determines whether to subscribe to audio streams when the user joins the channel:
+    /** @~chinese
+     设置加入频道时是否自动订阅音频流：
+     - true: （默认）订阅
+     - false: 不订阅
+
+     该成员功能与 \ref agora::rtc::IChannel::muteAllRemoteAudioStreams "muteAllRemoteAudioStreams" 相同。加入频道后，你可以通过 `muteAllRemoteAudioStreams` 方法重新设置是否订阅频道内的远端音频流。
+     */
+    /** @~english
+     Determines whether to subscribe to audio streams when the user joins the channel:
      - true: (Default) Subscribe.
      - false: Do not subscribe.
 
@@ -20,7 +33,15 @@ struct ChannelMediaOptions {
      you can call the `muteAllRemoteAudioStreams` method to set whether to subscribe to audio streams in the channel.
      */
     bool autoSubscribeAudio;
-    /** Determines whether to subscribe to video streams when the user joins the channel:
+    /** @~chinese
+     设置加入频道是是否自动订阅视频流：
+     - true: （默认）订阅
+     - false: 不订阅
+
+     该成员功能与 \ref agora::rtc::IChannel::muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" 相同。加入频道后，你可以通过 `muteAllRemoteVideoStreams` 方法重新设置是否订阅频道内的远端视频流。
+     */
+    /** @~english
+     Determines whether to subscribe to video streams when the user joins the channel:
      - true: (Default) Subscribe.
      - false: Do not subscribe.
 
@@ -33,14 +54,31 @@ struct ChannelMediaOptions {
     , autoSubscribeVideo(true)
     {}
 };
-/** The IChannel class. */
+/** @~chinese
+ * IChannel 类。
+ */
+/** @~english
+ The IChannel class.
+ */
 class IChannel;
-/** The IChannelEventHandler class. */
+/** @~chinese
+ * IChannelEventHandler 类。
+ */
+/** @~english
+ The IChannelEventHandler class.
+ */
 class IChannelEventHandler
 {
 public:
     virtual ~IChannelEventHandler() {}
-    /** Reports the warning code of `IChannel`.
+    /** @~chinese
+    报告 IChannel 的警告码。
+    @param rtcChannel IChannel。
+    @param warn 警告码，详见 #WARN_CODE_TYPE。
+    @param msg 警告信息。
+     */
+    /** @~english
+     Reports the warning code of `IChannel`.
 
      @param rtcChannel IChannel
      @param warn The warning code: #WARN_CODE_TYPE
@@ -52,8 +90,15 @@ public:
         (void)warn;
         (void)msg;
     }
-    /** Reports the error code of `IChannel`.
-     
+    /** @~chinese
+    报告 IChannel 的错误码。
+    @param rtcChannel IChannel
+    @param err 错误码，详见 #ERROR_CODE_TYPE
+    @param msg 错误信息
+     */
+    /** @~english
+     Reports the error code of `IChannel`.
+
      @param rtcChannel IChannel
      @param err The error code: #ERROR_CODE_TYPE
      @param msg The error message.
@@ -63,7 +108,16 @@ public:
         (void)err;
         (void)msg;
     }
-    /** Occurs when a user joins a channel.
+    /** @~chinese
+     加入频道回调。
+
+     该回调方法表示该客户端成功加入了指定的频道。
+     @param rtcChannel IChannel
+     @param uid 用户 ID。如果 \ref IChannel::joinChannel "joinChannel" 中指定了 `uid`，则此处返回该 ID；否则使用 Agora 服务器自动分配的 ID。
+     @param elapsed 从 \ref IChannel::joinChannel "joinChannel" 开始到发生此事件过去的时间（毫秒）。
+     */
+    /** @~english
+     Occurs when a user joins a channel.
 
      This callback notifies the application that a user joins a specified channel.
 
@@ -77,8 +131,17 @@ public:
         (void)uid;
         (void)elapsed;
     }
-    /** Occurs when a user rejoins the channel after being disconnected due to network problems.
-     
+    /** @~chinese
+     重新加入频道回调。
+
+     有时候由于网络原因，客户端可能会和服务器失去连接，SDK 会进行自动重连，自动重连成功后触发此回调方法。
+     @param rtcChannel IChannel
+     @param uid 用户 ID。
+     @param elapsed 从开始重连到重连成功的时间（毫秒）。
+     */
+    /** @~english
+     Occurs when a user rejoins the channel after being disconnected due to network problems.
+
      @param rtcChannel IChannel
      @param uid The user ID.
      @param elapsed Time elapsed (ms) from the local user starting to reconnect until this callback is triggered.
@@ -89,7 +152,15 @@ public:
         (void)uid;
         (void)elapsed;
     }
-    /** Occurs when a user leaves the channel.
+    /** @~chinese
+     离开频道回调。
+
+     App 调用 \ref agora::rtc::IChannel::leaveChannel "leaveChannel" 方法时，SDK提示 App 离开频道成功。在该回调方法中，App 可以得到此次通话的总通话时长、SDK 收发数据的流量等信息。App 通过该回调获取通话时长以及 SDK 接收到或发送的数据统计信息。
+     @param rtcChannel IChannel
+     @param stats 通话的统计数据: RtcStats 。
+     */
+    /** @~english
+     Occurs when a user leaves the channel.
 
      This callback notifies the application that a user leaves the channel when the application calls the \ref agora::rtc::IChannel::leaveChannel "leaveChannel" method.
 
@@ -102,7 +173,18 @@ public:
         (void)rtcChannel;
         (void)stats;
     }
-    /** Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
+    /** @~chinese
+     播场景下用户角色已切换回调。
+
+     直播场景下，当用户切换角色时会触发此回调，即主播切换为观众时，或观众切换为主播时。
+
+     该回调由本地用户在加入频道后调用 \ref agora::rtc::IChannel::setClientRole "setClientRole" 改变用户角色触发的。
+     @param rtcChannel IChannel
+     @param oldRole 切换前的角色: #CLIENT_ROLE_TYPE。
+     @param newRole 切换后的角色: #CLIENT_ROLE_TYPE。
+     */
+    /** @~english
+     Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
 
      This callback notifies the application of a user role switch when the application calls the \ref IChannel::setClientRole "setClientRole" method.
 
@@ -117,7 +199,29 @@ public:
         (void)oldRole;
         (void)newRole;
     }
-    /** Occurs when a remote user (Communication)/ host (Live Broadcast) joins the channel.
+    /** @~chinese
+     远端用户（通信场景）/主播（直播场景）加入当前频道回调。
+
+     - 通信场景下，该回调提示有远端用户加入了频道，并返回新加入用户的 ID；如果加入之前，已经有其他用户在频道中了，新加入的用户也会收到这些已有用户加入频道的回调。
+     - 直播场景下，该回调提示有主播加入了频道，并返回该主播的 ID。如果在加入之前，已经有主播在频道中了，新加入的用户也会收到已有主播加入频道的回调。声网建议连麦主播不超过 17 人。
+
+     该回调在如下情况下会被触发：
+     - 远端用户/主播调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 方法加入频道
+     - 远端用户加入频道后调用 \ref agora::rtc::IChannel::setClientRole "setClientRole" 将用户角色改变为主播
+     - 远端用户/主播网络中断后重新加入频道
+     - 主播通过调用 \ref agora::rtc::IChannel::addInjectStreamUrl "addInjectStreamUrl" 方法成功输入在线媒体流
+
+     @note 直播场景下，
+     - 主播间能相互收到新主播加入频道的回调，并能获得该主播的 uid。
+     - 观众也能收到新主播加入频道的回调，并能获得该主播的 uid。
+     - 当 Web 端加入直播频道时，只要 Web 端有推流，SDK 会默认该 Web 端为主播，并触发该回调。
+
+     @param rtcChannel IChannel
+     @param uid 新加入频道的远端用户/主播 ID。
+     @param elapsed 从本地用户调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 到该回调触发的延迟（毫秒)。
+     */
+    /** @~english
+     Occurs when a remote user (Communication)/ host (Live Broadcast) joins the channel.
 
      - Communication profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
      - Live-broadcast profile: This callback notifies the application that the host joins the channel. If other hosts are already in the channel, the SDK also reports to the application on the existing hosts. We recommend limiting the number of hosts to 17.
@@ -132,7 +236,7 @@ public:
      - The host receives this callback when another host joins the channel.
      - The audience in the channel receives this callback when a new host joins the channel.
      - When a web application joins the channel, the SDK triggers this callback as long as the web application publishes streams.
-     
+
      @param rtcChannel IChannel
      @param uid User ID of the user or host joining the channel.
      @param elapsed Time delay (ms) from the local user calling the \ref IChannel::joinChannel "joinChannel" method until the SDK triggers this callback.
@@ -142,7 +246,19 @@ public:
         (void)uid;
         (void)elapsed;
     }
-    /** Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+    /** @~chinese
+     远端用户（通信场景）/主播（直播场景）离开当前频道回调。
+
+     提示有远端用户/主播离开了频道（或掉线）。用户离开频道有两个原因，即正常离开和超时掉线：
+     - 正常离开的时候，远端用户/主播会发送类似“再见”的消息。接收此消息后，判断用户离开频道。
+     - 超时掉线的依据是，在一定时间内（通信场景为 20 秒，直播场景稍有延时），用户没有收到对方的任何数据包，则判定为对方掉线。在网络较差的情况下，有可能会误报。我们建议使用 Agora 实时消息 SDK 来做可靠的掉线检测。
+
+     @param rtcChannel IChannel
+     @param uid 离线用户或主播的用户 ID。
+     @param reason 离线原因: #USER_OFFLINE_REASON_TYPE。
+     */
+    /** @~english
+     Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
 
      Reasons why the user is offline:
 
@@ -158,34 +274,68 @@ public:
         (void)uid;
         (void)reason;
     }
-    /** Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
+    /** @~chinese
+     网络连接丢失回调。
+
+     SDK 在调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 后无论是否加入成功，只要 10 秒和服务器无法连接就会触发该回调。
+
+     与 \ref agora::rtc::IRtcEngineEventHandler::onConnectionInterrupted "onConnectionInterrupted" 的区别是：
+
+     - `onConnectionInterrupted` 回调一定是发生在加入频道成功后，且 SDK 刚失去和服务器连接超过 4 秒时触发。
+     - `onConnectionLost` 回调是无论之前加入频道是否成功，只要 10 秒内和服务器无法建立连接都会触发。
+
+     如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，SDK 会停止尝试重连。
+
+     @param rtcChannel IChannel
+     */
+    /** @~english
+     Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
 
      The SDK triggers this callback when it cannot connect to the server 10 seconds after calling the \ref IChannel::joinChannel "joinChannel" method, whether or not it is in the channel.
-     
+
      This callback is different from \ref agora::rtc::IRtcEngineEventHandler::onConnectionInterrupted "onConnectionInterrupted":
 
      - The SDK triggers the `onConnectionInterrupted` callback when it loses connection with the server for more than four seconds after it successfully joins the channel.
      - The SDK triggers the `onConnectionLost` callback when it loses connection with the server for more than 10 seconds, whether or not it joins the channel.
 
      If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
-     
+
      @param rtcChannel IChannel
      */
     virtual void onConnectionLost(IChannel *rtcChannel) {
         (void)rtcChannel;
     }
-    /** Occurs when the token expires.
+    /** @~chinese
+     Token 已过期回调。
+
+     在调用 \ref agora::rtc::IChannel::joinChannel "joinChannel", 时如果指定了 Token，由于 Token 具有一定的时效，在通话过程中 SDK 可能由于网络原因和服务器失去连接，重连时可能需要新的 Token。
+
+     该回调通知 App 需要生成新的 Token，并调用 \ref agora::rtc::IChannel::renewToken "renewToken" 更新 Token。
+
+     @param rtcChannel IChannel
+     */
+    /** @~english
+     Occurs when the token expires.
 
      After a token is specified by calling the \ref IChannel::joinChannel "joinChannel" method, if the SDK losses connection with the Agora server due to network issues, the token may expire after a certain period of time and a new token may be required to reconnect to the server.
 
      This callback notifies the app to generate a new token and call `joinChannel` to rejoin the channel with the new token.
-     
+
      @param rtcChannel IChannel
      */
     virtual void onRequestToken(IChannel *rtcChannel) {
         (void)rtcChannel;
     }
-    /** Occurs when the token expires in 30 seconds.
+    /** @~chinese
+     Token 服务即将过期回调。
+
+     在调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 时如果指定了 Token，由于 Token 具有一定的时效，在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 App 更新 Token。 当收到该回调时，用户需要重新在服务端生成新的 Token，然后调用 \ref agora::rtc::IChannel::renewToken "renewToken" 将新生成的 Token 传给 SDK。
+
+     @param rtcChannel IChannel
+     @param token 即将服务失效的 Token。
+     */
+    /** @~english
+     Occurs when the token expires in 30 seconds.
 
      The user becomes offline if the token used in the \ref IChannel::joinChannel "joinChannel" method expires. The SDK triggers this callback 30 seconds before the token expires to remind the application to get a new token. Upon receiving this callback, generate a new token on the server and call the \ref IChannel::renewToken "renewToken" method to pass the new token to the SDK.
 
@@ -196,10 +346,19 @@ public:
         (void)rtcChannel;
         (void)token;
     }
-    /** Reports the statistics of the current call. 
-    
+    /** @~chinese
+     当前通话统计回调。
+
+     SDK 定期向 App 报告当前通话的统计信息，每两秒触发一次。
+
+     @param rtcChannel IChannel
+     @param stats RTC 引擎统计数据: RtcStats 。
+     */
+    /** @~english
+     Reports the statistics of the current call.
+
      The SDK triggers this callback once every two seconds after the user joins the channel.
-     
+
      @param rtcChannel IChannel
      @param stats Statistics of the RtcEngine: RtcStats.
      */
@@ -207,12 +366,25 @@ public:
         (void)rtcChannel;
         (void)stats;
     }
-    /** Reports the last mile network quality of each user in the channel once every two seconds.
+    /** @~chinese
+     通话中每个用户的网络上下行 last mile 质量报告回调。
+
+     该回调描述每个用户在通话中的 last mile 网络状态，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
+
+     该回调每 2 秒触发一次。如果远端有多个用户，该回调每 2 秒会被触发多次。
+
+     @param rtcChannel IChannel
+     @param uid 用户 ID。表示该回调报告的是持有该 ID 的用户的网络质量。当 uid 为 0 时，返回的是本地用户的网络质量。
+     @param txQuality 该用户的上行网络质量，基于发送码率、上行丢包率、平均往返时延和网络抖动计算。该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。假设上行码率是 1000 Kbps，那么支持直播场景下 640 &times; 480 的分辨率、15 fps 的帧率没有问题，但是支持 1280 &times; 720 的分辨率就会有困难。详见 #QUALITY_TYPE 。
+     @param rxQuality 该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。详见 #QUALITY_TYPE。
+     */
+    /** @~english
+     Reports the last mile network quality of each user in the channel once every two seconds.
 
      Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, the SDK triggers this callback as many times.
 
      @param rtcChannel IChannel
-     @param uid User ID. The network quality of the user with this @p uid is reported. If @p uid is 0, the local network quality is reported.
+     @param uid User ID. The network quality of the user with this `uid` is reported. If `uid` is 0, the local network quality is reported.
      @param txQuality Uplink transmission quality rating of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time), and jitter of the uplink network. @p txQuality is a quality rating helping you understand how well the current uplink network conditions can support the selected VideoEncoderConfiguration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 * 480 and a frame rate of 15 fps in the Live-broadcast profile, but may be inadequate for resolutions higher than 1280 * 720. See #QUALITY_TYPE.
      @param rxQuality Downlink network quality rating of the user in terms of the packet loss rate, average RTT, and jitter of the downlink network. See #QUALITY_TYPE.
      */
@@ -222,7 +394,18 @@ public:
         (void)txQuality;
         (void)rxQuality;
     }
-    /** Reports the statistics of the video stream from each remote user/host.
+    /** @~chinese
+     通话中远端视频流的统计信息回调。
+     *
+     * 该回调描述远端用户在通话中端到端的视频流统计信息，
+     * 针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播，
+     * 该回调每 2 秒会被触发多次。
+     *
+     * @param rtcChannel IChannel
+     * @param stats 远端视频统计数据。详见: RemoteVideoStats 。
+     */
+    /** @~english
+     Reports the statistics of the video stream from each remote user/host.
      *
      * The SDK triggers this callback once every two seconds for each remote
      * user/host. If a channel includes multiple remote users, the SDK
@@ -236,7 +419,16 @@ public:
         (void)rtcChannel;
         (void)stats;
     }
-    /** Reports the statistics of the audio stream from each remote user/host.
+    /** @~chinese
+     通话中远端音频流的统计信息回调。用于取代 \ref agora::rtc::IRtcEngineEventHandler::onAudioQuality "onAudioQuality" 回调。
+
+     该回调描述远端用户在通话中端到端的音频流统计信息。该回调函数针对每个发送音频流的远端用户/主播每 2 秒触发一次。如果远端有多个用户/主播发送音频流，该回调每 2 秒会被触发多次。
+
+     @param rtcChannel IChannel
+     @param stats 接收到的远端音频统计数据，详细定义见: RemoteAudioStats 。
+     */
+    /** @~english
+     Reports the statistics of the audio stream from each remote user/host.
 
      This callback replaces the \ref agora::rtc::IRtcEngineEventHandler::onAudioQuality "onAudioQuality" callback.
 
@@ -249,11 +441,26 @@ public:
         (void)rtcChannel;
         (void)stats;
     }
-    /** Occurs when the remote audio state changes.
-     
+    /** @~chinese
+     远端音频流状态发生改变回调。
+
+     远端用户/主播音频状态发生改变时，SDK 会触发该回调向本地用户报告当前的远端音频流状态。
+
+     @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+
+     @param rtcChannel IChannel
+     @param uid 发生音频状态改变的远端用户 ID。
+     @param state 远端音频流状态。 详见 #REMOTE_AUDIO_STATE 。
+     @param reason 远端音频流状态改变的具体原因。详见 #REMOTE_AUDIO_STATE_REASON 。
+     @param elapsed 从本地用户调用 \ref IChannel::joinChannel "joinChannel"
+     方法到发生本事件经历的时间，单位为 ms。
+     */
+    /** @~english
+      Occurs when the remote audio state changes.
+
       This callback indicates the state change of the remote audio stream.
       @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-      
+
       @param rtcChannel IChannel
       @param uid ID of the remote user whose audio state changes.
       @param state State of the remote audio. See #REMOTE_AUDIO_STATE.
@@ -270,14 +477,28 @@ public:
         (void)reason;
         (void)elapsed;
     }
-    /** Reports which user is the loudest speaker.
+    /** @~chinese
+     监测到最活跃用户回调。
+
+     成功调用 \ref agora::rtc::IRtcEngine::enableAudioVolumeIndication "enableAudioVolumeIndication" 后，SDK 会持续监测音量
+     最大的远端用户，并统计该用户被判断为音量最大者的次数。当前时间段内，该次数累积最多的远端用户为最活跃的用户。
+
+     当频道内用户数量大于或等于 2 且有活跃用户时，SDK 会触发该回调并报告最活跃用户的 `uid`。
+     - 如果最活跃用户一直是同一位用户，则 SDK 不会再次触发 `onActiveSpeaker` 回调。
+     - 如果最活跃用户有变化，则 SDK 会再次触发该回调并报告新的最活跃用户的 `uid`。
+
+     @param rtcChannel IChannel
+     @param uid 远端最活跃用户的 ID。
+     */
+    /** @~english
+    Reports which user is the loudest speaker.
 
     If the user enables the audio volume indication by calling the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method, this callback returns the @p uid of the active speaker detected by the audio volume detection module of the SDK.
 
     @note
     - To receive this callback, you need to call the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method.
     - This callback returns the user ID of the user with the highest voice volume during a period of time, instead of at the moment.
-    
+
     @param rtcChannel IChannel
     @param uid User ID of the active speaker. A `uid` of 0 represents the local user.
     */
@@ -285,14 +506,24 @@ public:
         (void)rtcChannel;
         (void)uid;
     }
-     /** Occurs when the video size or rotation of a specified user changes.
+    /** @~chinese
+     本地或远端视频大小和旋转信息发生改变回调。
+
+     @param rtcChannel IChannel
+     @param uid 图像尺寸和旋转信息发生变化的用户的用户 ID（本地用户的 uid 为 0）。
+     @param width 视频流的宽度（像素）。
+     @param height 视频流的高度（像素）。
+     @param rotation 旋转信息 [0,360)。
+     */
+     /** @~english
+      Occurs when the video size or rotation of a specified user changes.
 
      @param rtcChannel IChannel
      @param uid User ID of the remote user or local user (0) whose video size or rotation changes.
      @param width New width (pixels) of the video.
      @param height New height (pixels) of the video.
      @param rotation New rotation of the video [0 to 360).
-     */ 
+     */
     virtual void onVideoSizeChanged(IChannel *rtcChannel, uid_t uid, int width, int height, int rotation) {
         (void)rtcChannel;
         (void)uid;
@@ -300,10 +531,22 @@ public:
         (void)height;
         (void)rotation;
     }
-    /** Occurs when the remote video state changes.
-      
+    /** @~chinese
+     远端视频状态发生改变回调。
+
+     @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+
+     @param rtcChannel IChannel
+     @param uid 发生视频状态改变的远端用户 ID。
+     @param state 远端视频流状态。详见 #REMOTE_VIDEO_STATE 。
+     @param reason 远端视频流状态改变的具体原因。详见 #REMOTE_VIDEO_STATE_REASON。
+     @param elapsed 从本地用户调用 \ref agora::rtc::IChannel::joinChannel "joinChannel" 方法到发生本事件经历的时间，单位为 ms。
+     */
+    /** @~english
+     Occurs when the remote video state changes.
+
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-     
+
      @param rtcChannel IChannel
      @param uid ID of the remote user whose video state changes.
      @param state State of the remote video. See #REMOTE_VIDEO_STATE.
@@ -320,10 +563,22 @@ public:
         (void)reason;
         (void)elapsed;
     }
-    /** Occurs when the local user receives the data stream from the remote user within five seconds.
+    /** @~chinese
+     接收到对方数据流消息的回调。
+
+     该回调表示本地用户收到了远端用户调用 \ref agora::rtc::IChannel::sendStreamMessage "sendStreamMessage" 方法发送的流消息。
+
+     @param rtcChannel IChannel
+     @param uid 发送消息的用户 ID。
+     @param streamId Stream ID。
+     @param data 接收到的数据。
+     @param length 数据长度。
+     */
+    /** @~english
+     Occurs when the local user receives the data stream from the remote user within five seconds.
 
      The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the \ref agora::rtc::IChannel::sendStreamMessage "sendStreamMessage" method.
-     
+
      @param rtcChannel IChannel
      @param uid User ID of the remote user sending the message.
      @param streamId Stream ID.
@@ -337,10 +592,23 @@ public:
         (void)data;
         (void)length;
     }
-    /** Occurs when the local user does not receive the data stream from the remote user within five seconds.
+    /** @~chinese
+     接收对方数据流消息发生错误的回调。
+
+     该回调表示本地用户未收到远端用户调用 \ref agora::rtc::IChannel::sendStreamMessage "sendStreamMessage" 方法发送的流消息。
+
+     @param rtcChannel IChannel
+     @param uid 发送消息的用户 ID。
+     @param streamId Stream ID。
+     @param code 错误码: #ERROR_CODE_TYPE。
+     @param missed 丢失的消息数量。
+     @param cached 数据流中断时，后面缓存的消息数量。
+     */
+    /** @~english
+     Occurs when the local user does not receive the data stream from the remote user within five seconds.
 
      The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the \ref agora::rtc::IChannel::sendStreamMessage "sendStreamMessage" method.
-     
+
      @param rtcChannel IChannel
      @param uid User ID of the remote user sending the message.
      @param streamId Stream ID.
@@ -356,7 +624,18 @@ public:
         (void)missed;
         (void)cached;
     }
-    /** Occurs when the state of the media stream relay changes.
+    /** @~chinese
+     跨频道媒体流转发状态发生改变回调。
+     *
+     * 当跨频道媒体流转发状态发生改变时，SDK 会触发该回调，
+     * 并报告当前的转发状态以及相关的错误信息。
+     *
+     * @param rtcChannel IChannel
+     * @param state 跨频道媒体流转发状态。详见 #CHANNEL_MEDIA_RELAY_STATE 。
+     * @param code 跨频道媒体流转发出错的错误码。详见 #CHANNEL_MEDIA_RELAY_ERROR 。
+     */
+    /** @~english
+     Occurs when the state of the media stream relay changes.
      *
      * The SDK returns the state of the current media relay with any error
      * message.
@@ -369,7 +648,15 @@ public:
         (void)state;
         (void)code;
     }
-    /** Reports events during the media stream relay.
+    /** @~chinese
+     跨频道媒体流转发事件回调。
+     *
+     * 该回调报告跨频道媒体流转发过程中发生的事件。
+     * @param rtcChannel IChannel
+     * @param code 跨频道媒体流转发事件码。详见 #CHANNEL_MEDIA_RELAY_EVENT 。
+     */
+    /** @~english
+     Reports events during the media stream relay.
      * @param rtcChannel IChannel
      * @param code The event code in #CHANNEL_MEDIA_RELAY_EVENT.
      */
@@ -377,13 +664,25 @@ public:
         (void)rtcChannel;
         (void)code;
     }
-    /**
+    /** @~chinese
+     RTMP/RTMPS 推流状态发生改变回调。
+
+     该回调返回本地用户调用 \ref agora::rtc::IChannel::addPublishStreamUrl "addPublishStreamUrl" 或 \ref agora::rtc::IChannel::removePublishStreamUrl "removePublishStreamUrl" 方法的结果。
+     RTMP/RTMPS 推流状态发生改变时，SDK 会触发该回调，并在回调中明确状态发生改变的 URL 地址及当前推流状态。
+     该回调方便推流用户了解当前的推流状态；推流出错时，你可以通过返回的错误码了解出错的原因，方便排查问题。
+
+     @param rtcChannel IChannel
+     @param url 推流状态发生改变的 URL 地址。
+     @param state 当前的推流状态，详见 #RTMP_STREAM_PUBLISH_STATE 。当推流状态为 RTMP_STREAM_PUBLISH_STATE_FAILURE (4) 时，你可以在 errorCode 参数中查看返回的错误信息。
+     @param errCode 推流错误信息，详见 #RTMP_STREAM_PUBLISH_ERROR 。
+     */
+    /** @~english
      Occurs when the state of the RTMP streaming changes.
- 
+
      The SDK triggers this callback to report the result of the local user calling the \ref agora::rtc::IChannel::addPublishStreamUrl "addPublishStreamUrl" or \ref agora::rtc::IChannel::removePublishStreamUrl "removePublishStreamUrl" method.
 
      This callback indicates the state of the RTMP streaming. When exceptions occur, you can troubleshoot issues by referring to the detailed error descriptions in the *errCode* parameter.
-    
+
      @param rtcChannel IChannel
      @param url The RTMP URL address.
      @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
@@ -395,19 +694,39 @@ public:
         (void) state;
         (void) errCode;
     }
-     /** Occurs when the publisher's transcoding is updated. 
- 
+    /** @~chinese
+     旁路推流设置已被更新回调。
+     *
+     * \ref agora::rtc::IChannel::setLiveTranscoding "setLiveTranscoding" 方法中的直播参数 `LiveTranscoding` 更新时，`onTranscodingUpdated` 回调会被触发并向主播报告更新信息。
+     *
+     * @note 首次调用 `setLiveTranscoding` 方法设置转码参数 `LiveTranscoding` 时，不会触发此回调。
+     *
+     * @param rtcChannel IChannel
+     *
+     */
+    /** @~english
+     Occurs when the publisher's transcoding is updated.
+
      When the `LiveTranscoding` class in the \ref agora::rtc::IChannel::setLiveTranscoding "setLiveTranscoding" method updates, the SDK triggers the `onTranscodingUpdated` callback to report the update information to the local host.
- 
+
      @note If you call the `setLiveTranscoding` method to set the LiveTranscoding class for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
-     
+
      @param rtcChannel IChannel
-     */   
+     */
     virtual void onTranscodingUpdated(IChannel *rtcChannel) {
         (void)rtcChannel;
     }
-    /** Occurs when a voice or video stream URL address is added to a live broadcast.
-     
+    /** @~chinese
+     输入在线媒体流状态回调。
+
+     @param rtcChannel IChannel
+     @param url 导入进直播的在线媒体流的地址。
+     @param uid 用户 ID。
+     @param status 输入的在线媒体流状态: #INJECT_STREAM_STATUS 。
+     */
+    /** @~english
+     Occurs when a voice or video stream URL address is added to a live broadcast.
+
      @param rtcChannel IChannel
      @param url The URL address of the externally injected stream.
      @param uid User ID.
@@ -419,7 +738,21 @@ public:
         (void)uid;
         (void)status;
     }
-    /** Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to the video after the network conditions improve.
+    /** @~chinese
+     本地发布流已回退为音频流回调。
+
+     如果你调用了 \ref agora::rtc::IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" 接口并将 option
+     设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY ，当上行网络环境不理想、本地发布的媒体流回退为音频流时，或当上行网络改善、媒体流恢复为音视频流时，会触发该回调。
+
+     @note 如果本地发流已回退为音频流，远端的 App 上会收到 \ref agora::rtc::IRtcEngineEventHandler::onUserMuteVideo "onUserMuteVideo" 的回调事件。
+
+     @param rtcChannel IChannel
+     @param isFallbackOrRecover
+     - true: 由于网络环境不理想，本地发布的媒体流已回退为音频流；
+     - false: 由于网络环境改善，发布的音频流已恢复为音视频流。
+     */
+    /** @~english
+    Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to the video after the network conditions improve.
 
     If you call \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" and set *option* as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this callback when the published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
 
@@ -432,14 +765,28 @@ public:
         (void)rtcChannel;
         (void)isFallbackOrRecover;
     }
-    /** Occurs when the remote media stream falls back to audio-only stream
+    /** @~chinese
+     远端订阅流已回退为音频流回调。
+
+     如果你调用了 \ref agora::rtc::IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" 接口并将 option 设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY ，当下行网络环境不理想、仅接收远端音频流时，或当下行网络改善、恢复订阅音视频流时，会触发该回调。
+
+     @note 远端订阅流因弱网环境不能同时满足音视频而回退为小流时，你可以使用 RemoteVideoStats 来监控远端视频大小流的切换。
+
+     @param rtcChannel IChannel
+     @param uid 远端用户 ID。
+     @param  isFallbackOrRecover
+     - true: 由于网络环境不理想，远端订阅流已回退为音频流；
+     - false: 由于网络环境改善，订阅的音频流已恢复为音视频流。
+     */
+    /** @~english
+     Occurs when the remote media stream falls back to audio-only stream
      * due to poor network conditions or switches back to the video stream
      * after the network conditions improve.
      *
      * If you call
      * \ref IRtcEngine::setRemoteSubscribeFallbackOption
      * "setRemoteSubscribeFallbackOption" and set
-     * @p option as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this
+     * `option` as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this
      * callback when the remote media stream falls back to audio-only mode due
      * to poor uplink conditions, or when the remote media stream switches
      * back to the video after the uplink network condition improves.
@@ -461,8 +808,18 @@ public:
         (void)uid;
         (void)isFallbackOrRecover;
     }
-    /** Occurs when the connection state between the SDK and the server changes.
-    
+    /** @~chinese
+     网络连接状态已改变回调。
+
+     该回调在网络连接状态发生改变的时候触发，并告知用户当前的网络连接状态和引起网络状态改变的原因。
+
+     @param rtcChannel IChannel
+     @param state 详见： #CONNECTION_STATE_TYPE。
+     @param reason 详见： #CONNECTION_CHANGED_REASON_TYPE。
+     */
+    /** @~english
+     Occurs when the connection state between the SDK and the server changes.
+
      @param rtcChannel IChannel
      @param state See #CONNECTION_STATE_TYPE.
      @param reason See #CONNECTION_CHANGED_REASON_TYPE.

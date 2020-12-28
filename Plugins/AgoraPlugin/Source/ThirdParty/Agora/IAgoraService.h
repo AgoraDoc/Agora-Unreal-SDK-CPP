@@ -29,8 +29,16 @@ protected:
 public:
     AGORA_CPP_API static void release ();
 
-	/** Initializes the engine.
-     
+    /** @~chinese
+     * 初始化 RtcEngine。
+     * @param context AgoraServiceContext 的指针。
+     * @return
+     * - 0: 方法调用成功
+     * - < 0: 方法调用失败
+     */
+	/** @~english
+    Initializes the engine.
+
     @param context RtcEngine context.
     @return
      - 0: Success.
@@ -51,7 +59,7 @@ public:
 } // namespace agora
 
 /** Gets the SDK version number.
- 
+
  @param build Build number of the Agora SDK.
  @return
  - 0: Success.
@@ -66,6 +74,11 @@ AGORA_API const char* AGORA_CALL getAgoraSdkVersion(int* build);
 */
 AGORA_API const char* AGORA_CALL getAgoraSdkErrorDescription(int err);
 
+/** @~chinese
+ * 创建 IAgoraService 对象，并返回指针。
+ * @return
+ * - 方法调用成功：返回 IAgoraService 的指针。
+ * - 方法调用失败：返回一个空指针。
 /**
 * Creates the Agora Service object and returns the pointer.
 * @return returns Pointer of the Agora Service object
