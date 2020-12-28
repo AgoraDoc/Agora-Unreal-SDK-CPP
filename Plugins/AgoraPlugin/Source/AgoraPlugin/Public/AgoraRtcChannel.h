@@ -26,7 +26,7 @@ namespace ue4 {
  * AgoraRtcChannel 类。
  */
 /** @~english
-* Wrapper around agora::rtc::IRtcChannel
+* Wrapper around agora::rtc::IRtcChannel.
 */
 class AGORAPLUGIN_API AgoraRtcChannel
 {
@@ -48,9 +48,10 @@ public:
    * - 方法调用失败：返回一个空指针。
    */
    /** @~english
-   Creates the \ref IChannel object and returns the pointer.
-   @return   \arg Success: Pointer to the \ref IChannel object.
-             \arg Failure: nullptr.
+   Creates the AgoraRtcChannel object and returns the pointer.
+   @param channel Pointer to the IChannel object.
+   @return   \arg Success: Pointer to the AgoraRtcChannel object.
+             \arg Failure: A null pointer.
    */
    static AgoraRtcChannel* createAgoraRtcChannel( agora::rtc::IChannel *channel );
 
@@ -493,6 +494,7 @@ public:
     - The size of the packet sent to the network after processing should not exceed 1200 bytes, otherwise, the packet may fail to be sent.
     - Ensure that both receivers and senders call this method, otherwise, you may meet undefined behaviors such as no voice and black screen.
     - When you use CDN live streaming, recording or storage functions, Agora doesn't recommend calling this method.
+    - Call this method before joining a channel.
 
     @param observer The registered packet observer. See \ref IPacketObserver.
 
@@ -634,7 +636,7 @@ public:
     such as Battle Royale games.
 
     @note
-    - For this method to work, enable stereo panning for remote users by calling the \ref AgoraRtcEngine::enableSoundPositionIndication "enableSoundPositionIndication" method before joining a channel.
+    - For this method to work, enable stereo panning for remote users by calling the \ref agora::rtc::IRtcEngine::enableSoundPositionIndication "enableSoundPositionIndication" method before joining a channel.
     - This method requires hardware support. For the best sound positioning, we recommend using a stereo speaker.
 
     @param uid The ID of the remote user.
@@ -1213,8 +1215,10 @@ public:
     call the `setLiveTranscoding` method to update the transcoding setting.
 
     @note
-    - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*..
+    - Ensure that you enable the RTMP Converter service before using this function. See Prerequisites in the advanced guide *Push Streams to CDN*.
     - If you call the `setLiveTranscoding` method to set the transcoding setting for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
+    - Ensure that you call this method after joining a channel.
+    - Agora supports pushing media streams in RTMPS protocol to the CDN only when you enable transcoding.
 
     @param transcoding Sets the CDN live audio/video transcoding settings. See LiveTranscoding.
 

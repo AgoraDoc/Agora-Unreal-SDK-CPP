@@ -44,7 +44,7 @@ namespace ue4
  * AgoraMediaEngine 类是基于 IMediaEngine 封装的类。
  */
 /** @~english
- * Wrapper around agora::media::IMediaEngine
+ * Wrapper around agora::media::IMediaEngine.
  */
 class AGORAPLUGIN_API AgoraMediaEngine
 {
@@ -70,7 +70,7 @@ public:
    * @param          RtcEngine
    *                 Pointer to the RtcEngine object.
    * @return
-   *                 -  Success: Returns a pointer to the AudioDeviceManager object
+   *                 -  Success: Returns a pointer to the AgoraMediaEngine object.
    *                 -  Failure: Returns nullptr.
    */
 	static AgoraMediaEngine* Create(agora::rtc::ue4::AgoraRtcEngine* RtcEngine);
@@ -92,10 +92,11 @@ public:
    /** @~english
    * @brief          Registers an audio frame observer object.
    * @brief          This method is used to register an audio frame observer object (register a callback).
-   *                 This method is required to register callbacks when the engine is required to provide an \ref IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame"
-   *                 or \ref IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
-   * @param          observer 
-   *                 Audio frame observer object instance. If NULL is passed in, the registration is canceled.
+   *                 This method is required to register callbacks when the engine is required to provide callbacks in IAudioFrameObserver.
+   * @param          observer
+   *                 Audio frame observer object instance. See IAudioFrameObserver. Set the value as `NULL` to release the
+   *                 audio observer object. Agora recommends calling `registerAudioFrameObserver(NULL)` after receiving
+   *                 the \ref agora::rtc::IRtcEngineEventHandler::onLeaveChannel "onLeaveChannel" callback.
    * @return
    *                 - 0: Success.
    *                 - < 0: Failure.
@@ -121,17 +122,16 @@ public:
    */
    /** @~english
    * @brief          Registers a video frame observer object.
-   * @brief          You need to implement the IVideoFrameObserver class in this method, and register the following callbacks according to your scenarios:
-   *                 - \ref IVideoFrameObserver::onCaptureVideoFrame "onCaptureVideoFrame": Occurs each time the SDK receives a video frame captured by the local camera.
-   *                 - \ref IVideoFrameObserver::onRenderVideoFrame "onRenderVideoFrame": Occurs each time the SDK receives a video frame sent by the remote user.
-   *                 - \ref IVideoFrameObserver::getVideoFormatPreference "getVideoFormatPreference": Occurs each time the SDK receives a video frame and prompts you to set the video format. YUV420 is the default video format. 
-   * @brief          If you want to receive other video formats, register this callback in the IVideoFrameObserver class. 
-   *                 - \ref IVideoFrameObserver::getRotationApplied "getRotationApplied": Occurs each time the SDK receives a video frame and prompts you whether or not to rotate the captured video according to the rotation member in the VideoFrame class. 
-   *                 This callback applies to RGBA video data only.
-   *                 - \ref IVideoFrameObserver::getMirrorApplied "getMirrorApplied": Occurs each time the SDK receives a video frame and prompts you whether or not to mirror the captured video. This callback applies to RGBA video data only.
-   *                 After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
+   * @brief          You need to implement the IVideoFrameObserver class in this method, and register callbacks according to your scenarios.
+   * @brief          After you successfully register the video frame observer, the SDK triggers the registered callbacks each time a video frame is received.
    *
-   * @param          observer 
+   * @note
+   * - When handling the video data returned in the callbacks, pay attention to the changes in the `width` and `height` parameters,
+   * which may be adapted under the following circumstances:
+   *  - When the network condition deteriorates, the video resolution decreases incrementally.
+   *  - If the user adjusts the video profile, the resolution of the video returned in the callbacks also changes.
+   * - Ensure that you call this method before joining a channel.
+   * @param          observer
    *                 Video frame observer object instance. If NULL is passed in, the registration is canceled.
    * @return
    *                 - 0: Success.
@@ -274,13 +274,20 @@ private:
    - true: 方法调用成功
    - false: 方法调用不成功
    */
+   /** @~english
+    * Queries the AgoraRtcEngine interface.
+    * @param AgoraEngine Pointer to the AgoraRtcEngine object.
+    * @return
+    * - true: Success.
+    * - false: Failure.
+    */
 	bool queryInterface(agora::rtc::ue4::AgoraRtcEngine* AgoraEngine);
 
    /** @~chinese
    * 释放所有 AgoraMediaEngine 的资源。
    */
    /** @~english
-   * @brief         Releases all MediaEngine resources.
+   * @brief         Releases all AgoraMediaEngine resources.
    */
 	void release();
 
