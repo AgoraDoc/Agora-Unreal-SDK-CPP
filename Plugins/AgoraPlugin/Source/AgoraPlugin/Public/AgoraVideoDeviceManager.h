@@ -134,7 +134,14 @@ public:
 	AgoraVideoDeviceManager& operator=(AgoraVideoDeviceManager&& other) noexcept = delete;
 
 	~AgoraVideoDeviceManager() = default;
-
+   /** @~chinese
+   * 创建并获取 AgoraAudioDeviceManager 对象。
+   *
+   * @param RtcEngine AgoraRtcEngine 对象的指针。
+   * @return
+   * - 方法调用成功：返回一个 AgoraAudioDeviceManager 对象的指针。
+   * - 方法调用失败：返回一个空指针。
+   */
 	static AgoraVideoDeviceManager* Create(AgoraRtcEngine* RtcEngine);
 public:
 
@@ -233,6 +240,9 @@ public:
 	int getDevice(char deviceId[agora::rtc::MAX_DEVICE_ID_LENGTH]);
 
 private:
+    /** @~chinese
+   获取设备管理员对象的指针。
+     */
 	bool queryInterface(AgoraRtcEngine* engine);
 
    /** @~chinese

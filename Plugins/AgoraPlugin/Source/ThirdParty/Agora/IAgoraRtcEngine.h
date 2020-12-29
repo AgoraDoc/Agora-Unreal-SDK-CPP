@@ -17,351 +17,789 @@ namespace agora {
 namespace rtc {
     typedef unsigned int uid_t;
     typedef void* view_t;
-/** Maximum length of the device ID.
+/** @~chinese
+设备 ID 的最大长度。
+*/
+/** @~english
+Maximum length of the device ID.
 */
 enum MAX_DEVICE_ID_LENGTH_TYPE
 {
-  /** The maximum length of the device ID is 512 bytes.
+  /** @~chinese
+  设备 ID 的最大长度为 512 字。
+  */
+  /** @~english
+  The maximum length of the device ID is 512 bytes.
   */
     MAX_DEVICE_ID_LENGTH = 512
 };
-/** Maximum length of user account.
- */
+/** @~chinese
+用户名的最大长度。
+*/
+/** @~english
+Maximum length of user account.
+*/
 enum MAX_USER_ACCOUNT_LENGTH_TYPE
 {
-  /** The maximum length of user account is 255 bytes.
-   */
+  /** @~chinese
+  用户名的最大长度为 255 字。
+  */
+  /** @~english
+  The maximum length of user account is 255 bytes.
+  */
   MAX_USER_ACCOUNT_LENGTH = 256
 };
-/** Maximum length of channel ID.
+/** @~chinese
+频道名的最大长度。
+*/
+/** @~english
+Maximum length of channel ID.
  */
 enum MAX_CHANNEL_ID_LENGTH_TYPE
 {
-    /** The maximum length of channel id is 64 bytes.
+    /** @~chinese
+    频道名的最大长度为 64 字。
+    */
+    /** @~english
+    The maximum length of channel id is 64 bytes.
      */
     MAX_CHANNEL_ID_LENGTH = 65
 };
-/** Formats of the quality report.
+/** @~chinese
+质量报告的格式。
+*/
+/** @~english
+Formats of the quality report.
 */
 enum QUALITY_REPORT_FORMAT_TYPE
 {
-  /** 0: The quality report in JSON format,
+  /** @~chinese
+  0: 质量报告格式为 JSON。
+  */
+  /** @~english
+  0: The quality report in JSON format,
   */
     QUALITY_REPORT_JSON = 0,
-    /** 1: The quality report in HTML format.
+    /** @~chinese
+    1: 质量报告格式为 HTML。
+    */
+    /** @~english
+    1: The quality report in HTML format.
     */
     QUALITY_REPORT_HTML = 1,
 };
 
 enum MEDIA_ENGINE_EVENT_CODE_TYPE
 {
-    /** 0: For internal use only.
+    /** @~chinese
+     0: 仅供内部使用。
+     */
+    /** @~english
+     0: For internal use only.
      */
     MEDIA_ENGINE_RECORDING_ERROR = 0,
-    /** 1: For internal use only.
+    /** @~chinese
+     1: 仅供内部使用。
+     */
+    /** @~english
+     1: For internal use only.
      */
     MEDIA_ENGINE_PLAYOUT_ERROR = 1,
-    /** 2: For internal use only.
+    /** @~chinese
+     2: 仅供内部使用。
+     */
+    /** @~english
+     2: For internal use only.
      */
     MEDIA_ENGINE_RECORDING_WARNING = 2,
-    /** 3: For internal use only.
+    /** @~chinese
+     3: 仅供内部使用。
+     */
+    /** @~english
+     3: For internal use only.
      */
     MEDIA_ENGINE_PLAYOUT_WARNING = 3,
-    /** 10: For internal use only.
+    /** @~chinese
+     10: 仅供内部使用。
+     */
+    /** @~english
+     10: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_FILE_MIX_FINISH = 10,
-    /** 12: For internal use only.
+    /** @~chinese
+     12: 仅供内部使用。
+     */    /** @~english
+     12: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_FAREND_MUSIC_BEGINS = 12,
-    /** 13: For internal use only.
+    /** @~chinese
+     13: 仅供内部使用。
+     */
+    /** @~english
+     13: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_FAREND_MUSIC_ENDS = 13,
-    /** 14: For internal use only.
+    /** @~chinese
+     14: 仅供内部使用。
+     */
+    /** @~english
+     14: For internal use only.
      */
     MEDIA_ENGINE_LOCAL_AUDIO_RECORD_ENABLED = 14,
-    /** 15: For internal use only.
+    /** @~chinese
+     15: 仅供内部使用。
+     */
+    /** @~english
+     15: For internal use only.
      */
     MEDIA_ENGINE_LOCAL_AUDIO_RECORD_DISABLED = 15,
     // media engine role changed
-    /** 20: For internal use only.
+    /** @~chinese
+     20: 仅供内部使用。
+     */
+    /** @~english
+     20: For internal use only.
      */
     MEDIA_ENGINE_ROLE_BROADCASTER_SOLO = 20,
-    /** 21: For internal use only.
+    /** @~chinese
+     21: 仅供内部使用。
+     */
+    /** @~english
+     21: For internal use only.
      */
     MEDIA_ENGINE_ROLE_BROADCASTER_INTERACTIVE = 21,
-    /** 22: For internal use only.
+    /** @~chinese
+     22: 仅供内部使用。
+     */
+    /** @~english
+     22: For internal use only.
      */
     MEDIA_ENGINE_ROLE_AUDIENCE = 22,
-    /** 23: For internal use only.
+    /** @~chinese
+     23: 仅供内部使用。
+     */
+    /** @~english
+     23: For internal use only.
      */
     MEDIA_ENGINE_ROLE_COMM_PEER = 23,
-    /** 24: For internal use only.
+    /** @~chinese
+     24: 仅供内部使用。
+     */
+    /** @~english
+     24: For internal use only.
      */
     MEDIA_ENGINE_ROLE_GAME_PEER = 24,
     // iOS adm sample rate changed
-    /** 110: For internal use only.
+    /** @~chinese
+     110: 仅供内部使用。
+     */
+    /** @~english
+     110: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ADM_REQUIRE_RESTART = 110,
-    /** 111: For internal use only.
+    /** @~chinese
+     111: 仅供内部使用。
+     */
+    /** @~english
+     111: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ADM_SPECIAL_RESTART = 111,
-    /** 112: For internal use only.
+    /** @~chinese
+     112: 仅供内部使用。
+     */
+    /** @~english
+     112: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ADM_USING_COMM_PARAMS = 112,
-    /** 113: For internal use only.
+    /** @~chinese
+     113: 仅供内部使用。
+     */
+    /** @~english
+     113: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ADM_USING_NORM_PARAMS = 113,
     // audio mix state
-    /** 710: For internal use only.
+    /** @~chinese
+     710: 仅供内部使用。
+     */
+    /** @~english
+     710: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_EVENT_MIXING_PLAY = 710,
-    /** 711: For internal use only.
+    /** @~chinese
+     711: 仅供内部使用。
+     */
+    /** @~english
+     711: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_EVENT_MIXING_PAUSED = 711,
-    /** 712: For internal use only.
+    /** @~chinese
+     712: 仅供内部使用。
+     */
+    /** @~english
+     712: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_EVENT_MIXING_RESTART         = 712,
-    /** 713: For internal use only.
+    /** @~chinese
+     713: 仅供内部使用。
+     */
+    /** @~english
+     713: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_EVENT_MIXING_STOPPED = 713,
-    /** 714: For internal use only.
+    /** @~chinese
+     714: 仅供内部使用。
+     */
+    /** @~english
+     714: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_EVENT_MIXING_ERROR = 714,
     //Mixing error codes
-    /** 701: For internal use only.
+    /** @~chinese
+     701: 仅供内部使用。
+     */
+    /** @~english
+     701: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ERROR_MIXING_OPEN = 701,
-    /** 702: For internal use only.
+    /** @~chinese
+     702: 仅供内部使用。
+     */
+    /** @~english
+     702: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ERROR_MIXING_TOO_FREQUENT = 702,
-    /** 703: The audio mixing file playback is interrupted. For internal use only.
+    /** @~chinese
+     703: 仅供内部使用。
+     */
+    /** @~english
+     703: The audio mixing file playback is interrupted. For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ERROR_MIXING_INTERRUPTED_EOF = 703,
-    /** 0: For internal use only.
+    /** @~chinese
+     0: 仅供内部使用。
+     */
+    /** @~english
+     0: For internal use only.
      */
     MEDIA_ENGINE_AUDIO_ERROR_MIXING_NO_ERROR = 0,
 };
 
-/** The states of the local user's audio mixing file.
+/** @~chinese
+本地用户的音乐文件播放状态。
+*/
+/** @~english
+The states of the local user's audio mixing file.
 */
 enum AUDIO_MIXING_STATE_TYPE{
-    /** 710: The audio mixing file is playing.
+    /** @~chinese
+    710: 音乐文件正常播放。
+    */
+    /** @~english
+    710: The audio mixing file is playing.
     */
     AUDIO_MIXING_STATE_PLAYING = 710,
-    /** 711: The audio mixing file pauses playing.
+    /** @~chinese
+    711: 音乐文件暂停播放。
+    */
+    /** @~english
+    711: The audio mixing file pauses playing.
     */
     AUDIO_MIXING_STATE_PAUSED = 711,
-    /** 713: The audio mixing file stops playing.
+    /** @~chinese
+    713: 音乐文件停止播放。
+    */
+    /** @~english
+    713: The audio mixing file stops playing.
     */
     AUDIO_MIXING_STATE_STOPPED = 713,
-    /** 714: An exception occurs when playing the audio mixing file. See #AUDIO_MIXING_ERROR_TYPE.
+    /** @~chinese
+    714: 音乐文件播放失败。
+    错误类型详见 #AUDIO_MIXING_ERROR_TYPE
+    */
+    /** @~english
+    714: An exception occurs when playing the audio mixing file. See #AUDIO_MIXING_ERROR_TYPE.
     */
     AUDIO_MIXING_STATE_FAILED = 714,
 };
 
-/** The error codes of the local user's audio mixing file.
+/** @~chinese
+混音音乐文件错误码。
+*/
+/** @~english
+The error codes of the local user's audio mixing file.
 */
 enum AUDIO_MIXING_ERROR_TYPE{
-    /** 701: The SDK cannot open the audio mixing file.
+    /** @~chinese
+    701: 音乐文件无法打开。
+    */
+    /** @~english
+    701: The SDK cannot open the audio mixing file.
     */
     AUDIO_MIXING_ERROR_CAN_NOT_OPEN = 701,
-    /** 702: The SDK opens the audio mixing file too frequently.
+    /** @~chinese
+    702: 音乐文件打开太频繁。
+    */
+    /** @~english
+    702: The SDK opens the audio mixing file too frequently.
     */
     AUDIO_MIXING_ERROR_TOO_FREQUENT_CALL = 702,
-    /** 703: The audio mixing file playback is interrupted.
+    /** @~chinese
+    703: 音乐文件播放中断。
+    */
+    /** @~english
+    703: The audio mixing file playback is interrupted.
      */
     AUDIO_MIXING_ERROR_INTERRUPTED_EOF = 703,
-    /** 0: The SDK can open the audio mixing file.
+    /** @~chinese
+    0: 音乐文件正常打开。
+    */
+    /** @~english
+    0: The SDK can open the audio mixing file.
     */
     AUDIO_MIXING_ERROR_OK = 0,
 };
 
-/** Media device states.
+/** @~chinese
+媒体设备的状态。
+*/
+/** @~english
+Media device states.
  */
 enum MEDIA_DEVICE_STATE_TYPE
 {
-  /** 1: The device is active.
+  /** @~chinese
+  1: 设备正在使用。
+  */
+  /** @~english
+  1: The device is active.
   */
     MEDIA_DEVICE_STATE_ACTIVE = 1,
-    /** 2: The device is disabled.
+    /** @~chinese
+    2: 设备被禁用。
+    */
+    /** @~english
+    2: The device is disabled.
     */
     MEDIA_DEVICE_STATE_DISABLED = 2,
-    /** 4: The device is not present.
+    /** @~chinese
+    4: 设备不存在。
+    */
+    /** @~english
+    4: The device is not present.
     */
     MEDIA_DEVICE_STATE_NOT_PRESENT = 4,
-    /** 8: The device is unplugged.
+    /** @~chinese
+    8: 设备被拔出。
+    */
+    /** @~english
+    8: The device is unplugged.
     */
     MEDIA_DEVICE_STATE_UNPLUGGED = 8
 };
 
-/** Media device types.
+/** @~chinese
+媒体设备的类型。
+*/
+/** @~english
+Media device types.
  */
 enum MEDIA_DEVICE_TYPE
 {
-  /** -1: Unknown device type.
+  /** @~chinese
+  -1: 未知的设备类型。
+  */
+  /** @~english
+  -1: Unknown device type.
   */
     UNKNOWN_AUDIO_DEVICE = -1,
-    /** 0: Audio playback device.
+    /** @~chinese
+    0: 音频播放设备。
+    */
+    /** @~english
+    0: Audio playback device.
     */
     AUDIO_PLAYOUT_DEVICE = 0,
-    /** 1: Audio recording device.
+    /** @~chinese
+    1: 音频采集设备。
+    */
+    /** @~english
+    1: Audio recording device.
     */
     AUDIO_RECORDING_DEVICE = 1,
-    /** 2: Video renderer.
+    /** @~chinese
+    2: 视频渲染设备。
+    */
+    /** @~english
+    2: Video renderer.
     */
     VIDEO_RENDER_DEVICE = 2,
-    /** 3: Video capturer.
+    /** @~chinese
+    3: 视频采集设备。
+    */
+    /** @~english
+    3: Video capturer.
     */
     VIDEO_CAPTURE_DEVICE = 3,
-    /** 4: Application audio playback device.
+    /** @~chinese
+    4: 音频应用播放设备。
+    */
+    /** @~english
+    4: Application audio playback device.
     */
     AUDIO_APPLICATION_PLAYOUT_DEVICE = 4,
 };
 
-/** Local video state types
+/** @~chinese
+本地视频状态。
+*/
+/** @~english
+Local video state types
  */
 enum LOCAL_VIDEO_STREAM_STATE
 {
-    /** Initial state */
+    /** @~chinese
+    0: 初始状态。
+    */
+    /** @~english
+    Initial state
+    */
     LOCAL_VIDEO_STREAM_STATE_STOPPED = 0,
-    /** The capturer starts successfully. */
+    /** @~chinese
+    1: 本地视频采集设备成功启动。
+    */
+    /** @~english
+    The capturer starts successfully.
+    */
     LOCAL_VIDEO_STREAM_STATE_CAPTURING = 1,
-    /** The first video frame is successfully encoded. */
+    /** @~chinese
+    2: 本地视频首帧编码成功。
+    */
+    /** @~english
+    The first video frame is successfully encoded.
+    */
     LOCAL_VIDEO_STREAM_STATE_ENCODING = 2,
-    /** The local video fails to start. */
+    /** @~chinese
+    3: 本地视频启动失败。
+    */
+    /** @~english
+    The local video fails to start.
+    */
     LOCAL_VIDEO_STREAM_STATE_FAILED = 3
 };
 
-/** Local video state error codes
+/** @~chinese
+本地视频出错原因。
+*/
+/** @~english
+Local video state error codes
  */
 enum LOCAL_VIDEO_STREAM_ERROR {
-    /** The local video is normal. */
+    /** @~chinese
+    0: 本地视频状态正常。
+    */
+    /** @~english
+    The local video is normal.
+    */
     LOCAL_VIDEO_STREAM_ERROR_OK = 0,
-    /** No specified reason for the local video failure. */
+    /** @~chinese
+    1: 没有明确的出错原因。
+    */
+    /** @~english
+    No specified reason for the local video failure.
+    */
     LOCAL_VIDEO_STREAM_ERROR_FAILURE = 1,
-    /** No permission to use the local video capturing device. */
+    /** @~chinese
+    2: 没有权限使用本地视频采集设备。
+    */
+    /** @~english
+    No permission to use the local video capturing device.
+    */
     LOCAL_VIDEO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
-    /** The local video capturing device is in use. */
+    /** @~chinese
+    3: 本地视频采集设备正在使用中。
+    */
+    /** @~english
+    The local video capturing device is in use.
+    */
     LOCAL_VIDEO_STREAM_ERROR_DEVICE_BUSY = 3,
-    /** The local video capture fails. Check whether the capturing device is working properly. */
+    /** @~chinese
+    4: 本地视频采集失败，建议检查采集设备是否正常工作。
+    */
+    /** @~english
+    The local video capture fails. Check whether the capturing device is working properly.
+    */
     LOCAL_VIDEO_STREAM_ERROR_CAPTURE_FAILURE = 4,
-    /** The local video encoding fails. */
+    /** @~chinese
+    5: 本地视频编码失败。
+    */
+    /** @~english
+    The local video encoding fails.
+    */
     LOCAL_VIDEO_STREAM_ERROR_ENCODE_FAILURE = 5
 };
 
-/** Local audio state types.
+/** @~chinese
+本地音频状态
+*/
+/** @~english
+Local audio state types.
  */
 enum LOCAL_AUDIO_STREAM_STATE
 {
-    /** 0: The local audio is in the initial state.
+    /** @~chinese
+    0: 初始状态。
+    */
+    /** @~english
+    0: The local audio is in the initial state.
      */
     LOCAL_AUDIO_STREAM_STATE_STOPPED = 0,
-    /** 1: The recording device starts successfully.
+    /** @~chinese
+    1: 本地音频采集设备成功启动。
+    */
+    /** @~english
+    1: The recording device starts successfully.
      */
     LOCAL_AUDIO_STREAM_STATE_RECORDING = 1,
-    /** 2: The first audio frame encodes successfully.
+    /** @~chinese
+    2: 本地音频首帧编码成功。
+    */
+    /** @~english
+    2: The first audio frame encodes successfully.
      */
     LOCAL_AUDIO_STREAM_STATE_ENCODING = 2,
-    /** 3: The local audio fails to start.
+    /** @~chinese
+    3: 本地音频启动失败。
+    */
+    /** @~english
+    3: The local audio fails to start.
      */
     LOCAL_AUDIO_STREAM_STATE_FAILED = 3
 };
 
-/** Local audio state error codes.
+/** @~chinese
+本地音频出错原因。
+*/
+/** @~english
+Local audio state error codes.
  */
 enum LOCAL_AUDIO_STREAM_ERROR
 {
-    /** 0: The local audio is normal.
+    /** @~chinese
+    0: 本地音频状态正常。
+    */
+    /** @~english
+    0: The local audio is normal.
      */
     LOCAL_AUDIO_STREAM_ERROR_OK = 0,
-    /** 1: No specified reason for the local audio failure.
+    /** @~chinese
+    1: 没有明确的出错原因。
+    */
+    /** @~english
+    1: No specified reason for the local audio failure.
      */
     LOCAL_AUDIO_STREAM_ERROR_FAILURE = 1,
-    /** 2: No permission to use the local audio device.
+    /** @~chinese
+    2: 没有权限使用本地音频采集设备。
+    */
+    /** @~english
+    2: No permission to use the local audio device.
      */
     LOCAL_AUDIO_STREAM_ERROR_DEVICE_NO_PERMISSION = 2,
-    /** 3: The microphone is in use.
+    /** @~chinese
+    3: 本地音频采集设备正在使用中。
+    */
+    /** @~english
+    3: The microphone is in use.
      */
     LOCAL_AUDIO_STREAM_ERROR_DEVICE_BUSY = 3,
-    /** 4: The local audio recording fails. Check whether the recording device
+    /** @~chinese
+    4: 本地音频采集失败，建议检查采集设备是否正常工作。
+    */
+    /** @~english
+     * 4: The local audio recording fails. Check whether the recording device
      * is working properly.
      */
     LOCAL_AUDIO_STREAM_ERROR_RECORD_FAILURE = 4,
-    /** 5: The local audio encoding fails.
+    /** @~chinese
+    5: 本地音频编码失败。
+    */
+    /** @~english
+    5: The local audio encoding fails.
      */
     LOCAL_AUDIO_STREAM_ERROR_ENCODE_FAILURE = 5
 };
 
-/** Audio recording qualities.
+/** @~chinese
+音频采集的音质。
+*/
+/** @~english
+Audio recording qualities.
 */
 enum AUDIO_RECORDING_QUALITY_TYPE
 {
-    /** 0: Low quality. The sample rate is 32 kHz, and the file size is around
-     * 1.2 MB after 10 minutes of recording.
+    /** @~chinese
+    0: 低音质。采样率为 32 kHz，录制 10 分钟的文件大小为 1.2 M 左右。
+    */
+    /** @~english
+    * 0: Low quality. The sample rate is 32 kHz, and the file size is around
+    * 1.2 MB after 10 minutes of recording.
     */
     AUDIO_RECORDING_QUALITY_LOW = 0,
-    /** 1: Medium quality. The sample rate is 32 kHz, and the file size is
-     * around 2 MB after 10 minutes of recording.
+    /** @~chinese
+    1: 中音质。采样率为 32 kHz，录制 10 分钟的文件大小为 2 M 左右。
+    */
+    /** @~english
+    * 1: Medium quality. The sample rate is 32 kHz, and the file size is
+    * around 2 MB after 10 minutes of recording.
     */
     AUDIO_RECORDING_QUALITY_MEDIUM = 1,
-    /** 2: High quality. The sample rate is 32 kHz, and the file size is
-     * around 3.75 MB after 10 minutes of recording.
+    /** @~chinese
+    2: 高音质。采样率为 32 kHz，录制 10 分钟的文件大小为 3.75 M 左右。
+    */
+    /** @~english
+    2: High quality. The sample rate is 32 kHz, and the file size is
+    * around 3.75 MB after 10 minutes of recording.
     */
     AUDIO_RECORDING_QUALITY_HIGH = 2,
 };
 
-/** Network quality types. */
+/** @~chinese
+网络质量。
+*/
+/** @~english
+Network quality types. */
 enum QUALITY_TYPE
 {
-    /** 0: The network quality is unknown. */
+    /** @~chinese
+    0: 网络质量未知。
+    */
+    /** @~english
+    0: The network quality is unknown.
+    */
     QUALITY_UNKNOWN = 0,
-    /**  1: The network quality is excellent. */
+    /** @~chinese
+    1: 网络质量极好。
+    */
+    /**  @~english
+    1: The network quality is excellent.
+    */
     QUALITY_EXCELLENT = 1,
-    /** 2: The network quality is quite good, but the bitrate may be slightly lower than excellent. */
+    /** @~chinese
+    2: 用户主观感觉和 excellent 差不多，但码率可能略低于 excellent。
+    */
+    /** @~english
+    2: The network quality is quite good, but the bitrate may be slightly lower than excellent.
+    */
     QUALITY_GOOD = 2,
-    /** 3: Users can feel the communication slightly impaired. */
+    /** @~chinese
+    3: 用户主观感受有瑕疵但不影响沟通。
+    */
+    /** @~english
+    3: Users can feel the communication slightly impaired.
+    */
     QUALITY_POOR = 3,
-    /** 4: Users cannot communicate smoothly. */
+    /** @~chinese
+    4: 用户勉强能沟通但不顺畅。
+    */
+    /** @~english
+    4: Users cannot communicate smoothly.
+    */
     QUALITY_BAD = 4,
-    /** 5: The network is so bad that users can barely communicate. */
+    /** @~chinese
+    5: 网络质量非常差，基本不能沟通。
+    */
+    /** @~english
+    5: The network is so bad that users can barely communicate.
+    */
     QUALITY_VBAD = 5,
-    /** 6: The network is down and users cannot communicate at all. */
+    /** @~chinese
+    6: 用户完全无法沟通。
+    */
+    /** @~english
+    6: The network is down and users cannot communicate at all. */
     QUALITY_DOWN = 6,
-    /** 7: Users cannot detect the network quality. (Not in use.) */
+    /** @~chinese
+    7: 暂时无法检测网络质量（未使用）。
+    */
+    /** @~english
+    7: Users cannot detect the network quality. (Not in use.) */
     QUALITY_UNSUPPORTED = 7,
-    /** 8: Detecting the network quality. */
+    /** @~chinese
+    8: 正在进行网络质量检测。
+    */
+    /** @~english
+    8: Detecting the network quality. */
     QUALITY_DETECTING = 8,
 };
 
-/** Video display modes. */
+/** @~chinese
+视频显示模式。
+*/
+/** @~english
+Video display modes.
+*/
 enum RENDER_MODE_TYPE
 {
-  /**
+  /** @~chinese
+  1: 视频尺寸等比缩放。优先保证视窗被填满。因视频尺寸与显示视窗尺寸不一致而多出的视频将被截掉。
+  */
+  /** @~english
 1: Uniformly scale the video until it fills the visible boundaries (cropped). One dimension of the video may have clipped contents.
  */
     RENDER_MODE_HIDDEN = 1,
-    /**
+  /** @~chinese
+  2: 视频尺寸等比缩放。优先保证视频内容全部显示。因视频尺寸与显示视窗尺寸不一致造成的视窗未被填满的区域填充黑色。
+  */
+    /** @~english
 2: Uniformly scale the video until one of its dimension fits the boundary (zoomed to fit). Areas that are not filled due to disparity in the aspect ratio are filled with black.
  */
     RENDER_MODE_FIT = 2,
-    /** **DEPRECATED** 3: This mode is deprecated.
+  /** @~chinese
+  **DEPRECATED** 3: 该模式已废弃。
+  */
+    /** @~english
+    **DEPRECATED** 3: This mode is deprecated.
      */
     RENDER_MODE_ADAPTIVE = 3,
+  /** @~chinese
+  4: 视频尺寸进行缩放和拉伸以充满显示视窗。
+  */
     /**
-    4: The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
+    4: @~english
+    The fill mode. In this mode, the SDK stretches or zooms the video to fill the display window.
     */
     RENDER_MODE_FILL = 4,
 };
 
-/** Video mirror modes. */
+/** @~chinese
+镜像模式的设置。
+*/
+/** @~english
+Video mirror modes.
+*/
 enum VIDEO_MIRROR_MODE_TYPE
 {
-      /** 0: (Default) The SDK enables the mirror mode. 
+      /** @~chinese
+      0: （默认）由 SDK 决定镜像模式。
+      */
+      /** @~english
+      0: (Default) The SDK enables the mirror mode.
        */
     VIDEO_MIRROR_MODE_AUTO = 0,//determined by SDK
-        /** 1: Enable mirror mode. */
+        /** @~chinese
+        1: 启用镜像模式。
+        */
+        /** @~english
+        1: Enable mirror mode.
+        */
     VIDEO_MIRROR_MODE_ENABLED = 1,//enabled mirror
-        /** 2: Disable mirror mode. */
+        /** @~chinese
+        2: 关闭镜像模式。
+        */
+        /** @~english
+        2: Disable mirror mode.
+        */
     VIDEO_MIRROR_MODE_DISABLED = 2,//disable mirror
 };
 
@@ -524,154 +962,358 @@ enum VIDEO_PROFILE_TYPE
     VIDEO_PROFILE_DEFAULT = VIDEO_PROFILE_LANDSCAPE_360P,
 };
 
-/** Audio profiles.
+/** @~chinese
+音频属性。
 
-Sets the sample rate, bitrate, encoding mode, and the number of channels:*/
+设置采样率、码率、编码模式和声道数。 */
+/** @~english
+Audio profiles.
+
+Sets the sample rate, bitrate, encoding mode, and the number of channels:
+*/
 enum AUDIO_PROFILE_TYPE // sample rate, bit rate, mono/stereo, speech/music codec
 {
-   /**
+   /** @~chinese
+    0: 默认值：
+    - 直播场景下：48 KHz 采样率，音乐编码，单声道，编码码率最大值为 52 Kbps。
+    - 通信场景下：16 KHz 采样率，音乐编码，单声道，编码码率最大值为 16 Kbps。
+    */
+   /** @~english
     0: Default audio profile:
     - For the live-broadcast profile: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 52 Kbps.
     - For the communication profile: A sample rate of 16 KHz, music encoding, mono, and a bitrate of up to 16 Kbps.
     */
     AUDIO_PROFILE_DEFAULT = 0, // use default settings
-    /**
+    /** @~chinese
+    1: 指定 32 KHz 采样率，语音编码，单声道，编码码率最大值为 18 Kbps。
+    */
+    /** @~english
      1: A sample rate of 32 KHz, audio encoding, mono, and a bitrate of up to 18 Kbps.
      */
     AUDIO_PROFILE_SPEECH_STANDARD = 1, // 32Khz, 18Kbps, mono, speech
-    /**
+    /** @~chinese
+    2: 指定 48 KHz 采样率，音乐编码，单声道，编码码率最大值为 48 Kbps。
+    */
+    /** @~english
      2: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 48 Kbps.
      */
     AUDIO_PROFILE_MUSIC_STANDARD = 2, // 48Khz, 48Kbps, mono, music
-    /**
+    /** @~chinese
+     3: 指定 48 KHz 采样率，音乐编码，双声道，编码码率最大值为 56 Kbps。
+    */
+    /** @~english
      3: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 56 Kbps.
      */
     AUDIO_PROFILE_MUSIC_STANDARD_STEREO = 3, // 48Khz, 56Kbps, stereo, music
-    /**
+    /** @~chinese
+    4: 指定 48 KHz 采样率，音乐编码，单声道，编码码率最大值为 128 Kbps。
+    */
+    /** @~english
      4: A sample rate of 48 KHz, music encoding, mono, and a bitrate of up to 128 Kbps.
      */
     AUDIO_PROFILE_MUSIC_HIGH_QUALITY = 4, // 48Khz, 128Kbps, mono, music
-    /**
+    /** @~chinese
+    5: 指定 48 KHz 采样率，音乐编码，双声道，编码码率最大值为 192 Kbps。
+    */
+    /** @~english
      5: A sample rate of 48 KHz, music encoding, stereo, and a bitrate of up to 192 Kbps.
      */
     AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO = 5, // 48Khz, 192Kbps, stereo, music
-    /**
+    /** @~chinese
+    6: 指定 16 KHz 采样率，语音编码，单声道，应用回声消除算法 AES。
+    */
+    /** @~english
      6: A sample rate of 16 KHz, audio encoding, mono, and Acoustic Echo Cancellation (AES) enabled.
      */
     AUDIO_PROFILE_IOT                       = 6,
     AUDIO_PROFILE_NUM = 7,
 };
 
-/** Audio application scenarios.
+/** @~chinese
+音频应用场景。
+*/
+/** @~english
+Audio application scenarios.
 */
 enum AUDIO_SCENARIO_TYPE // set a suitable scenario for your app type
 {
-    /** 0: Default. */
+    /** @~chinese
+    0: 默认的音频应用场景。
+    */
+    /** @~english
+    0: Default.
+    */
     AUDIO_SCENARIO_DEFAULT = 0,
-    /** 1: Entertainment scenario, supporting voice during gameplay. */
+    /** @~chinese
+    1: 娱乐场景，支持边玩游戏边语音。
+    */
+    /** @~english
+    1: Entertainment scenario, supporting voice during gameplay.
+    */
     AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT = 1,
-    /** 2: Education scenario, prioritizing smoothness and stability. */
+    /** @~chinese
+    2: 教育场景，适用于需要高流畅度和稳定性的场景。
+    */
+    /** @~english
+    2: Education scenario, prioritizing smoothness and stability.
+    */
     AUDIO_SCENARIO_EDUCATION = 2,
-    /** 3: Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback. */
+    /** @~chinese
+    3: 游戏直播场景，游戏音效可通过扬声器播放，适用于需要播放高保真音乐的场景。
+    */
+    /** @~english
+    3: Live gaming scenario, enabling the gaming audio effects in the speaker mode in a live broadcast scenario. Choose this scenario for high-fidelity music playback.
+    */
     AUDIO_SCENARIO_GAME_STREAMING = 3,
-    /** 4: Showroom scenario, optimizing the audio quality with external professional equipment. */
+    /** @~chinese
+    4: 秀场场景，通过外部专业设备优化音频质量。
+    */
+    /** @~english
+    4: Showroom scenario, optimizing the audio quality with external professional equipment.
+    */
     AUDIO_SCENARIO_SHOWROOM = 4,
-    /** 5: Gaming scenario. */
+    /** @~chinese
+    5: 游戏场景。
+    */
+    /** @~english
+    5: Gaming scenario.
+    */
     AUDIO_SCENARIO_CHATROOM_GAMING = 5,
-    /** 6: Applicable to the IoT scenario. */
+    /** @~chinese
+    6: IoT（物联网）场景。
+    */
+    /** @~english
+    6: Applicable to the IoT scenario.
+    */
     AUDIO_SCENARIO_IOT = 6,
     AUDIO_SCENARIO_NUM = 7,
 };
 
- /** The channel profile of the IRtcEngine.
+ /** @~chinese
+ 频道使用场景。
+ */
+ /** @~english
+ The channel profile of the IRtcEngine.
  */
 enum CHANNEL_PROFILE_TYPE
 {
-   /** (Default) The Communication profile. Use this profile in one-on-one calls or group calls, where all users can talk freely.
+    /** @~chinese
+    0: （默认）通信场景。该场景下，频道内所有用户都可以发布和接收音、视频流。适用于语音通话、视频群聊等应用场景。
+    */
+   /** @~english
+   (Default) The Communication profile. Use this profile in one-on-one calls or group calls, where all users can talk freely.
     */
 	CHANNEL_PROFILE_COMMUNICATION = 0,
-   /** The Live-Broadcast profile. Users in a live-broadcast channel have a role as either broadcaster or audience. 
+    /** @~chinese
+    1: 直播场景。该场景有主播和观众两种用户角色。主播可以发布和接收音视频流，观众直接接收流。
+    */
+   /** @~english
+   The Live-Broadcast profile. Users in a live-broadcast channel have a role as either broadcaster or audience.
     A broadcaster can both send and receive streams; an audience can only receive streams.
     */
 	CHANNEL_PROFILE_LIVE_BROADCASTING = 1,
-   /** 2: The Gaming profile. This profile uses a codec with a lower bitrate and consumes less power. Applies to the gaming scenario, where all game players can talk freely.
+   /** @~chinese
+   2: 游戏语音场景。该场景默认使用低功耗低码率的编解码器，且频道内任何用户都可以自由发言，适用于游戏场景。
+    */
+   /** @~english
+   2: The Gaming profile. This profile uses a codec with a lower bitrate and consumes less power. Applies to the gaming scenario, where all game players can talk freely.
     */
     CHANNEL_PROFILE_GAME = 2,
 };
 
-/** Client roles in a live broadcast. */
+/** @~chinese
+直播场景里的用户角色。
+*/
+/** @~english
+Client roles in a live broadcast.
+*/
 enum CLIENT_ROLE_TYPE
 {
-    /** 1: Broadcaster. A broadcaster can both send and receive streams. */
+    /** @~chinese
+    1: 主播。主播可以发流也可以收流。
+    */
+    /** @~english
+    1: Broadcaster. A broadcaster can both send and receive streams.
+    */
     CLIENT_ROLE_BROADCASTER = 1,
-    /** 2: Audience, the default role. An audience can only receive streams. */
+    /** @~chinese
+    2:（默认）观众。观众只能收流不能发流。
+    */
+    /** @~english
+    2: Audience, the default role. An audience can only receive streams.
+    */
     CLIENT_ROLE_AUDIENCE = 2,
 };
 
-/** Reasons for a user being offline. */
+/** @~chinese
+用户离线原因
+*/
+/** @~english
+Reasons for a user being offline.
+*/
 enum USER_OFFLINE_REASON_TYPE
 {
-    /** 0: The user quits the call. */
+    /** @~chinese
+    0: 用户主动离开。
+    */
+    /** @~english
+    0: The user quits the call.
+    */
     USER_OFFLINE_QUIT = 0,
-    /** 1: The SDK times out and the user drops offline because no data packet is received within a certain period of time. If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline. */
+    /** @~chinese
+    1: 因过长时间收不到对方数据包，超时掉线。由于 SDK 使用的是不可靠通道，如果对方主动离开但本方没收到对方离开消息，可能会误判为超时掉线。
+    */
+    /** @~english
+    1: The SDK times out and the user drops offline because no data packet is received within a certain period of time.
+    If the user quits the call and the message is not passed to the SDK (due to an unreliable channel), the SDK assumes the user dropped offline.
+    */
     USER_OFFLINE_DROPPED = 1,
-      /** 2: (Live broadcast only.) The client role switched from the host to the audience. */
+      /** @~chinese
+      2: （仅适用于直播场景）用户身份从主播切换为观众。
+      */
+      /** @~english
+      2: (Live broadcast only.) The client role switched from the host to the audience.
+      */
     USER_OFFLINE_BECOME_AUDIENCE = 2,
 };
-/**
+/** @~chinese
+推流状态。
+*/
+/** @~english
  States of the RTMP streaming.
  */
 enum RTMP_STREAM_PUBLISH_STATE
 {
-  /** The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling removePublishStreamUrl.
+  /** @~chinese
+  0: 推流未开始或已结束。成功调用 \ref IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" 方法删除推流地址后，也会返回该状态。
+  */
+  /** @~english
+  The RTMP streaming has not started or has ended. This state is also triggered after you remove an RTMP address from the CDN by calling removePublishStreamUrl.
    */
   RTMP_STREAM_PUBLISH_STATE_IDLE = 0,
-  /** The SDK is connecting to Agora's streaming server and the RTMP server. This state is triggered after you call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method.
+  /** @~chinese
+  1: 正在连接 Agora 推流服务器和 CDN 服务器。调用 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 方法后，会返回该状态。
+  */
+  /** @~english
+  The SDK is connecting to Agora's streaming server and the RTMP server. This state is triggered after you call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method.
    */
   RTMP_STREAM_PUBLISH_STATE_CONNECTING = 1,
-  /** The RTMP streaming publishes. The SDK successfully publishes the RTMP streaming and returns this state.
+  /** @~chinese
+  2: 推流正在进行。成功推流后，会返回该状态。
+  */
+  /** @~english
+  The RTMP streaming publishes. The SDK successfully publishes the RTMP streaming and returns this state.
    */
   RTMP_STREAM_PUBLISH_STATE_RUNNING = 2,
-  /** The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP streaming and returns this state.
+  /** @~chinese
+  3: 正在恢复推流。当 CDN 出现异常，或推流短暂中断时，SDK 会自动尝试恢复推流，并返回该状态。
+
+   - 如成功恢复推流，则进入状态 #RTMP_STREAM_PUBLISH_STATE_RUNNING (2)。
+   - 如服务器出错或 60 秒内未成功恢复，则进入状态 #RTMP_STREAM_PUBLISH_STATE_FAILURE (4)。如果觉得 60 秒太长，也可以主动调用 \ref IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" 和 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 方法尝试重连。
+  */
+  /** @~english
+  The RTMP streaming is recovering. When exceptions occur to the CDN, or the streaming is interrupted, the SDK tries to resume RTMP streaming and returns this state.
 
    - If the SDK successfully resumes the streaming, #RTMP_STREAM_PUBLISH_STATE_RUNNING (2) returns.
    - If the streaming does not resume within 60 seconds or server errors occur, #RTMP_STREAM_PUBLISH_STATE_FAILURE (4) returns. You can also reconnect to the server by calling the \ref IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" and \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" methods.
    */
   RTMP_STREAM_PUBLISH_STATE_RECOVERING = 3,
-  /** The RTMP streaming fails. See the errCode parameter for the detailed error information. You can also call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method to publish the RTMP streaming again.
+  /** @~chinese
+  4: 推流失败。失败后，你可以通过返回的错误码排查错误原因，也可以再次调用 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 重新尝试推流。
+  */
+  /** @~english
+  The RTMP streaming fails. See the errCode parameter for the detailed error information. You can also call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method to publish the RTMP streaming again.
    */
   RTMP_STREAM_PUBLISH_STATE_FAILURE = 4,
 };
 
-/**
+/** @~chinese
+推流错误码。
+*/
+/** @~english
  Error codes of the RTMP streaming.
  */
 enum RTMP_STREAM_PUBLISH_ERROR
 {
-  /** The RTMP streaming publishes successfully. */
+  /** @~chinese
+  0: 推流成功。
+  */
+  /** @~english
+  The RTMP streaming publishes successfully.
+  */
   RTMP_STREAM_PUBLISH_ERROR_OK = 0,
-  /** Invalid argument used. If, for example, you do not call the \ref IRtcEngine::setLiveTranscoding "setLiveTranscoding" method to configure the LiveTranscoding parameters before calling the addPublishStreamUrl method, the SDK returns this error. Check whether you set the parameters in the *setLiveTranscoding* method properly. */
+  /** @~chinese
+  1: 参数无效。例如，如果在调用 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 前没有调用 \ref IRtcEngine::setLiveTranscoding "setLiveTranscoding" 设置转码参数，SDK 会返回该错误。请检查输入参数是否正确。
+  */
+  /** @~english
+  Invalid argument used. If, for example, you do not call the \ref IRtcEngine::setLiveTranscoding "setLiveTranscoding" method to configure the LiveTranscoding parameters before calling the addPublishStreamUrl method, the SDK returns this error. Check whether you set the parameters in the *setLiveTranscoding* method properly.
+  */
   RTMP_STREAM_PUBLISH_ERROR_INVALID_ARGUMENT = 1,
-  /** The RTMP streaming is encrypted and cannot be published. */
+  /** @~chinese
+  2: 推流已加密，不能推流。
+  */
+  /** @~english
+  The RTMP streaming is encrypted and cannot be published.
+  */
   RTMP_STREAM_PUBLISH_ERROR_ENCRYPTED_STREAM_NOT_ALLOWED = 2,
-  /** Timeout for the RTMP streaming. Call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method to publish the streaming again. */
+  /** @~chinese
+  3: 推流超时未成功。可调用 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 重新推流。
+  */
+  /** @~english
+  Timeout for the RTMP streaming. Call the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method to publish the streaming again.
+  */
   RTMP_STREAM_PUBLISH_ERROR_CONNECTION_TIMEOUT = 3,
-  /** An error occurs in Agora's streaming server. Call the addPublishStreamUrl method to publish the streaming again. */
+  /** @~chinese
+  4: 推流服务器出现错误。请调用 \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 重新推流。
+  */
+  /** @~english
+  An error occurs in Agora's streaming server. Call the addPublishStreamUrl method to publish the streaming again.
+  */
   RTMP_STREAM_PUBLISH_ERROR_INTERNAL_SERVER_ERROR = 4,
-  /** An error occurs in the RTMP server. */
+  /** @~chinese
+  5: CDN 服务器出现错误。
+  */
+  /** @~english
+  An error occurs in the RTMP server.
+  */
   RTMP_STREAM_PUBLISH_ERROR_RTMP_SERVER_ERROR = 5,
-  /** The RTMP streaming publishes too frequently. */
+  /** @~chinese
+  6: 推流请求过于频繁。
+  */
+  /** @~english
+  The RTMP streaming publishes too frequently.
+  */
   RTMP_STREAM_PUBLISH_ERROR_TOO_OFTEN = 6,
-  /** The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones. */
+  /** @~chinese
+  7: 单个主播的推流地址数目达到上线 10。请删掉一些不用的推流地址再增加推流地址。
+  */
+  /** @~english
+  The host publishes more than 10 URLs. Delete the unnecessary URLs before adding new ones.
+  */
   RTMP_STREAM_PUBLISH_ERROR_REACH_LIMIT = 7,
-  /** The host manipulates other hosts' URLs. Check your app logic. */
+  /** @~chinese
+  8: 主播操作不属于自己的流。例如更新其他主播的流参数、停止其他主播的流。请检查 App 逻辑。
+  */
+  /** @~english
+  The host manipulates other hosts' URLs. Check your app logic.
+  */
   RTMP_STREAM_PUBLISH_ERROR_NOT_AUTHORIZED = 8,
-  /** Agora's server fails to find the RTMP streaming. */
+  /** @~chinese
+  9: 服务器没有找到这个流。
+  */
+  /** @~english
+  Agora's server fails to find the RTMP streaming.
+  */
   RTMP_STREAM_PUBLISH_ERROR_STREAM_NOT_FOUND = 9,
-  /** The format of the RTMP streaming URL is not supported. Check whether the URL format is correct. */
+  /** @~chinese
+  10: 推流地址格式有错误。请检查推流地址格式是否正确。
+  */
+  /** @~english
+  The format of the RTMP streaming URL is not supported. Check whether the URL format is correct.
+  */
   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED = 10,
 };
-
+// TODO-yaxi
 /** States of importing an external video stream in a live broadcast. */
 enum INJECT_STREAM_STATUS
 {
@@ -1412,7 +2054,7 @@ struct AudioVolumeInfo
     /** Voice activity status of the local user.
      * - 0: The local user is not speaking.
      * - 1: The local user is speaking.
-     * 
+     *
      * @note
      * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
      * - Ensure that you set `report_vad`(true) in the \ref agora::rtc::IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method to enable the voice activity detection of the local user.
@@ -1507,7 +2149,7 @@ struct RtcStats
     /**
      System CPU usage (%).
 
-     In the multi-kernel environment, this member represents the average CPU usage. 
+     In the multi-kernel environment, this member represents the average CPU usage.
      The value **=** 100 **-** System Idle Progress in Task Manager (%).
      */
     double cpuTotalUsage;
@@ -1767,8 +2409,8 @@ struct RemoteVideoStats
    */
     int frozenRate;
     /**
-    The total time (ms) when the remote user in the Communication profile or the remote 
-    broadcaster in the Live-broadcast profile neither stops sending the video stream nor 
+    The total time (ms) when the remote user in the Communication profile or the remote
+    broadcaster in the Live-broadcast profile neither stops sending the video stream nor
     disables the video module after joining the channel.
 
     @since v3.0.1
@@ -1824,7 +2466,7 @@ struct RemoteAudioStats
     int totalFrozenTime;
     /** The total audio freeze time as a percentage (%) of the total time when the audio is available. */
     int frozenRate;
-    /** The total time (ms) when the remote user in the Communication profile or the remote broadcaster in 
+    /** The total time (ms) when the remote user in the Communication profile or the remote broadcaster in
      the Live-broadcast profile neither stops sending the audio stream nor disables the audio module after joining the channel.
      */
     int totalActiveTime;
@@ -2240,7 +2882,7 @@ struct InjectStreamConfig {
 /** The definition of ChannelMediaInfo.
  */
 struct ChannelMediaInfo {
-    /** The channel name. 
+    /** The channel name.
      */
 	const char* channelName;
     /** The token that enables the user to join the channel.
@@ -2423,13 +3065,13 @@ struct VideoCanvas
      */
     int renderMode;
     /** The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
-     - All lowercase English letters: a to z. 
-     - All uppercase English letters: A to Z. 
-     - All numeric characters: 0 to 9. 
-     - The space character. 
+     - All lowercase English letters: a to z.
+     - All uppercase English letters: A to Z.
+     - All numeric characters: 0 to 9.
+     - The space character.
      - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", " {", "}", "|", "~", ",".
 
-     @note 
+     @note
      - The default value is the empty string "". Use the default value if the user joins the channel using the \ref IRtcEngine::joinChannel "joinChannel" method in the IRtcEngine class. The `VideoCanvas` struct defines the video canvas of the user in the channel.
      - If the user joins the channel using the \ref IRtcEngine::joinChannel "joinChannel" method in the IChannel class, set this parameter as the `channelId` of the `IChannel` object. The `VideoCanvas` struct defines the video canvas of the user in the channel with the specified channel ID.
      */
@@ -2581,7 +3223,7 @@ enum AREA_CODE {
 };
 
 enum ENCRYPTION_CONFIG {
-    /** 
+    /**
 	 * - 1: Force set master key and mode;
 	 * - 0: Not force set, checking whether encryption plugin exists
 	 */
@@ -2651,7 +3293,7 @@ class IRtcEngineEventHandler
 {
 public:
     virtual ~IRtcEngineEventHandler() {}
-    
+
     /** Reports a warning during SDK runtime.
 
      In most cases, the application can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running. For example, when losing connection with the server, the SDK may report #WARN_LOOKUP_CHANNEL_TIMEOUT and automatically try to reconnect.
@@ -2878,10 +3520,10 @@ public:
         (void)lost;
     }
 
-    /** Reports the statistics of the current call. 
-    
+    /** Reports the statistics of the current call.
+
      The SDK triggers this callback once every two seconds after the user joins the channel.
-     
+
      @param stats Statistics of the IRtcEngine: RtcStats.
      */
     virtual void onRtcStats(const RtcStats& stats) {
@@ -2909,9 +3551,9 @@ public:
      * triggers this callback as many times.
      *
      * @note
-     * If you have called the 
-     * \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode" 
-     * method, the \ref onLocalVideoStats() "onLocalVideoStats" callback 
+     * If you have called the
+     * \ref agora::rtc::IRtcEngine::enableDualStreamMode "enableDualStreamMode"
+     * method, the \ref onLocalVideoStats() "onLocalVideoStats" callback
      * reports the statistics of the high-video
      * stream (high bitrate, and high-resolution video stream).
      *
@@ -2977,10 +3619,10 @@ public:
     }
 
     /** Occurs when the remote audio state changes.
-    
+
      This callback indicates the state change of the remote audio stream.
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-     
+
      @param uid ID of the remote user whose audio state changes.
      @param state State of the remote audio. See #REMOTE_AUDIO_STATE.
      @param reason The reason of the remote audio state change.
@@ -3003,7 +3645,7 @@ public:
      By default, this callback is disabled. You can enable it by calling the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method.
      Once enabled, this callback is triggered at the set interval, regardless of whether a user speaks or not.
 
-     The SDK triggers two independent `onAudioVolumeIndication` callbacks at one time, which separately report the volume information of the local user and all the remote speakers. 
+     The SDK triggers two independent `onAudioVolumeIndication` callbacks at one time, which separately report the volume information of the local user and all the remote speakers.
      For more information, see the detailed parameter descriptions.
 
      @note
@@ -3015,14 +3657,14 @@ public:
 
      @param speakers A pointer to AudioVolumeInfo:
      - In the local user's callback, this struct contains the following members:
-       - `uid` = 0, 
+       - `uid` = 0,
        - `volume` = `totalVolume`, which reports the sum of the voice volume and audio-mixing volume of the local user, and
        - `vad`, which reports the voice activity status of the local user.
      - In the remote speakers' callback, this array contains the following members:
        - `uid` of the remote speaker,
        - `volume`, which reports the sum of the voice volume and audio-mixing volume of each remote speaker, and
        - `vad` = 0.
-       
+
        An empty speakers array in the callback indicates that no remote user is speaking at the moment.
      @param speakerNumber Total number of speakers. The value range is [0, 3].
      - In the local user’s callback, `speakerNumber` = 1, regardless of whether the local user speaks or not.
@@ -3113,7 +3755,7 @@ public:
     }
 
     /** Occurs when the first remote video frame is rendered.
-    
+
      The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can retrieve the time elapsed from a user joining the channel until the first video frame is displayed.
 
      @param uid User ID of the remote user sending the video stream.
@@ -3129,11 +3771,11 @@ public:
     }
 
     /** @deprecated This method is deprecated from v3.0.0, use the \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged" callback instead.
-     
+
      Occurs when a remote user's audio stream playback pauses/resumes.
 
      The SDK triggers this callback when the remote user stops or resumes sending the audio stream by calling the \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" method.
-     
+
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
 
      @param uid User ID of the remote user.
@@ -3250,7 +3892,7 @@ public:
     /** Occurs when the camera focus area changes.
 
      The SDK triggers this callback when the local user changes the camera focus position by calling the setCameraFocusPositionInPreview method.
-     
+
      @note This callback is for Android and iOS only.
 
      @param x x coordinate of the changed camera focus area.
@@ -3302,9 +3944,9 @@ public:
     /** Occurs when the camera exposure area changes.
 
     The SDK triggers this callback when the local user changes the camera exposure position by calling the setCameraExposurePosition method.
-     
+
      @note This callback is for Android and iOS only.
-     
+
      @param x x coordinate of the changed camera exposure area.
      @param y y coordinate of the changed camera exposure area.
      @param width Width of the changed camera exposure area.
@@ -3330,7 +3972,7 @@ public:
     }
 
     /** Occurs when the state of the local user's audio mixing file changes.
-     
+
      When you call the \ref IRtcEngine::startAudioMixing "startAudioMixing" method and the state of audio mixing file changes, the SDK triggers this callback.
      - When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in @p state, and 0 in @p errorCode.
      - When exceptions occur during playback, this callback returns 714 in @p state and an error in @p errorCode.
@@ -3429,7 +4071,7 @@ public:
     }
     /** Occurs when the remote video state changes.
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
-     
+
      @param uid ID of the remote user whose video state changes.
      @param state State of the remote video. See #REMOTE_VIDEO_STATE.
      @param reason The reason of the remote video state change. See
@@ -3578,7 +4220,7 @@ public:
   }
 
     /** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
-     
+
      Reports the result of calling the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method. (CDN live only.)
 
      @param url The RTMP URL address.
@@ -3601,7 +4243,7 @@ public:
         (void)error;
     }
     /** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
-     
+
      Reports the result of calling the \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method. (CDN live only.)
 
      This callback indicates whether you have successfully removed an RTMP stream from the CDN.
@@ -3611,12 +4253,12 @@ public:
     virtual void onStreamUnpublished(const char *url) {
         (void)url;
     }
-/** Occurs when the publisher's transcoding is updated. 
- * 
+/** Occurs when the publisher's transcoding is updated.
+ *
  * When the `LiveTranscoding` class in the \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" method updates, the SDK triggers the `onTranscodingUpdated` callback to report the update information to the local host.
- * 
+ *
  * @note If you call the `setLiveTranscoding` method to set the LiveTranscoding class for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
- * 
+ *
  */
     virtual void onTranscodingUpdated() {
     }
@@ -3646,7 +4288,7 @@ public:
 
    /** Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to the video after the network conditions improve.
 
-    If you call \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" and set *option* as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this callback when the 
+    If you call \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" and set *option* as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this callback when the
     published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
     @note If the local stream fallbacks to the audio-only stream, the remote user receives the \ref IRtcEngineEventHandler::onUserMuteVideo "onUserMuteVideo" callback.
 
@@ -4270,7 +4912,7 @@ struct RtcEngineContext
 	void* context;
     /**
      * The area of connection. This advanced feature applies to scenarios that have regional restrictions.
-     * 
+     *
      * You can use the bitwise OR operator (|) to specify multiple areas. For details, see #AREA_CODE.
      *
      * After specifying the area of connection:
@@ -4368,9 +5010,9 @@ protected:
 public:
 
     /** Initializes the Agora service.
-     * 
+     *
      * Unless otherwise specified, all the methods provided by the IRtcEngine class are executed asynchronously. Agora recommends calling these methods in the same thread.
-     * 
+     *
      * @note Ensure that you call the
      * \ref agora::rtc::IRtcEngine::createAgoraRtcEngine
      * "createAgoraRtcEngine" and \ref agora::rtc::IRtcEngine::initialize
@@ -4387,8 +5029,8 @@ public:
 
     /** Releases all IRtcEngine resources.
 
-     @note 
-     - If you want to create a new `IRtcEngine` instance after releasing the current one, 
+     @note
+     - If you want to create a new `IRtcEngine` instance after releasing the current one,
      ensure that you wait till this method is executed.
      - Do not immediately uninstall the SDK's dynamic library after the call, or it may cause a crash due to the SDK clean-up thread not quitting.
 
@@ -4400,7 +5042,7 @@ public:
 
     /** Sets the channel profile of the Agora IRtcEngine.
 
-     The Agora IRtcEngine differentiates channel profiles and applies optimization algorithms accordingly. 
+     The Agora IRtcEngine differentiates channel profiles and applies optimization algorithms accordingly.
      For example, it prioritizes smoothness and low latency for a video call, and prioritizes video quality for a video broadcast.
 
      @warning
@@ -4431,7 +5073,7 @@ public:
      - < 0: Failure.
      */
     virtual int setClientRole(CLIENT_ROLE_TYPE role) = 0;
-    
+
     /** Joins a channel with the user ID.
 
      Users in the same channel can talk to each other, and multiple users in the same channel can start a group chat. Users with different App IDs cannot call each other.
@@ -4507,7 +5149,7 @@ public:
         - #ERR_REFUSED (-5)
      */
     virtual int switchChannel(const char* token, const char* channelId) = 0;
-    
+
     /** Allows a user to leave a channel, such as hanging up or exiting a call.
 
      After joining a channel, the user must call the *leaveChannel* method to end the call before joining another channel.
@@ -4529,7 +5171,7 @@ public:
      - < 0: Failure.
      */
     virtual int leaveChannel() = 0;
-    
+
     /** Gets a new token when the current token expires after a period of time.
 
      The `token` expires after a period of time once the token schema is enabled when:
@@ -4620,12 +5262,12 @@ public:
      - < 0: Failure.
         - #ERR_INVALID_ARGUMENT (-2)
         - #ERR_NOT_READY (-3)
-        - #ERR_REFUSED (-5) 
+        - #ERR_REFUSED (-5)
      */
     virtual int joinChannelWithUserAccount(const char* token,
                                            const char* channelId,
                                            const char* userAccount) = 0;
-    
+
     /** Gets the user information by passing in the user account.
 
      After a remote user joins the channel, the SDK gets the user ID and user account of the remote user, caches them
@@ -4806,11 +5448,11 @@ public:
     /** Initializes the local video view.
 
      This method initializes the video view of a local stream on the local device. It affects only the video view that the local user sees, not the published local video stream.
-     
+
      Call this method to bind the local video stream to a video view and to set the rendering and mirror modes of the video view.
      The binding is still valid after the user leaves the channel, which means that the window still displays. To unbind the view, set the *view* in VideoCanvas to NULL.
-     
-     @note 
+
+     @note
      - Call this method before joining a channel.
      - During a call, you can call this method as many times as necessary to update the display mode of the local video view.
      @param canvas Pointer to the local video view and settings. See VideoCanvas.
@@ -4899,17 +5541,17 @@ public:
 
     The audio function is enabled by default. This method disables or re-enables the local audio function, that is, to stop or restart local audio capturing.
 
-    This method does not affect receiving or playing the remote audio streams,and enableLocalAudio(false) is applicable to scenarios where the user wants to 
+    This method does not affect receiving or playing the remote audio streams,and enableLocalAudio(false) is applicable to scenarios where the user wants to
     receive remote audio streams without sending any audio stream to other users in the channel.
 
     The SDK triggers the \ref IRtcEngineEventHandler::onMicrophoneEnabled "onMicrophoneEnabled" callback once the local audio function is disabled or enabled.
 
      @note
      This method is different from the \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" method:
-        - \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio": Disables/Re-enables the local audio capturing and processing. 
+        - \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio": Disables/Re-enables the local audio capturing and processing.
         If you disable or re-enable local audio recording using the `enableLocalAudio` method, the local user may hear a pause in the remote audio playback.
         - \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream": Sends/Stops sending the local audio streams.
-     
+
      @param enabled Sets whether to disable/re-enable the local audio function:
      - true: (Default) Re-enable the local audio function, that is, to start the local audio capturing device (for example, the microphone).
      - false: Disable the local audio function, that is, to stop local audio capturing.
@@ -4940,9 +5582,9 @@ public:
      - In scenarios requiring high-quality audio, for example, a music teaching scenario, we recommend setting profile as AUDIO_PROFILE_MUSIC_HIGH_QUALITY (4) and  scenario as AUDIO_SCENARIO_GAME_STREAMING (3).
 
      @param  profile Sets the sample rate, bitrate, encoding mode, and the number of channels. See #AUDIO_PROFILE_TYPE.
-     @param  scenario Sets the audio application scenario. See #AUDIO_SCENARIO_TYPE. 
-     Under different audio scenarios, the device uses different volume tracks, 
-     i.e. either the in-call volume or the media volume. For details, see 
+     @param  scenario Sets the audio application scenario. See #AUDIO_SCENARIO_TYPE.
+     Under different audio scenarios, the device uses different volume tracks,
+     i.e. either the in-call volume or the media volume. For details, see
      [What is the difference between the in-call volume and the media volume?](https://docs.agora.io/en/faq/system_volume).
 
      @return
@@ -4953,7 +5595,7 @@ public:
     /** Stops/Resumes sending the local audio stream.
 
      A successful \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" method call triggers the \ref agora::rtc::IRtcEngineEventHandler::onUserMuteAudio "onUserMuteAudio" callback on the remote client.
-     @note 
+     @note
      - When @p mute is set as @p true, this method does not disable the microphone, which does not affect any ongoing recording.
      - If you call \ref agora::rtc::IRtcEngine::setChannelProfile "setChannelProfile" after this method, the SDK resets whether or not to mute the local audio according to the channel profile and user role. Therefore, we recommend calling this method after the `setChannelProfile` method.
 
@@ -4978,12 +5620,12 @@ public:
      */
 	virtual int muteAllRemoteAudioStreams(bool mute) = 0;
     /** Stops/Resumes receiving all remote users' audio streams by default.
-     
+
      You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteAudioStreams (true)` after joining a channel, the remote audio streams of all subsequent users are not received.
 
-     @note If you want to resume receiving the audio stream, call \ref agora::rtc::IRtcEngine::muteRemoteAudioStream "muteRemoteAudioStream (false)", 
-     and specify the ID of the remote user whose audio stream you want to receive. 
-     To receive the audio streams of multiple remote users, call `muteRemoteAudioStream (false)` as many times. 
+     @note If you want to resume receiving the audio stream, call \ref agora::rtc::IRtcEngine::muteRemoteAudioStream "muteRemoteAudioStream (false)",
+     and specify the ID of the remote user whose audio stream you want to receive.
+     To receive the audio streams of multiple remote users, call `muteRemoteAudioStream (false)` as many times.
      Calling `setDefaultMuteAllRemoteAudioStreams (false)` resumes receiving the audio streams of subsequent users only.
 
      @param mute Sets whether to receive/stop receiving all remote users' audio streams by default:
@@ -4995,11 +5637,11 @@ public:
      - < 0: Failure.
      */
 	virtual int setDefaultMuteAllRemoteAudioStreams(bool mute) = 0;
-    
+
     /** Adjusts the playback volume of a specified remote user.
 
      You can call this method as many times as necessary to adjust the playback volume of different remote users, or to repeatedly adjust the playback volume of the same remote user.
-     
+
      @note
      - Call this method after joining a channel.
      - The playback volume here refers to the mixed volume of a specified remote user.
@@ -5012,7 +5654,7 @@ public:
 
      @return
      - 0: Success.
-	 - < 0: Failure. 
+	 - < 0: Failure.
      */
     virtual int adjustUserPlaybackSignalVolume(unsigned int uid, int volume) = 0;
 	/** Stops/Resumes receiving a specified remote user's audio stream.
@@ -5078,7 +5720,7 @@ public:
      */
 	virtual int muteAllRemoteVideoStreams(bool mute) = 0;
     /** Stops/Resumes receiving all remote users' video streams by default.
-     
+
      You can call this method either before or after joining a channel. If you call `setDefaultMuteAllRemoteVideoStreams (true)` after joining a channel, the remote video streams of all subsequent users are not received.
 
      @note If you want to resume receiving the video stream, call \ref agora::rtc::IRtcEngine::muteRemoteVideoStream "muteRemoteVideoStream (false)", and specify the ID of the remote user whose video stream you want to receive. To receive the video streams of multiple remote users, call `muteRemoteVideoStream (false)` as many times. Calling `setDefaultMuteAllRemoteVideoStreams (false)` resumes receiving the video streams of subsequent users only.
@@ -5108,15 +5750,15 @@ public:
 	virtual int muteRemoteVideoStream(uid_t userId, bool mute) = 0;
     /** Sets the stream type of the remote video.
 
-     Under limited network conditions, if the publisher has not disabled the dual-stream mode using `enableDualStreamMode(false)`, 
-     the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or 
+     Under limited network conditions, if the publisher has not disabled the dual-stream mode using `enableDualStreamMode(false)`,
+     the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or
      the low-video stream (the low resolution, and low bitrate video stream).
 
-     By default, users receive the high-quality video stream. Call this method if you want to switch to the low-video stream. 
-     This method allows the app to adjust the corresponding video stream type based on the size of the video window to 
+     By default, users receive the high-quality video stream. Call this method if you want to switch to the low-video stream.
+     This method allows the app to adjust the corresponding video stream type based on the size of the video window to
      reduce the bandwidth and resources.
 
-     The aspect ratio of the low-video stream is the same as the high-quality video stream. Once the resolution of the high-quality video 
+     The aspect ratio of the low-video stream is the same as the high-quality video stream. Once the resolution of the high-quality video
      stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
 
      The method result returns in the \ref agora::rtc::IRtcEngineEventHandler::onApiCallExecuted "onApiCallExecuted" callback.
@@ -5130,12 +5772,12 @@ public:
 	virtual int setRemoteVideoStreamType(uid_t userId, REMOTE_VIDEO_STREAM_TYPE streamType) = 0;
     /** Sets the default stream type of remote videos.
 
-     Under limited network conditions, if the publisher has not disabled the dual-stream mode using `enableDualStreamMode(false)`, 
-     the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or 
+     Under limited network conditions, if the publisher has not disabled the dual-stream mode using `enableDualStreamMode(false)`,
+     the receiver can choose to receive either the high-quality video stream (the high resolution, and high bitrate video stream) or
      the low-video stream (the low resolution, and low bitrate video stream).
 
-     By default, users receive the high-quality video stream. Call this method if you want to switch to the low-video stream. 
-     This method allows the app to adjust the corresponding video stream type based on the size of the video window to 
+     By default, users receive the high-quality video stream. Call this method if you want to switch to the low-video stream.
+     This method allows the app to adjust the corresponding video stream type based on the size of the video window to
      reduce the bandwidth and resources. The aspect ratio of the low-video stream is the same as the high-quality video stream.
      Once the resolution of the high-quality video
      stream is set, the system automatically sets the resolution, frame rate, and bitrate of the low-video stream.
@@ -5159,7 +5801,7 @@ public:
      - > 0: Time interval (ms) between two consecutive volume indications. We recommend setting @p interval &gt; 200 ms. Do not set @p interval &lt; 10 ms, or the *onAudioVolumeIndication* callback will not be triggered.
      @param smooth  Smoothing factor sets the sensitivity of the audio volume indicator. The value ranges between 0 and 10. The greater the value, the more sensitive the indicator. The recommended value is 3.
      @param report_vad
-     
+
      - true: Enable the voice activity detection of the local user. Once it is enabled, the `vad` parameter of the `onAudioVolumeIndication` callback reports the voice activity status of the local user.
      - false: (Default) Disable the voice activity detection of the local user. Once it is disabled, the `vad` parameter of the `onAudioVolumeIndication` callback does not report the voice activity status of the local user, except for the scenario where the engine automatically detects the voice activity of the local user.
      @return
@@ -5168,7 +5810,7 @@ public:
      */
 	virtual int enableAudioVolumeIndication(int interval, int smooth, bool report_vad) = 0;
     /** @deprecated Starts an audio recording.
-     
+
      Use \ref IRtcEngine::startAudioRecording(const char* filePath, int sampleRate, AUDIO_RECORDING_QUALITY_TYPE quality) "startAudioRecording"2 instead.
 
      The SDK allows recording during a call. Supported formats:
@@ -5192,17 +5834,17 @@ public:
 	virtual int startAudioRecording(const char* filePath, AUDIO_RECORDING_QUALITY_TYPE quality) = 0;
 
     /** Starts an audio recording on the client.
-     * 
-     * The SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file. 
+     *
+     * The SDK allows recording during a call. After successfully calling this method, you can record the audio of all the users in the channel and get an audio recording file.
      * Supported formats of the recording file are as follows:
      * - .wav: Large file size with high fidelity.
      * - .aac: Small file size with low fidelity.
-     * 
+     *
      * @note
      * - Ensure that the directory you use to save the recording file exists and is writable.
      * - This method is usually called after the `joinChannel` method. The recording automatically stops when you call the `leaveChannel` method.
      * - For better recording effects, set quality as #AUDIO_RECORDING_QUALITY_MEDIUM or #AUDIO_RECORDING_QUALITY_HIGH when `sampleRate` is 44.1 kHz or 48 kHz.
-     * 
+     *
      * @param filePath Pointer to the absolute file path of the recording file. The string of the file name is in UTF-8, such as c:/music/audio.aac.
      * @param sampleRate Sample rate (kHz) of the recording file. Supported values are as follows:
      * - 16
@@ -5210,7 +5852,7 @@ public:
      * - 44.1
      * - 48
      * @param quality Sets the audio recording quality. See #AUDIO_RECORDING_QUALITY_TYPE.
-     * 
+     *
      * @return
      * - 0: Success.
      * - < 0: Failure.
@@ -5710,7 +6352,7 @@ public:
      - < 0: Failure.
      */
     virtual int setLogFileSize(unsigned int fileSizeInKBytes) = 0;
-    /** 
+    /**
      @deprecated This method is deprecated, use the \ref IRtcEngine::setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode"2 method instead.
      Sets the local video display mode.
 
@@ -5727,20 +6369,20 @@ public:
      @since v3.0.0
 
      After initializing the local video view, you can call this method to update its rendering and mirror modes. It affects only the video view that the local user sees, not the published local video stream.
-     
+
      @note
      - Ensure that you have called the \ref IRtcEngine::setupLocalVideo "setupLocalVideo" method to initialize the local video view before calling this method.
      - During a call, you can call this method as many times as necessary to update the display mode of the local video view.
      @param renderMode The rendering mode of the local video view. See #RENDER_MODE_TYPE.
-     @param mirrorMode 
-     - The mirror mode of the local video view. See #VIDEO_MIRROR_MODE_TYPE. 
+     @param mirrorMode
+     - The mirror mode of the local video view. See #VIDEO_MIRROR_MODE_TYPE.
      - **Note**: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
      @return
      - 0: Success.
      - < 0: Failure.
      */
     virtual int setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) = 0;
-    /** 
+    /**
      @deprecated This method is deprecated, use the \ref IRtcEngine::setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setRemoteRenderMode"2 method instead.
      Sets the video display mode of a specified remote user.
 
@@ -5754,7 +6396,7 @@ public:
      */
 	virtual int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode) = 0;
     /** Updates the display mode of the video view of a remote user.
-     
+
      @since v3.0.0
      After initializing the video view of a remote user, you can call this method to update its rendering and mirror modes. This method affects only the video view that the local user sees.
 
@@ -5764,17 +6406,17 @@ public:
 
      @param userId The ID of the remote user.
      @param renderMode The rendering mode of the remote video view. See #RENDER_MODE_TYPE.
-     @param mirrorMode 
+     @param mirrorMode
      - The mirror mode of the remote video view. See #VIDEO_MIRROR_MODE_TYPE.
      - **Note**: The SDK disables the mirror mode by default.
-     
+
      @return
      - 0: Success.
      - < 0: Failure.
      */
     virtual int setRemoteRenderMode(uid_t userId, RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) = 0;
-    /** 
-     @deprecated This method is deprecated, use the \ref IRtcEngine::setupLocalVideo "setupLocalVideo" 
+    /**
+     @deprecated This method is deprecated, use the \ref IRtcEngine::setupLocalVideo "setupLocalVideo"
      or \ref IRtcEngine::setLocalRenderMode(RENDER_MODE_TYPE renderMode, VIDEO_MIRROR_MODE_TYPE mirrorMode) "setLocalRenderMode" method instead.
 
      Sets the local video mirror mode.
@@ -5809,7 +6451,7 @@ public:
      @param channels Sets the number of audio channels of the external audio source:
      - 1: Mono.
      - 2: Stereo.
-     
+
      @return
      - 0: Success.
      - < 0: Failure.
@@ -5840,8 +6482,8 @@ public:
      * - < 0: Failure.
      */
     virtual int setExternalAudioSink(bool enabled, int sampleRate, int channels) = 0;
-    /** Sets the audio recording format for the \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" callback. 
-    
+    /** Sets the audio recording format for the \ref agora::media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" callback.
+
 
      @param sampleRate Sets the sample rate (@p samplesPerSec) returned in the *onRecordAudioFrame* callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
      @param channel Sets the number of audio channels (@p channels) returned in the *onRecordAudioFrame* callback:
@@ -5851,7 +6493,7 @@ public:
      @param samplesPerCall Sets the number of samples returned in the *onRecordAudioFrame* callback. `samplesPerCall` is usually set as 1024 for RTMP streaming.
 
 
-     @note The SDK triggers the `onRecordAudioFrame` callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = `samplePerCall`/(`sampleRate` × `channel`). 
+     @note The SDK triggers the `onRecordAudioFrame` callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = `samplePerCall`/(`sampleRate` × `channel`).
 
      @return
      - 0: Success.
@@ -5859,30 +6501,30 @@ public:
      */
 	virtual int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall) = 0;
     /** Sets the audio playback format for the \ref agora::media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
-     
-     
+
+
      @param sampleRate Sets the sample rate (@p samplesPerSec) returned in the *onPlaybackAudioFrame* callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
      @param channel Sets the number of channels (@p channels) returned in the *onPlaybackAudioFrame* callback:
      - 1: Mono
      - 2: Stereo
      @param mode Sets the use mode (see #RAW_AUDIO_FRAME_OP_MODE_TYPE) of the *onPlaybackAudioFrame* callback.
      @param samplesPerCall Sets the number of samples returned in the *onPlaybackAudioFrame* callback. `samplesPerCall` is usually set as 1024 for RTMP streaming.
-     
+
      @note The SDK triggers the `onPlaybackAudioFrame` callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = `samplePerCall`/(`sampleRate` × `channel`).
-     
+
      @return
      - 0: Success.
      - < 0: Failure.
      */
 	virtual int setPlaybackAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall) = 0;
     /** Sets the mixed audio format for the \ref agora::media::IAudioFrameObserver::onMixedAudioFrame "onMixedAudioFrame" callback.
-     
-    
+
+
      @param sampleRate Sets the sample rate (@p samplesPerSec) returned in the *onMixedAudioFrame* callback, which can be set as 8000, 16000, 32000, 44100, or 48000 Hz.
      @param samplesPerCall Sets the number of samples (`samples`) returned in the *onMixedAudioFrame* callback. `samplesPerCall` is usually set as 1024 for RTMP streaming.
-     
+
      @note The SDK triggers the `onMixedAudioFrame` callback according to the sample interval. Ensure that the sample interval ≥ 0.01 (s). And, Sample interval (sec) = `samplePerCall`/(`sampleRate` × `channels`).
-    
+
      @return
      - 0: Success.
      - < 0: Failure.
@@ -5890,9 +6532,9 @@ public:
 	virtual int setMixedAudioFrameParameters(int sampleRate, int samplesPerCall) = 0;
     /** Adjusts the recording volume.
 
-     @param volume Recording volume. To avoid echoes and 
-     improve call quality, Agora recommends setting the value of volume between 
-     0 and 100. If you need to set the value higher than 100, contact 
+     @param volume Recording volume. To avoid echoes and
+     improve call quality, Agora recommends setting the value of volume between
+     0 and 100. If you need to set the value higher than 100, contact
      support@agora.io first.
      - 0: Mute.
      - 100: Original volume.
@@ -5904,14 +6546,14 @@ public:
      */
 	virtual int adjustRecordingSignalVolume(int volume) = 0;
     /** Adjusts the playback volume of all remote users.
-     
-     @note 
+
+     @note
      - This method adjusts the playback volume that is the mixed volume of all remote users.
      - (Since v2.3.2) To mute the local audio playback, call both the `adjustPlaybackSignalVolume` and \ref IRtcEngine::adjustAudioMixingVolume "adjustAudioMixingVolume" methods and set the volume as `0`.
 
-     @param volume The playback volume of all remote users. To avoid echoes and 
-     improve call quality, Agora recommends setting the value of volume between 
-     0 and 100. If you need to set the value higher than 100, contact 
+     @param volume The playback volume of all remote users. To avoid echoes and
+     improve call quality, Agora recommends setting the value of volume between
+     0 and 100. If you need to set the value higher than 100, contact
      support@agora.io first.
      - 0: Mute.
      - 100: Original volume.
@@ -5922,11 +6564,11 @@ public:
      */
 	virtual int adjustPlaybackSignalVolume(int volume) = 0;
 
-    /** 
+    /**
      @deprecated This method is deprecated. As of v3.0.0, the Native SDK automatically enables interoperability with the Web SDK, so you no longer need to call this method.
      Enables interoperability with the Agora Web SDK.
 
-     @note 
+     @note
      - This method applies only to the Live-broadcast profile. In the Communication profile, interoperability with the Agora Web SDK is enabled by default.
      - If the channel has Web SDK users, ensure that you call this method, or the video of the Native user will be a black screen for the Web user.
 
@@ -5959,7 +6601,7 @@ public:
 
      - Disable the upstream video but enable audio only when the network conditions deteriorate and cannot support both video and audio.
      - Re-enable the video when the network conditions improve.
-     
+
      When the published video stream falls back to audio only or when the audio-only stream switches back to the video, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onLocalPublishFallbackToAudioOnly "onLocalPublishFallbackToAudioOnly" callback.
 
      @note Agora does not recommend using this method for CDN live streaming, because the remote CDN live user will have a noticeable lag when the published video stream falls back to audio only.
@@ -6002,12 +6644,12 @@ public:
     /** Switches between front and rear cameras.
 
      @note This method is for Android and iOS only.
-     @note This method is private. 
-     
+     @note This method is private.
+
      @param direction Sets the camera to be used:
      - CAMERA_DIRECTION.CAMERA_REAR: Use the rear camera.
      - CAMERA_DIRECTION.CAMERA_FRONT: Use the front camera.
-     
+
      @return
      - 0: Success.
      - < 0: Failure.
@@ -6020,10 +6662,10 @@ public:
      If a user does not call this method, the audio is routed to the earpiece by default. If you need to change the default audio route after joining a channel, call the \ref IRtcEngine::setEnableSpeakerphone "setEnableSpeakerphone" method.
 
      The default setting for each profile:
-     - Communication: In a voice call, the default audio route is the earpiece. In a video call, the default audio route is the speakerphone. If a user who is in the Communication profile calls 
-     the \ref IRtcEngine.disableVideo "disableVideo" method or if the user calls 
-     the \ref IRtcEngine.muteLocalVideoStream "muteLocalVideoStream" and 
-     \ref IRtcEngine.muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" methods, the 
+     - Communication: In a voice call, the default audio route is the earpiece. In a video call, the default audio route is the speakerphone. If a user who is in the Communication profile calls
+     the \ref IRtcEngine.disableVideo "disableVideo" method or if the user calls
+     the \ref IRtcEngine.muteLocalVideoStream "muteLocalVideoStream" and
+     \ref IRtcEngine.muteAllRemoteVideoStreams "muteAllRemoteVideoStreams" methods, the
      default audio route switches back to the earpiece automatically.
      - Live Broadcast: Speakerphone.
 
@@ -6067,7 +6709,7 @@ public:
      @param enabled Determines whether to enable in-ear monitoring.
      - true: Enable.
      - false: (Default) Disable.
-     
+
      * @return
      - 0: Success.
      - < 0: Failure.
@@ -6478,7 +7120,7 @@ public:
     /** Retrieves the warning or error description.
 
      @param code Warning code or error code returned in the \ref agora::rtc::IRtcEngineEventHandler::onWarning "onWarning" or \ref agora::rtc::IRtcEngineEventHandler::onError "onError" callback.
-     
+
      @return #WARN_CODE_TYPE or #ERROR_CODE_TYPE.
      */
     virtual const char* getErrorDescription(int code) = 0;
@@ -6526,7 +7168,7 @@ public:
     /** Registers a packet observer.
 
      The Agora SDK allows your application to register a packet observer to receive callbacks for voice or video packet transmission.
-     
+
      @note
      - The size of the packet sent to the network after processing should not exceed 1200 bytes, otherwise, the packet may fail to be sent.
      - Ensure that both receivers and senders call this method, otherwise, you may meet undefined behaviors such as no voice and black screen.
@@ -6567,7 +7209,7 @@ public:
      - Each client can send up to 6 kB of data per second.
      - Each user can have up to five data streams simultaneously.
 
-     A successful \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method call triggers the 
+     A successful \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method call triggers the
      \ref agora::rtc::IRtcEngineEventHandler::onStreamMessage "onStreamMessage" callback on the remote client, from which the remote user gets the stream message.
 
      A failed \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method call triggers the
@@ -6667,7 +7309,7 @@ public:
 
     /** Adds a watermark image to the local video.
 
-     This method adds a PNG watermark image to the local video in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included), 
+     This method adds a PNG watermark image to the local video in a live broadcast. Once the watermark image is added, all the audience in the channel (CDN audience included),
      and the recording device can see and capture it. Agora supports adding only one watermark image onto the local video, and the newly watermark image replaces the previous one.
 
      The watermark position depends on the settings in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method:
@@ -6701,7 +7343,7 @@ public:
     virtual int clearVideoWatermarks() = 0;
 
     /** @since v3.0.0
-     
+
      Enables/Disables image enhancement and sets the options.
 
     @note
@@ -7106,39 +7748,39 @@ public:
     RtcEngineParameters(IRtcEngine* engine)
         :m_parameter(engine){}
 
-    
+
     int enableLocalVideo(bool enabled) {
         return setParameters("{\"rtc.video.capture\":%s,\"che.video.local.capture\":%s,\"che.video.local.render\":%s,\"che.video.local.send\":%s}", enabled ? "true" : "false", enabled ? "true" : "false", enabled ? "true" : "false", enabled ? "true" : "false");
     }
 
 
-   
+
     int muteLocalVideoStream(bool mute) {
         return setParameters("{\"rtc.video.mute_me\":%s,\"che.video.local.send\":%s}", mute ? "true" : "false", mute ? "false" : "true");
     }
 
-    
+
     int muteAllRemoteVideoStreams(bool mute) {
         return m_parameter ? m_parameter->setBool("rtc.video.mute_peers", mute) : -ERR_NOT_INITIALIZED;
     }
 
 
-    
+
     int setDefaultMuteAllRemoteVideoStreams(bool mute) {
         return m_parameter ? m_parameter->setBool("rtc.video.set_default_mute_peers", mute) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int muteRemoteVideoStream(uid_t uid, bool mute) {
         return setObject("rtc.video.mute_peer", "{\"uid\":%u,\"mute\":%s}", uid, mute ? "true" : "false");
     }
 
-   
+
     int setPlaybackDeviceVolume(int volume) {// [0,255]
         return m_parameter ? m_parameter->setInt("che.audio.output.volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int startAudioRecording(const char* filePath, AUDIO_RECORDING_QUALITY_TYPE quality) {
         return startAudioRecording(filePath, 32000, quality);
     }
@@ -7155,12 +7797,12 @@ public:
         return setObject("che.audio.start_recording", "{\"filePath\":\"%s\",\"sampleRate\":%d,\"quality\":%d}", filePath, sampleRate, quality);
     }
 
-    
+
     int stopAudioRecording() {
         return m_parameter ? m_parameter->setBool("che.audio.stop_recording", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int startAudioMixing(const char* filePath, bool loopback, bool replace, int cycle) {
         if (!m_parameter) return -ERR_NOT_INITIALIZED;
 #if defined(_WIN32)
@@ -7177,22 +7819,22 @@ public:
                          cycle);
     }
 
-   
+
     int stopAudioMixing() {
         return m_parameter ? m_parameter->setBool("che.audio.stop_file_as_playout", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int pauseAudioMixing() {
         return m_parameter ? m_parameter->setBool("che.audio.pause_file_as_playout", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int resumeAudioMixing() {
         return m_parameter ? m_parameter->setBool("che.audio.pause_file_as_playout", false) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int adjustAudioMixingVolume(int volume) {
         int ret = adjustAudioMixingPlayoutVolume(volume);
         if (ret == 0) {
@@ -7201,12 +7843,12 @@ public:
         return ret;
     }
 
-    
+
     int adjustAudioMixingPlayoutVolume(int volume) {
         return m_parameter ? m_parameter->setInt("che.audio.set_file_as_playout_volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int getAudioMixingPlayoutVolume() {
         int volume = 0;
         int r = m_parameter ? m_parameter->getInt("che.audio.get_file_as_playout_volume", volume) : -ERR_NOT_INITIALIZED;
@@ -7215,12 +7857,12 @@ public:
         return r;
     }
 
-    
+
     int adjustAudioMixingPublishVolume(int volume) {
         return m_parameter ? m_parameter->setInt("che.audio.set_file_as_playout_publish_volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-   
+
     int getAudioMixingPublishVolume() {
         int volume = 0;
         int r = m_parameter ? m_parameter->getInt("che.audio.get_file_as_playout_publish_volume", volume) : -ERR_NOT_INITIALIZED;
@@ -7229,7 +7871,7 @@ public:
         return r;
     }
 
-    
+
     int getAudioMixingDuration() {
         int duration = 0;
         int r = m_parameter ? m_parameter->getInt("che.audio.get_mixing_file_length_ms", duration) : -ERR_NOT_INITIALIZED;
@@ -7238,7 +7880,7 @@ public:
         return r;
     }
 
-    
+
     int getAudioMixingCurrentPosition() {
         if (!m_parameter) return -ERR_NOT_INITIALIZED;
         int pos = 0;
@@ -7247,7 +7889,7 @@ public:
             r = pos;
         return r;
     }
-    
+
     int setAudioMixingPosition(int pos /*in ms*/) {
         return m_parameter ? m_parameter->setInt("che.audio.mixing.file.position", pos) : -ERR_NOT_INITIALIZED;
     }
@@ -7271,12 +7913,12 @@ public:
         return r;
     }
 
-    
+
     int setEffectsVolume(int volume) {
         return m_parameter ? m_parameter->setInt("che.audio.game_set_effects_volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-   
+
     int setVolumeOfEffect(int soundId, int volume) {
         return setObject(
                          "che.audio.game_adjust_effect_volume",
@@ -7284,7 +7926,7 @@ public:
                          soundId, volume);
     }
 
-    
+
     int playEffect(int soundId, const char* filePath, int loopCount, double pitch, double pan, int gain, bool publish = false) {
 #if defined(_WIN32)
         util::AString path;
@@ -7299,19 +7941,19 @@ public:
                          soundId, filePath, loopCount, pitch, pan, gain, publish);
     }
 
-    
+
     int stopEffect(int soundId) {
         return m_parameter ? m_parameter->setInt(
                                                  "che.audio.game_stop_effect", soundId) : -ERR_NOT_INITIALIZED;
     }
 
-   
+
     int stopAllEffects() {
         return m_parameter ? m_parameter->setBool(
                                                   "che.audio.game_stop_all_effects", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int preloadEffect(int soundId, char* filePath) {
         return setObject(
                          "che.audio.game_preload_effect",
@@ -7319,61 +7961,61 @@ public:
                          soundId, filePath);
     }
 
-    
+
     int unloadEffect(int soundId) {
         return m_parameter ? m_parameter->setInt(
                                                  "che.audio.game_unload_effect", soundId) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int pauseEffect(int soundId) {
         return m_parameter ? m_parameter->setInt(
                                                  "che.audio.game_pause_effect", soundId) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int pauseAllEffects() {
         return m_parameter ? m_parameter->setBool(
                                                   "che.audio.game_pause_all_effects", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int resumeEffect(int soundId) {
         return m_parameter ? m_parameter->setInt(
                                                  "che.audio.game_resume_effect", soundId) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int resumeAllEffects() {
         return m_parameter ? m_parameter->setBool(
                                                   "che.audio.game_resume_all_effects", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int enableSoundPositionIndication(bool enabled) {
         return m_parameter ? m_parameter->setBool(
                                                   "che.audio.enable_sound_position", enabled) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setRemoteVoicePosition(uid_t uid, double pan, double gain) {
         return setObject("che.audio.game_place_sound_position", "{\"uid\":%u,\"pan\":%lf,\"gain\":%lf}", uid, pan, gain);
     }
 
-    
+
     int setLocalVoicePitch(double pitch) {
         return m_parameter ? m_parameter->setInt(
                                                  "che.audio.morph.pitch_shift",
                                                  static_cast<int>(pitch * 100)) : -ERR_NOT_INITIALIZED;
     }
-    
+
     int setLocalVoiceEqualization(AUDIO_EQUALIZATION_BAND_FREQUENCY bandFrequency, int bandGain) {
         return setObject(
                          "che.audio.morph.equalization",
                          "{\"index\":%d,\"gain\":%d}",
                          static_cast<int>(bandFrequency), bandGain);
     }
-    
+
     int setLocalVoiceReverb(AUDIO_REVERB_TYPE reverbKey, int value) {
         return setObject(
                          "che.audio.morph.reverb",
@@ -7381,7 +8023,7 @@ public:
                          static_cast<int>(reverbKey), value);
     }
 
-    
+
     int setLocalVoiceChanger(VOICE_CHANGER_PRESET voiceChanger) {
         if(voiceChanger == 0x00000000)
         {
@@ -7405,7 +8047,7 @@ public:
         }
     }
 
-    
+
     int setLocalVoiceReverbPreset(AUDIO_REVERB_PRESET reverbPreset) {
         if(reverbPreset == 0x00000000)
         {
@@ -7439,17 +8081,17 @@ public:
         return m_parameter ? m_parameter->setBool("che.pause.audio", true) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int resumeAudio() {
         return m_parameter ? m_parameter->setBool("che.pause.audio", false) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setHighQualityAudioParameters(bool fullband, bool stereo, bool fullBitrate) {
         return setObject("che.audio.codec.hq", "{\"fullband\":%s,\"stereo\":%s,\"fullBitrate\":%s}", fullband ? "true" : "false", stereo ? "true" : "false", fullBitrate ? "true" : "false");
     }
 
-    
+
     int adjustRecordingSignalVolume(int volume) {//[0, 400]: e.g. 50~0.5x 100~1x 400~4x
         if (volume < 0)
             volume = 0;
@@ -7458,7 +8100,7 @@ public:
         return m_parameter ? m_parameter->setInt("che.audio.record.signal.volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int adjustPlaybackSignalVolume(int volume) {//[0, 400]
         if (volume < 0)
             volume = 0;
@@ -7467,35 +8109,35 @@ public:
         return m_parameter ? m_parameter->setInt("che.audio.playout.signal.volume", volume) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int enableAudioVolumeIndication(int interval, int smooth, bool report_vad) { // in ms: <= 0: disable, > 0: enable, interval in ms
         if (interval < 0)
             interval = 0;
         return setObject("che.audio.volume_indication", "{\"interval\":%d,\"smooth\":%d,\"vad\":%d}", interval, smooth, report_vad);
     }
 
-    
+
     int muteLocalAudioStream(bool mute) {
         return setParameters("{\"rtc.audio.mute_me\":%s,\"che.audio.mute_me\":%s}", mute ? "true" : "false", mute ? "true" : "false");
     }
     // mute/unmute all peers. unmute will clear all muted peers specified mutePeer() interface
 
-    
+
     int muteRemoteAudioStream(uid_t uid, bool mute) {
         return setObject("rtc.audio.mute_peer", "{\"uid\":%u,\"mute\":%s}", uid, mute?"true":"false");
     }
 
-    
+
     int muteAllRemoteAudioStreams(bool mute) {
         return m_parameter ? m_parameter->setBool("rtc.audio.mute_peers", mute) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setDefaultMuteAllRemoteAudioStreams(bool mute) {
         return m_parameter ? m_parameter->setBool("rtc.audio.set_default_mute_peers", mute) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setExternalAudioSource(bool enabled, int sampleRate, int channels) {
         if (enabled)
             return setParameters("{\"che.audio.external_capture\":true,\"che.audio.external_capture.push\":true,\"che.audio.set_capture_raw_audio_format\":{\"sampleRate\":%d,\"channelCnt\":%d,\"mode\":%d}}", sampleRate, channels, RAW_AUDIO_FRAME_OP_MODE_TYPE::RAW_AUDIO_FRAME_OP_MODE_READ_WRITE);
@@ -7503,7 +8145,7 @@ public:
             return setParameters("{\"che.audio.external_capture\":false,\"che.audio.external_capture.push\":false}");
     }
 
-    
+
     int setExternalAudioSink(bool enabled, int sampleRate, int channels) {
         if (enabled)
             return setParameters("{\"che.audio.external_render\":true,\"che.audio.external_render.pull\":true,\"che.audio.set_render_raw_audio_format\":{\"sampleRate\":%d,\"channelCnt\":%d,\"mode\":%d}}", sampleRate, channels, RAW_AUDIO_FRAME_OP_MODE_TYPE::RAW_AUDIO_FRAME_OP_MODE_READ_ONLY);
@@ -7511,7 +8153,7 @@ public:
             return setParameters("{\"che.audio.external_render\":false,\"che.audio.external_render.pull\":false}");
     }
 
-    
+
     int setLogFile(const char* filePath) {
         if (!m_parameter) return -ERR_NOT_INITIALIZED;
 #if defined(_WIN32)
@@ -7524,73 +8166,73 @@ public:
         return m_parameter->setString("rtc.log_file", filePath);
     }
 
-    
+
     int setLogFilter(unsigned int filter) {
         return m_parameter ? m_parameter->setUInt("rtc.log_filter", filter&LOG_FILTER_MASK) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setLogFileSize(unsigned int fileSizeInKBytes) {
         return m_parameter ? m_parameter->setUInt("rtc.log_size", fileSizeInKBytes) : -ERR_NOT_INITIALIZED;
     }
 
-   
+
     int setLocalRenderMode(RENDER_MODE_TYPE renderMode) {
         return setRemoteRenderMode(0, renderMode);
     }
 
-    
+
     int setRemoteRenderMode(uid_t uid, RENDER_MODE_TYPE renderMode) {
         return setParameters("{\"che.video.render_mode\":[{\"uid\":%u,\"renderMode\":%d}]}", uid, renderMode);
     }
 
-    
+
     int setCameraCapturerConfiguration(const CameraCapturerConfiguration& config) {
         if (!m_parameter) return -ERR_NOT_INITIALIZED;
         return m_parameter->setInt("che.video.camera_capture_mode", (int)config.preference);
     }
 
-    
+
     int enableDualStreamMode(bool enabled) {
         return setParameters("{\"rtc.dual_stream_mode\":%s,\"che.video.enableLowBitRateStream\":%d}", enabled ? "true" : "false", enabled ? 1 : 0);
     }
 
-    
+
     int setRemoteVideoStreamType(uid_t uid, REMOTE_VIDEO_STREAM_TYPE streamType) {
         return setParameters("{\"rtc.video.set_remote_video_stream\":{\"uid\":%u,\"stream\":%d}, \"che.video.setstream\":{\"uid\":%u,\"stream\":%d}}", uid, streamType, uid, streamType);
 //        return setObject("rtc.video.set_remote_video_stream", "{\"uid\":%u,\"stream\":%d}", uid, streamType);
     }
 
-    
+
     int setRemoteDefaultVideoStreamType(REMOTE_VIDEO_STREAM_TYPE streamType) {
         return m_parameter ? m_parameter->setInt("rtc.video.set_remote_default_video_stream_type", streamType) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setRecordingAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall) {
         return setObject("che.audio.set_capture_raw_audio_format", "{\"sampleRate\":%d,\"channelCnt\":%d,\"mode\":%d,\"samplesPerCall\":%d}", sampleRate, channel, mode, samplesPerCall);
     }
-    
+
     int setPlaybackAudioFrameParameters(int sampleRate, int channel, RAW_AUDIO_FRAME_OP_MODE_TYPE mode, int samplesPerCall) {
         return setObject("che.audio.set_render_raw_audio_format", "{\"sampleRate\":%d,\"channelCnt\":%d,\"mode\":%d,\"samplesPerCall\":%d}", sampleRate, channel, mode, samplesPerCall);
     }
-    
+
     int setMixedAudioFrameParameters(int sampleRate, int samplesPerCall) {
         return setObject("che.audio.set_mixed_raw_audio_format", "{\"sampleRate\":%d,\"samplesPerCall\":%d}", sampleRate, samplesPerCall);
     }
 
-    
+
     int enableWebSdkInteroperability(bool enabled) {//enable interoperability with zero-plugin web sdk
         return setParameters("{\"rtc.video.web_h264_interop_enable\":%s,\"che.video.web_h264_interop_enable\":%s}", enabled ? "true" : "false", enabled ? "true" : "false");
     }
 
     //only for live broadcast
-    
+
     int setVideoQualityParameters(bool preferFrameRateOverImageQuality) {
         return setParameters("{\"rtc.video.prefer_frame_rate\":%s,\"che.video.prefer_frame_rate\":%s}", preferFrameRateOverImageQuality ? "true" : "false", preferFrameRateOverImageQuality ? "true" : "false");
     }
 
-    
+
     int setLocalVideoMirrorMode(VIDEO_MIRROR_MODE_TYPE mirrorMode) {
         if (!m_parameter) return -ERR_NOT_INITIALIZED;
         const char *value;
@@ -7610,18 +8252,18 @@ public:
         return m_parameter->setString("che.video.localViewMirrorSetting", value);
     }
 
-   
+
     int setLocalPublishFallbackOption(STREAM_FALLBACK_OPTIONS option) {
         return m_parameter ? m_parameter->setInt("rtc.local_publish_fallback_option", option) : -ERR_NOT_INITIALIZED;
     }
 
-    
+
     int setRemoteSubscribeFallbackOption(STREAM_FALLBACK_OPTIONS option) {
         return m_parameter ? m_parameter->setInt("rtc.remote_subscribe_fallback_option", option) : -ERR_NOT_INITIALIZED;
     }
 
 #if (defined(__APPLE__) && TARGET_OS_MAC && !TARGET_OS_IPHONE) || defined(_WIN32)
-    
+
     int enableLoopbackRecording(bool enabled, const char* deviceName = NULL) {
         if (!deviceName) {
             return setParameters("{\"che.audio.loopback.recording\":%s}", enabled ? "true" : "false");
@@ -7632,7 +8274,7 @@ public:
     }
 #endif
 
-    
+
     int setInEarMonitoringVolume(int volume) {
         return m_parameter ? m_parameter->setInt("che.audio.headset.monitoring.parameter", volume) : -ERR_NOT_INITIALIZED;
     }
@@ -7677,11 +8319,11 @@ private:
 ////////////////////////////////////////////////////////
 
 /** Creates the IRtcEngine object and returns the pointer.
- * 
+ *
  * @note The Agora RTC Native SDK supports creating only one `IRtcEngine` object for an app for now.
- * 
+ *
  * @return Pointer to the IRtcEngine object.
- */ 
+ */
 AGORA_API agora::rtc::IRtcEngine* AGORA_CALL createAgoraRtcEngine();
 
 ////////////////////////////////////////////////////////
