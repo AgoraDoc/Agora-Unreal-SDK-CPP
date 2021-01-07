@@ -1146,7 +1146,7 @@ enum CLIENT_ROLE_TYPE
 };
 
 /** @~chinese
-用户离线原因
+用户离线原因。
 */
 /** @~english
 Reasons for a user being offline.
@@ -1313,352 +1313,556 @@ enum RTMP_STREAM_PUBLISH_ERROR
   */
   RTMP_STREAM_PUBLISH_ERROR_FORMAT_NOT_SUPPORTED = 10,
 };
-// TODO-yaxi
-/** States of importing an external video stream in a live broadcast. */
+/** @~english States of importing an external video stream in a live broadcast. */
+/** @~chinese 直播中外部视频源的导入状态。 */
 enum INJECT_STREAM_STATUS
 {
-    /** 0: The external video stream imported successfully. */
+    /** @~english 0: The external video stream imported successfully. */
+    /** @~chinese 0: 外部视频流导入成功。 */
     INJECT_STREAM_STATUS_START_SUCCESS = 0,
-    /** 1: The external video stream already exists. */
+    /** @~english 1: The external video stream already exists. */
+    /** @~chinese 1: 外部视频流已存在。 */
     INJECT_STREAM_STATUS_START_ALREADY_EXISTS = 1,
-    /** 2: The external video stream to be imported is unauthorized. */
+    /** @~english 2: The external video stream to be imported is unauthorized. */
+    /** @~chinese 2: 外部视频流导入未经授权。 */
     INJECT_STREAM_STATUS_START_UNAUTHORIZED = 2,
-    /** 3: Import external video stream timeout. */
+    /** @~english 3: Import external video stream timeout. */
+    /** @~chinese 3: 导入外部视频流超时。 */
     INJECT_STREAM_STATUS_START_TIMEDOUT = 3,
-    /** 4: Import external video stream failed. */
+    /** @~english 4: Import external video stream failed. */
+    /** @~chinese 4: 外部视频流导入失败。 */
     INJECT_STREAM_STATUS_START_FAILED = 4,
-    /** 5: The external video stream stopped importing successfully. */
+    /** @~english 5: The external video stream stopped importing successfully. */
+    /** @~chinese 5: 外部视频流停止导入成功。 */
     INJECT_STREAM_STATUS_STOP_SUCCESS = 5,
-    /** 6: No external video stream is found. */
+    /** @~english 6: No external video stream is found. */
+    /** @~chinese 6: 未找到要停止导入的外部视频流。 */
     INJECT_STREAM_STATUS_STOP_NOT_FOUND = 6,
-    /** 7: The external video stream to be stopped importing is unauthorized. */
+    /** @~english 7: The external video stream to be stopped importing is unauthorized. */
+    /** @~chinese 7: 要停止导入的外部视频流未经授权。 */
     INJECT_STREAM_STATUS_STOP_UNAUTHORIZED = 7,
-    /** 8: Stop importing external video stream timeout. */
+    /** @~english 8: Stop importing external video stream timeout. */
+    /** @~chinese 8: 停止导入外部视频流超时。 */
     INJECT_STREAM_STATUS_STOP_TIMEDOUT = 8,
-    /** 9: Stop importing external video stream failed. */
+    /** @~english 9: Stop importing external video stream failed. */
+    /** @~chinese 9: 停止导入外部视频流失败。 */
     INJECT_STREAM_STATUS_STOP_FAILED = 9,
-    /** 10: The external video stream is corrupted. */
+    /** @~english 10: The external video stream is corrupted. */
+    /** @~chinese 10: 导入的外部视频流被中断。 */
     INJECT_STREAM_STATUS_BROKEN = 10,
 };
-/** Remote video stream types. */
+
+/** @~english Remote video stream types. */
+/** @~chinese 视频流类型。 */
 enum REMOTE_VIDEO_STREAM_TYPE
 {
-      /** 0: High-stream video. */
+      /** @~english 0: High-stream video. */
+      /** @~chinese 0: 视频大流。 */
     REMOTE_VIDEO_STREAM_HIGH = 0,
-      /** 1: Low-stream video. */
+      /** @~english 1: Low-stream video. */
+      /** @~chinese 1: 视频小流。 */
     REMOTE_VIDEO_STREAM_LOW = 1,
 };
 
-/** The use mode of the audio data in the \ref media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" or \ref media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback.
- */
+/** @~english The use mode of the audio data in the \ref media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" or \ref media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" callback. */
+/** @~chinese \ref media::IAudioFrameObserver::onRecordAudioFrame "onRecordAudioFrame" 或 \ref media::IAudioFrameObserver::onPlaybackAudioFrame "onPlaybackAudioFrame" 回调中返回的音频数据的使用模式。 */
  enum RAW_AUDIO_FRAME_OP_MODE_TYPE
 {
-    /** 0: Read-only mode: Users only read the \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" data without modifying anything. For example, when users acquire the data with the Agora SDK, then push the RTMP streams. */
+    /** @~english 0: Read-only mode: Users only read the \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" data without modifying anything. For example, when users acquire the data with the Agora SDK, then push the RTMP streams. */
+    /** @~chinese 0: 只读模式，用户仅从 \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" 获取原始数据，不作任何修改。例如: 若用户通过 Agora SDK 采集数据，自己进行 RTMP/RTMPS 推流，则可以选择该模式。 */
     RAW_AUDIO_FRAME_OP_MODE_READ_ONLY = 0,
-    /** 1: Write-only mode: Users replace the \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" data with their own data and pass the data to the SDK for encoding. For example, when users acquire the data. */
+    /** @~english 1: Write-only mode: Users replace the \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" data with their own data and pass the data to the SDK for encoding. For example, when users acquire the data. */
+    /** @~chinese 1: 只写模式，用户替换 \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" 中的数据以供 SDK 编码传输。例如: 若用户自行采集数据，可选择该模式。 */
     RAW_AUDIO_FRAME_OP_MODE_WRITE_ONLY = 1,
-    /** 2: Read and write mode: Users read the data from \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame", modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing, such as a voice change. */
+    /** @~english 2: Read and write mode: Users read the data from \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame", modify it, and then play it. For example, when users have their own sound-effect processing module and perform some voice pre-processing, such as a voice change. */
+    /** @~chinese 2: 读写模式, 用户从 \ref agora::media::IAudioFrameObserver::AudioFrame "AudioFrame" 获取并修改数据、修改，并返回给 SDK 进行编码传输。例如: 若用户自己有音效处理模块，且想要根据实际需要对数据进行前处理(例如变声)，则可以选择该模式。 */
     RAW_AUDIO_FRAME_OP_MODE_READ_WRITE = 2,
 };
 
-/** Audio-sample rates. */
+/** @~english Audio-sample rates. */
+/** @~chinese 用于旁路推流的输出音频的采样率。 */
 enum AUDIO_SAMPLE_RATE_TYPE
 {
-    /** 32000: 32 kHz */
+    /** @~english 32000: 32 kHz */
+    /** @~chinese 32000: 32 kHz */
     AUDIO_SAMPLE_RATE_32000 = 32000,
-    /** 44100: 44.1 kHz */
+    /** @~english 44100: 44.1 kHz */
+    /** @~chinese 44100: 44.1 kHz */
     AUDIO_SAMPLE_RATE_44100 = 44100,
-      /** 48000: 48 kHz */
+    /** @~english 48000: 48 kHz */
+    /** @~chinese 48000: 48 kHz */
     AUDIO_SAMPLE_RATE_48000 = 48000,
 };
 
-/** Video codec profile types. */
+/** @~english Video codec profile types. */
+/** @~chinese 用于旁路推流的输出视频的编解码规格。 */
 enum VIDEO_CODEC_PROFILE_TYPE
-{  /** 66: Baseline video codec profile. Generally used in video calls on mobile phones. */
+{
+    /** @~english 66: Baseline video codec profile. Generally used in video calls on mobile phones. */
+    /** @~chinese 66: Baseline 级别的视频编码规格，一般用于低阶或需要额外容错的应用，比如视频通话、手机视频等。 */
     VIDEO_CODEC_PROFILE_BASELINE = 66,
-    /** 77: Main video codec profile. Generally used in mainstream electronics such as MP4 players, portable video players, PSP, and iPads. */
+    /** @~english 77: Main video codec profile. Generally used in mainstream electronics such as MP4 players, portable video players, PSP, and iPads. */
+    /** @~chinese 77: Main 级别的视频编码规格，一般用于主流消费类电子产品，如 mp4、便携的视频播放器、PSP 和 iPad 等。*/
     VIDEO_CODEC_PROFILE_MAIN = 77,
-      /** 100: (Default) High video codec profile. Generally used in high-resolution broadcasts or television. */
+    /** @~english 100: (Default) High video codec profile. Generally used in high-resolution broadcasts or television. */
+    /** @~chinese 100: （默认）High 级别的视频编码规格，一般用于广播及视频碟片存储，高清电视。 */
     VIDEO_CODEC_PROFILE_HIGH = 100,
 };
 
-/** Video codec types */
+/** @~english Video codec types */
+/** @~chinese 视频编码格式 */
 enum VIDEO_CODEC_TYPE {
-    /** Standard VP8 */
+    /** @~english Standard VP8 */
+    /** @~chinese 标准 VP8 */
     VIDEO_CODEC_VP8 = 1,
-    /** Standard H264 */
+    /** @~english Standard H264 */
+    /** @~chinese 标准 H264 */
     VIDEO_CODEC_H264 = 2,
-    /** Enhanced VP8 */
+    /** @~english Enhanced VP8 */
+    /** @~chinese 增强 VP8 */
     VIDEO_CODEC_EVP = 3,
-    /** Enhanced H264 */
+    /** @~english Enhanced H264 */
+    /** @~chinese 增强 H264 */
     VIDEO_CODEC_E264 = 4,
 };
 
-/** Audio equalization band frequencies. */
+/** @~english Audio equalization band frequencies. */
+/** @~chinese 语音音效均衡波段的中心频率。 */
 enum AUDIO_EQUALIZATION_BAND_FREQUENCY
 {
-    /** 0: 31 Hz */
+    /** @~english 0: 31 Hz */
+    /** @~chinese 0: 31 Hz */
     AUDIO_EQUALIZATION_BAND_31 = 0,
-      /** 1: 62 Hz */
+      /** @~english 1: 62 Hz */
+      /** @~chinese 1: 62 Hz */
     AUDIO_EQUALIZATION_BAND_62 = 1,
-    /** 2: 125 Hz */
+    /** @~english 2: 125 Hz */
+    /** @~chinese 2: 125 Hz */
     AUDIO_EQUALIZATION_BAND_125 = 2,
-      /** 3: 250 Hz */
+      /** @~english 3: 250 Hz */
+      /** @~chinese 3: 250 Hz */
     AUDIO_EQUALIZATION_BAND_250 = 3,
-      /** 4: 500 Hz */
+      /** @~english 4: 500 Hz */
+      /** @~chinese 4: 500 Hz */
     AUDIO_EQUALIZATION_BAND_500 = 4,
-        /** 5: 1 kHz */
+        /** @~english 5: 1 kHz */
+        /** @~chinese 5: 1 kHz */
     AUDIO_EQUALIZATION_BAND_1K = 5,
-        /** 6: 2 kHz */
+        /** @~english 6: 2 kHz */
+        /** @~chinese 6: 2 kHz */
     AUDIO_EQUALIZATION_BAND_2K = 6,
-        /** 7: 4 kHz */
+        /** @~english 7: 4 kHz */
+        /** @~chinese 7: 4 kHz */
     AUDIO_EQUALIZATION_BAND_4K = 7,
-        /** 8: 8 kHz */
+        /** @~english 8: 8 kHz */
+        /** @~chinese 8: 8 kHz */
     AUDIO_EQUALIZATION_BAND_8K = 8,
-      /** 9: 16 kHz */
+      /** @~english 9: 16 kHz */
+      /** @~chinese 9: 16 kHz */
     AUDIO_EQUALIZATION_BAND_16K = 9,
 };
 
-/** Audio reverberation types. */
+/** @~english Audio reverberation types. */
+/** @~chinese 各混响音效 Key 所对应的值。 */
 enum AUDIO_REVERB_TYPE
 {
-    /** 0: The level of the dry signal (db). The value is between -20 and 10. */
+    /** @~english 0: The level of the dry signal (db). The value is between -20 and 10. */
+    /** @~chinese 0: 取值范围 [-20,10]，单位为 dB, 原始声音强度，即所谓的 dry signal。 */
     AUDIO_REVERB_DRY_LEVEL = 0, // (dB, [-20,10]), the level of the dry signal
-    /** 1: The level of the early reflection signal (wet signal) (dB). The value is between -20 and 10. */
+    /** @~english 1: The level of the early reflection signal (wet signal) (dB). The value is between -20 and 10. */
+    /** @~chinese 1: 取值范围 [-20,10]，单位为 dB, 早期反射信号强度，即所谓的 wet signal。 */
     AUDIO_REVERB_WET_LEVEL = 1, // (dB, [-20,10]), the level of the early reflection signal (wet signal)
-    /** 2: The room size of the reflection. The value is between 0 and 100. */
+    /** @~english 2: The room size of the reflection. The value is between 0 and 100. */
+    /** @~chinese 2: 所需混响效果的房间尺寸，一般房间越大，混响越强，取值范围 [0,100]。 */
     AUDIO_REVERB_ROOM_SIZE = 2, // ([0,100]), the room size of the reflection
-    /** 3: The length of the initial delay of the wet signal (ms). The value is between 0 and 200. */
+    /** @~english 3: The length of the initial delay of the wet signal (ms). The value is between 0 and 200. */
+    /** @~chinese 3: 取值范围 [0,200]，单位为毫秒, wet signal 的初始延迟长度，以毫秒为单位。 */
     AUDIO_REVERB_WET_DELAY = 3, // (ms, [0,200]), the length of the initial delay of the wet signal in ms
-    /** 4: The reverberation strength. The value is between 0 and 100. */
+    /** @~english 4: The reverberation strength. The value is between 0 and 100. */
+    /** @~chinese 4: 取值范围 [0,100], 混响持续的强度。 */
     AUDIO_REVERB_STRENGTH = 4, // ([0,100]), the strength of the reverberation
 };
 
-/**
+/** @~english
  * Local voice changer options.
  */
+/**
+ * @~chinese 预设的语音变声效果。
+ */
 enum VOICE_CHANGER_PRESET {
-    /**
+    /** @~english
      * The original voice (no local voice change).
      */
+    /** @~chinese
+     * 原声，即关闭语音变声。
+     */
     VOICE_CHANGER_OFF = 0x00000000, //Turn off the voice changer
-    /**
+    /** @~english
      * The voice of an old man.
      */
+    /** @~chinese
+     * 变声：老年男性。
+     */
     VOICE_CHANGER_OLDMAN = 0x00000001,
-    /**
+    /** @~english
      * The voice of a little boy.
      */
+     /** @~chinese
+     * 变声：小男孩。
+     */
     VOICE_CHANGER_BABYBOY = 0x00000002,
-    /**
+    /** @~english
      * The voice of a little girl.
      */
+     /** @~chinese
+     * 变声：小女孩。
+     */
     VOICE_CHANGER_BABYGIRL = 0x00000003,
-    /**
+    /** @~english
      * The voice of Zhu Bajie, a character in Journey to the West who has a voice like that of a growling bear.
      */
+    /** @~chinese
+     * 变声：猪八戒。
+     */
     VOICE_CHANGER_ZHUBAJIE = 0x00000004,
-    /**
+    /** @~english
      * The ethereal voice.
      */
+    /** @~chinese
+     * 变声：空灵。
+     */
     VOICE_CHANGER_ETHEREAL = 0x00000005,
-    /**
+    /** @~english
      * The voice of Hulk.
      */
+    /** @~chinese
+     * 变声：绿巨人。
+     */
     VOICE_CHANGER_HULK = 0x00000006,
-    /**
+    /** @~english
      * A more vigorous voice.
      */
+     /** @~chinese
+     * 美音：浑厚。
+     */
     VOICE_BEAUTY_VIGOROUS = 0x00100001,//7,
-    /**
+    /** @~english
      * A deeper voice.
      */
+     /** @~chinese
+     * 美音：低沉。
+     */
     VOICE_BEAUTY_DEEP = 0x00100002,
-    /**
+    /** @~english
      * A mellower voice.
      */
+     /** @~chinese
+     * 美音：圆润。
+     */
     VOICE_BEAUTY_MELLOW = 0x00100003,
-    /**
+    /** @~english
      * Falsetto.
      */
+     /** @~chinese
+     * 美音：假音。
+     */
     VOICE_BEAUTY_FALSETTO = 0x00100004,
-    /**
+    /** @~english
      * A fuller voice.
      */
+     /** @~chinese
+     * 美音：饱满。
+     */
     VOICE_BEAUTY_FULL = 0x00100005,
-    /**
+    /** @~english
      * A clearer voice.
      */
+     /** @~chinese
+     * 美音：清澈。
+     */
     VOICE_BEAUTY_CLEAR = 0x00100006,
-    /**
+    /** @~english
      * A more resounding voice.
      */
+     /** @~chinese
+     * 美音：高亢。
+     */
     VOICE_BEAUTY_RESOUNDING = 0x00100007,
-    /**
+    /** @~english
      * A more ringing voice.
      */
+     /** @~chinese
+     * 美音：嘹亮。
+     */
     VOICE_BEAUTY_RINGING = 0x00100008,
-    /**
+    /** @~english
      * A more spatially resonant voice.
      */
+     /** @~chinese
+     * 美音：空旷。
+     */
     VOICE_BEAUTY_SPACIAL = 0x00100009,
-    /**
+    /** @~english
      * (For male only) A more magnetic voice. Do not use it when the speaker is a female; otherwise, voice distortion occurs.
      */
+     /** @~chinese
+     * 语聊美声：磁性（男）。此枚举为男声定制化效果，不适用于女声。若女声使用此音效设置，则音频可能会产生失真。
+     */
     GENERAL_BEAUTY_VOICE_MALE_MAGNETIC = 0x00200001,
-    /**
+    /** @~english
      * (For female only) A fresher voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
      */
+     /** @~chinese
+     * 语聊美声：清新（女）。此枚举为女声定制化效果，不适用于男声。若男声使用此音效设置，则音频可能会产生失真。
+     */
     GENERAL_BEAUTY_VOICE_FEMALE_FRESH = 0x00200002,
-    /**
+    /** @~english
      * 	(For female only) A more vital voice. Do not use it when the speaker is a male; otherwise, voice distortion occurs.
+     */
+     /** @~chinese
+     * 语聊美声：活力（女）。此枚举为女声定制化效果，不适用于男声。若男声使用此音效设置，则音频可能会产生失真。
      */
     GENERAL_BEAUTY_VOICE_FEMALE_VITALITY = 0x00200003
 
 };
 
-/** Local voice reverberation presets. */
+/** @~english Local voice reverberation presets. */
+/** @~chinese 预设的语音混响效果。 */
 enum AUDIO_REVERB_PRESET {
-    /**
+    /** @~english
      * Turn off local voice reverberation, that is, to use the original voice.
      */
+     /** @~chinese
+     * 原声，即关闭本地语音混响。
+     */
     AUDIO_REVERB_OFF = 0x00000000, // Turn off audio reverb
-    /**
+    /** @~english
      * The reverberation style typical of a KTV venue (enhanced).
      */
+     /** @~chinese
+     * KTV（增强版）。
+     */
     AUDIO_REVERB_FX_KTV = 0x00100001,
-    /**
+    /** @~english
      * The reverberation style typical of a concert hall (enhanced).
      */
+     /** @~chinese
+     * 演唱会（增强版）。
+     */
     AUDIO_REVERB_FX_VOCAL_CONCERT = 0x00100002,
-    /**
+    /** @~english
      * The reverberation style typical of an uncle's voice.
      */
+     /** @~chinese
+     * 大叔。
+     */
     AUDIO_REVERB_FX_UNCLE = 0x00100003,
-    /**
+    /** @~english
      * The reverberation style typical of a little sister's voice.
      */
+     /** @~chinese
+     * 小姐姐。
+     */
     AUDIO_REVERB_FX_SISTER = 0x00100004,
-    /**
+    /** @~english
      * The reverberation style typical of a recording studio (enhanced).
      */
+     /** @~chinese
+     * 录音棚（增强版）。
+     */
     AUDIO_REVERB_FX_STUDIO = 0x00100005,
-    /**
+    /** @~english
      * The reverberation style typical of popular music (enhanced).
      */
+     /** @~chinese
+     * 流行（增强版）。
+     */
     AUDIO_REVERB_FX_POPULAR = 0x00100006,
-    /**
+    /** @~english
      * The reverberation style typical of R&B music (enhanced).
      */
+     /** @~chinese
+     * R&B（增强版）。
+     */
     AUDIO_REVERB_FX_RNB = 0x00100007,
-    /**
+    /** @~english
      * The reverberation style typical of the vintage phonograph.
      */
+     /** @~chinese
+     * 留声机。
+     */
     AUDIO_REVERB_FX_PHONOGRAPH = 0x00100008,
-    /**
+    /** @~english
      * The reverberation style typical of popular music.
      */
+     /** @~chinese
+     * 流行。
+     */
     AUDIO_REVERB_POPULAR = 0x00000001,
-    /**
+    /** @~english
      * The reverberation style typical of R&B music.
      */
+     /** @~chinese
+     * R&B。
+     */
     AUDIO_REVERB_RNB = 0x00000002,
-    /**
+    /** @~english
      * The reverberation style typical of rock music.
      */
+     /** @~chinese
+     * 摇滚。
+     */
     AUDIO_REVERB_ROCK = 0x00000003,
-    /**
+    /** @~english
      * The reverberation style typical of hip-hop music.
      */
+     /** @~chinese
+     * 嘻哈。
+     */
      AUDIO_REVERB_HIPHOP = 0x00000004,
-    /**
+    /** @~english
      * The reverberation style typical of a concert hall.
      */
+     /** @~chinese
+     * 演唱会。
+     */
     AUDIO_REVERB_VOCAL_CONCERT = 0x00000005,
-    /**
+    /** @~english
      * The reverberation style typical of a KTV venue.
      */
+     /** @~chinese
+     * KTV。
+     */
     AUDIO_REVERB_KTV = 0x00000006,
-    /**
+    /** @~english
      * The reverberation style typical of a recording studio.
      */
+     /** @~chinese
+     * 录音棚。
+     */
     AUDIO_REVERB_STUDIO = 0x00000007,
-    /**
+    /** @~english
      * The reverberation of the virtual stereo. The virtual stereo is an effect that renders the monophonic
      * audio as the stereo audio, so that all users in the channel can hear the stereo voice effect.
      * To achieve better virtual stereo reverberation, Agora recommends setting `profile` in `setAudioProfile`
      * as `AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5)`.
      */
+     /** @~chinese
+     * 虚拟立体声。虚拟立体声是指将单声道的音轨渲染出立体声的效果，使频道内所有用户听到有空间感的声音
+     * 效果。为达到更好的虚拟立体声效果，Agora 推荐在调用该方法前将 `setAudioProfile` 的 `profile` 参
+     * 数设置为 `AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO(5)`。
+     */
     AUDIO_VIRTUAL_STEREO = 0x00200001
 };
-/** Audio codec profile types. The default value is LC_ACC. */
+/** @~english Audio codec profile types. The default value is LC_ACC. */
+/** @~chinese 用于旁路推流的输出音频的编解码规格，默认为 LC-AAC。 */
 enum AUDIO_CODEC_PROFILE_TYPE
 {
-    /** 0: LC-AAC, which is the low-complexity audio codec type. */
+    /** @~english 0: LC-AAC, which is the low-complexity audio codec type. */
+    /** @~chinese 0: LC-AAC 规格，表示基本音频编码规格。*/
   AUDIO_CODEC_PROFILE_LC_AAC = 0,
-    /** 1: HE-AAC, which is the high-efficiency audio codec type. */
+    /** @~english 1: HE-AAC, which is the high-efficiency audio codec type. */
+    /** @~chinese 1: HE-AAC 规格，表示高效音频编码规格。*/
   AUDIO_CODEC_PROFILE_HE_AAC = 1,
 };
 
-/** Remote audio states.
+/** @~english Remote audio states.
+ */
+/** @~chinese 远端音频流状态。
  */
 enum REMOTE_AUDIO_STATE
 {
-      /** 0: The remote audio is in the default state, probably due to
+      /** @~english 0: The remote audio is in the default state, probably due to
        * #REMOTE_AUDIO_REASON_LOCAL_MUTED (3),
        * #REMOTE_AUDIO_REASON_REMOTE_MUTED (5), or
        * #REMOTE_AUDIO_REASON_REMOTE_OFFLINE (7).
        */
+       /** @~chinese 0: 远端音频流默认初始状态。在
+       * #REMOTE_AUDIO_REASON_LOCAL_MUTED (3)、
+       * #REMOTE_AUDIO_REASON_REMOTE_MUTED (5) 或
+       * #REMOTE_AUDIO_REASON_REMOTE_OFFLINE (7) 的情况下，会报告该状态。
+       */
       REMOTE_AUDIO_STATE_STOPPED = 0,  // Default state, audio is started or remote user disabled/muted audio stream
-      /** 1: The first remote audio packet is received.
+      /** @~english 1: The first remote audio packet is received.
+       */
+      /** @~chinese 1: 本地用户已接收远端音频首包。
        */
       REMOTE_AUDIO_STATE_STARTING = 1,  // The first audio frame packet has been received
-      /** 2: The remote audio stream is decoded and plays normally, probably
+      /** @~english 2: The remote audio stream is decoded and plays normally, probably
        * due to #REMOTE_AUDIO_REASON_NETWORK_RECOVERY (2),
        * #REMOTE_AUDIO_REASON_LOCAL_UNMUTED (4), or
        * #REMOTE_AUDIO_REASON_REMOTE_UNMUTED (6).
        */
+      /** @~chinese 2: 远端音频流正在解码，正常播放。在
+       * #REMOTE_AUDIO_REASON_NETWORK_RECOVERY (2)、
+       * #REMOTE_AUDIO_REASON_LOCAL_UNMUTED (4) 或
+       * #REMOTE_AUDIO_REASON_REMOTE_UNMUTED (6) 的情况下，会报告该状态。
+       */
       REMOTE_AUDIO_STATE_DECODING = 2,  // The first remote audio frame has been decoded or fronzen state ends
-      /** 3: The remote audio is frozen, probably due to
+      /** @~english 3: The remote audio is frozen, probably due to
        * #REMOTE_AUDIO_REASON_NETWORK_CONGESTION (1).
        */
+      /** @~chinese 3: 远端音频流卡顿。在 #REMOTE_AUDIO_REASON_NETWORK_CONGESTION (1)
+       * 的情况下，会报告该状态。
+       */
       REMOTE_AUDIO_STATE_FROZEN = 3,    // Remote audio is frozen, probably due to network issue
-      /** 4: The remote audio fails to start, probably due to
+      /** @~english 4: The remote audio fails to start, probably due to
        * #REMOTE_AUDIO_REASON_INTERNAL (0).
+       */
+      /** @~chinese 4: 远端音频流播放失败。在 #REMOTE_AUDIO_REASON_INTERNAL (0)
+       * 的情况下，会报告该状态。
        */
       REMOTE_AUDIO_STATE_FAILED = 4,    // Remote audio play failed
 };
 
-/** Remote audio state reasons.
+/** @~english Remote audio state reasons.
+ */
+/** @~chinese 远端音频流状态改变的具体原因。
  */
 enum REMOTE_AUDIO_STATE_REASON
 {
-      /** 0: Internal reasons.
+      /** @~english 0: Internal reasons.
+       */
+      /** @~chinese 0: 音频状态发生改变时，会报告该原因。
        */
       REMOTE_AUDIO_REASON_INTERNAL = 0,
-      /** 1: Network congestion.
+      /** @~english 1: Network congestion.
+       */
+      /** @~chinese 1: 网络阻塞。
        */
       REMOTE_AUDIO_REASON_NETWORK_CONGESTION = 1,
-      /** 2: Network recovery.
+      /** @~english 2: Network recovery.
+       */
+      /** @~chinese 2: 网络恢复正常。
        */
       REMOTE_AUDIO_REASON_NETWORK_RECOVERY = 2,
-      /** 3: The local user stops receiving the remote audio stream or
+      /** @~english 3: The local user stops receiving the remote audio stream or
        * disables the audio module.
        */
+      /** @~chinese 3: 本地用户停止接收远端音频流或本地用户禁用音频模块。
+       */
       REMOTE_AUDIO_REASON_LOCAL_MUTED = 3,
-      /** 4: The local user resumes receiving the remote audio stream or
+      /** @~english 4: The local user resumes receiving the remote audio stream or
        * enables the audio module.
        */
+      /** @~chinese 4: 本地用户恢复接收远端音频流或本地用户启用音频模块。
+       */
       REMOTE_AUDIO_REASON_LOCAL_UNMUTED = 4,
-      /** 5: The remote user stops sending the audio stream or disables the
+      /** @~english 5: The remote user stops sending the audio stream or disables the
        * audio module.
+       */
+      /** @~chinese 5: 远端用户停止发送音频流或远端用户禁用音频模块。
        */
       REMOTE_AUDIO_REASON_REMOTE_MUTED = 5,
-      /** 6: The remote user resumes sending the audio stream or enables the
+      /** @~english 6: The remote user resumes sending the audio stream or enables the
        * audio module.
        */
+      /** @~chinese 6: 远端用户恢复发送音频流或远端用户启用音频模块。
+       */
       REMOTE_AUDIO_REASON_REMOTE_UNMUTED = 6,
-      /** 7: The remote user leaves the channel.
+      /** @~english 7: The remote user leaves the channel.
+       */
+      /** @~chinese 7: 远端用户离开频道。
        */
       REMOTE_AUDIO_REASON_REMOTE_OFFLINE = 7,
 };
@@ -1674,384 +1878,590 @@ enum REMOTE_AUDIO_STATE_REASON
 //       REMOTE_VIDEO_STATE_FROZEN = 2,    // Remote video is frozen, probably due to network issue.
 // };
 
-/** The state of the remote video. */
+/** @~english The state of the remote video. */
+/** @~chinese 远端视频流状态。 */
 enum REMOTE_VIDEO_STATE {
-    /** 0: The remote video is in the default state, probably due to #REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED (3), #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5), or #REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE (7).
+    /** @~english 0: The remote video is in the default state, probably due to #REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED (3), #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5), or #REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE (7).
+     */
+     /** @~chinese 0: 远端视频默认初始状态。在 #REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED (3)、
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5) 或
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE (7) 的情况下，会报告该状态。
      */
     REMOTE_VIDEO_STATE_STOPPED = 0,
 
-    /** 1: The first remote video packet is received.
+    /** @~english 1: The first remote video packet is received.
+     */
+    /** @~chinese 1: 本地用户已接收远端视频首包。
      */
     REMOTE_VIDEO_STATE_STARTING = 1,
 
-    /** 2: The remote video stream is decoded and plays normally, probably due to #REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2), #REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED (4), #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6), or #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY (9).
+    /** @~english 2: The remote video stream is decoded and plays normally, probably due to #REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2), #REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED (4), #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6), or #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY (9).
+     */
+    /** @~chinese 2: 远端视频流正在解码，正常播放。在
+     * #REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY (2)、
+     * #REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED (4)、
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6) 或
+     * #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY (9) 的情况下，
+     * 会报告该状态。
      */
     REMOTE_VIDEO_STATE_DECODING = 2,
 
-    /** 3: The remote video is frozen, probably due to #REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION (1) or #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK (8).
+    /** @~english 3: The remote video is frozen, probably due to #REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION (1) or #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK (8).
+     */
+    /** @~chinese 3: 远端视频流卡顿。在
+     * #REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION (1) 或
+     * #REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK (8) 的情况下，会报告该状态。
      */
     REMOTE_VIDEO_STATE_FROZEN = 3,
 
-    /** 4: The remote video fails to start, probably due to #REMOTE_VIDEO_STATE_REASON_INTERNAL (0).
+    /** @~english 4: The remote video fails to start, probably due to #REMOTE_VIDEO_STATE_REASON_INTERNAL (0).
+     */
+    /** @~chinese 4: 远端视频流播放失败。在
+     * #REMOTE_VIDEO_STATE_REASON_INTERNAL (0) 的情况下，会报告该状态。
      */
     REMOTE_VIDEO_STATE_FAILED = 4
 };
 
-/** The reason of the remote video state change. */
+/** @~english The reason of the remote video state change. */
+/** @~chinese 远端视频流状态切换原因。 */
 enum REMOTE_VIDEO_STATE_REASON {
-    /** 0: Internal reasons.
+    /** @~english 0: Internal reasons.
+     */
+    /** @~chinese0: 视频状态发生改变时，会报告该原因。
      */
     REMOTE_VIDEO_STATE_REASON_INTERNAL = 0,
 
-    /** 1: Network congestion.
+    /** @~english 1: Network congestion.
+     */
+    /** @~chinese1: 网络阻塞。
      */
     REMOTE_VIDEO_STATE_REASON_NETWORK_CONGESTION = 1,
 
-    /** 2: Network recovery.
+    /** @~english 2: Network recovery.
+     */
+    /** @~chinese 2: 网络恢复正常。
      */
     REMOTE_VIDEO_STATE_REASON_NETWORK_RECOVERY = 2,
 
-    /** 3: The local user stops receiving the remote video stream or disables the video module.
+    /** @~english 3: The local user stops receiving the remote video stream or disables the video module.
+     */
+    /** @~chinese 3: 本地用户停止接收远端视频流或本地用户禁用视频模块。
      */
     REMOTE_VIDEO_STATE_REASON_LOCAL_MUTED = 3,
 
-    /** 4: The local user resumes receiving the remote video stream or enables the video module.
+    /** @~english 4: The local user resumes receiving the remote video stream or enables the video module.
+     */
+    /** @~chinese 4: 本地用户恢复接收远端视频流或本地用户启动视频模块。
      */
     REMOTE_VIDEO_STATE_REASON_LOCAL_UNMUTED = 4,
 
-    /** 5: The remote user stops sending the video stream or disables the video module.
+    /** @~english 5: The remote user stops sending the video stream or disables the video module.
+     */
+    /** @~chinese 5: 远端用户停止发送视频流或远端用户禁用视频模块。
      */
     REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED = 5,
 
-    /** 6: The remote user resumes sending the video stream or enables the video module.
+    /** @~english 6: The remote user resumes sending the video stream or enables the video module.
+     */
+    /** @~chinese 6: 远端用户恢复发送视频流或远端用户启用视频模块。
      */
     REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED = 6,
 
-    /** 7: The remote user leaves the channel.
+    /** @~english 7: The remote user leaves the channel.
+     */
+    /** @~chinese 7: 远端用户离开频道。
      */
     REMOTE_VIDEO_STATE_REASON_REMOTE_OFFLINE = 7,
 
-    /** 8: The remote media stream falls back to the audio-only stream due to poor network conditions.
+    /** @~english 8: The remote media stream falls back to the audio-only stream due to poor network conditions.
+     */
+    /** @~chinese 8: 弱网情况下，远端音视频流回退为音频流。
      */
     REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK = 8,
 
-    /** 9: The remote media stream switches back to the video stream after the network conditions improve.
+    /** @~english 9: The remote media stream switches back to the video stream after the network conditions improve.
+     */
+    /** @~chinese 9: 网络情况改善时，远端音频流恢复为音视频流。
      */
     REMOTE_VIDEO_STATE_REASON_AUDIO_FALLBACK_RECOVERY = 9
 
 };
 
-/** Video frame rates. */
+/** @~english Video frame rates. */
+/** @~chinese 视频帧率。 */
 enum FRAME_RATE
 {
-      /** 1: 1 fps */
+      /** @~english 1: 1 fps */
+      /** @~chinese 1: 1 fps */
     FRAME_RATE_FPS_1 = 1,
-        /** 7: 7 fps */
+        /** @~english 7: 7 fps */
+        /** @~chinese 7: 7 fps */
     FRAME_RATE_FPS_7 = 7,
-      /** 10: 10 fps */
+      /** @~english 10: 10 fps */
+      /** @~chinese 10: 10 fps */
     FRAME_RATE_FPS_10 = 10,
-    /** 15: 15 fps */
+    /** @~english 15: 15 fps */
+    /** @~chinese 15: 15 fps */
     FRAME_RATE_FPS_15 = 15,
-        /** 24: 24 fps */
+        /** @~english 24: 24 fps */
+        /** @~chinese 24: 24 fps */
     FRAME_RATE_FPS_24 = 24,
-    /** 30: 30 fps */
+    /** @~english 30: 30 fps */
+    /** @~chinese 30: 30 fps */
     FRAME_RATE_FPS_30 = 30,
-    /** 60: 60 fps (Windows and macOS only) */
+    /** @~english 60: 60 fps (Windows and macOS only) */
+    /** @~chinese 60: 60 fps 仅适用于 Windows 和 macOS 平台。 */
     FRAME_RATE_FPS_60 = 60,
 };
 
-/** Video output orientation modes.
+/** @~english Video output orientation modes.
+ */
+/** @~chinese 视频编码的方向模式。
  */
 enum ORIENTATION_MODE {
-  /** 0: (Default) Adaptive mode.
+  /** @~english 0: (Default) Adaptive mode.
 
    The video encoder adapts to the orientation mode of the video input device.
 
    - If the width of the captured video from the SDK is greater than the height, the encoder sends the video in landscape mode. The encoder also sends the rotational information of the video, and the receiver uses the rotational information to rotate the received video.
    - When you use a custom video source, the output video from the encoder inherits the orientation of the original video. If the original video is in portrait mode, the output video from the encoder is also in portrait mode. The encoder also sends the rotational information of the video to the receiver.
    */
+  /** @~chinese 0: （默认）该模式下 SDK 输出的视频方向与采集到的视频方向一致。接收端会根据收到的视频旋转信息对视频进行旋转。该模式适用于接收端可以调整视频方向的场景。
+
+   - 如果采集的视频是横屏模式，则输出的视频也是横屏模式；
+   - 如果采集的视频是竖屏模式，则输出的视频也是竖屏模式。
+
+   */
     ORIENTATION_MODE_ADAPTIVE = 0,
-    /** 1: Landscape mode.
+    /** @~english 1: Landscape mode.
 
      The video encoder always sends the video in landscape mode. The video encoder rotates the original video before sending it and the rotational infomation is 0. This mode applies to scenarios involving CDN live streaming.
      */
+    /** @~chinese 1: 该模式下 SDK 固定输出风景（横屏）模式的视频。
+    如果采集到的视频是竖屏模式，则视频编码器会对其进行裁剪。该模式适用于接收端无法调整视频方向的场景，如旁路推流。
+    */
     ORIENTATION_MODE_FIXED_LANDSCAPE = 1,
-    /** 2: Portrait mode.
+    /** @~english 2: Portrait mode.
 
      The video encoder always sends the video in portrait mode. The video encoder rotates the original video before sending it and the rotational infomation is 0. This mode applies to scenarios involving CDN live streaming.
      */
+    /** @~chinese 2: 该模式下 SDK 固定输出人像（竖屏）模式的视频。
+    如果采集到的视频是横屏模式，则视频编码器会对其进行裁剪。该模式适用于接收端无法调整视频方向的场景，如旁路推流。 */
+
     ORIENTATION_MODE_FIXED_PORTRAIT = 2,
 };
 
-/** Video degradation preferences when the bandwidth is a constraint. */
+/** @~english Video degradation preferences when the bandwidth is a constraint. */
+/** @~chinese 带宽受限时的视频编码降级偏好 */
 enum DEGRADATION_PREFERENCE {
-    /** 0: (Default) Degrade the frame rate in order to maintain the video quality. */
+    /** @~english 0: (Default) Degrade the frame rate in order to maintain the video quality. */
+    /** @~chinese 0:（默认）降低编码帧率以保证视频质量 */
     MAINTAIN_QUALITY = 0,
-    /** 1: Degrade the video quality in order to maintain the frame rate. */
+    /** @~english 1: Degrade the video quality in order to maintain the frame rate. */
+    /** @~chinese 1: 降低视频质量以保证编码帧率 */
     MAINTAIN_FRAMERATE = 1,
-    /** 2: (For future use) Maintain a balance between the frame rate and video quality. */
+    /** @~english 2: (For future use) Maintain a balance between the frame rate and video quality. */
+    /** @~chinese 2: 预留参数，暂不支持 */
     MAINTAIN_BALANCED = 2,
 };
 
-/** Stream fallback options. */
+/** @~english Stream fallback options. */
+/** @~chinese 音视频流回退处理选项。 */
 enum STREAM_FALLBACK_OPTIONS
 {
-    /** 0: No fallback behavior for the local/remote video stream when the uplink/downlink network conditions are poor. The quality of the stream is not guaranteed. */
+    /** @~english 0: No fallback behavior for the local/remote video stream when the uplink/downlink network conditions are poor. The quality of the stream is not guaranteed. */
+    /** @~chinese 0: 上行/下行网络较弱时，不对音视频流作回退处理，但不能保证音视频流的质量。 */
     STREAM_FALLBACK_OPTION_DISABLED = 0,
-    /** 1: Under poor downlink network conditions, the remote video stream, to which you subscribe, falls back to the low-stream (low resolution and low bitrate) video. You can set this option only in the \ref IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" method. Nothing happens when you set this in the \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" method. */
+    /** @~english 1: Under poor downlink network conditions, the remote video stream, to which you subscribe, falls back to the low-stream (low resolution and low bitrate) video. You can set this option only in the \ref IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" method. Nothing happens when you set this in the \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" method. */
+    /** @~chinese 1: 在下行网络条件较差时只接收视频小流（低分辨率、低码率视频流）。该选项只对 \ref agora::rtc::IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" 有效，对 \ref agora::rtc::IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" 方法无效。 */
     STREAM_FALLBACK_OPTION_VIDEO_STREAM_LOW = 1,
-    /** 2: Under poor uplink network conditions, the published video stream falls back to audio only.
-
+    /** @~english 2: Under poor uplink network conditions, the published video stream falls back to audio only.
+    /** @~chinese 2: 上行/下行网络较弱时，先尝试只接收视频小流（低分辨率、低码率视频流）；如果网络环境无法显示视频，则再回退到只接收远端订阅的音频流。 */
     Under poor downlink network conditions, the remote video stream, to which you subscribe, first falls back to the low-stream (low resolution and low bitrate) video; and then to an audio-only stream if the network conditions worsen.*/
     STREAM_FALLBACK_OPTION_AUDIO_ONLY = 2,
 };
 
- /** Camera capturer configuration.
+ /** @~english Camera capturer configuration.
+ */
+ /** @~chinese 摄像头采集偏好。
  */
  enum CAPTURER_OUTPUT_PREFERENCE
  {
-     /** 0: (Default) self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
+     /** @~english 0: (Default) self-adapts the camera output parameters to the system performance and network conditions to balance CPU consumption and video preview quality.
+     */
+     /** @~chinese 0:（默认）自动调整采集参数。SDK 根据实际的采集设备性能及网络情况，选择合适的摄像头输出参数，在设备性能及视频预览质量之间维持平衡。
      */
      CAPTURER_OUTPUT_PREFERENCE_AUTO = 0,
-     /** 1: Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration".
+     /** @~english 1: Prioritizes the system performance. The SDK chooses the dimension and frame rate of the local camera capture closest to those set by \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration".
+     */
+     /** @~chinese 1: 优先保证设备性能。SDK 根据用户在 \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 中设置编码器的分辨率和帧率，选择最接近的摄像头输出参数，从而保证设备性能。在这种情况下，预览质量接近于编码器的输出质量。
      */
      CAPTURER_OUTPUT_PREFERENCE_PERFORMANCE = 1,
-     /** 2: Prioritizes the local preview quality. The SDK chooses higher camera output parameters to improve the local video preview quality. This option requires extra CPU and RAM usage for video pre-processing.
+     /** @~english 2: Prioritizes the local preview quality. The SDK chooses higher camera output parameters to improve the local video preview quality. This option requires extra CPU and RAM usage for video pre-processing.
+     */
+     /** @~chinese 2: 优先保证视频预览质量。SDK 选择较高的摄像头输出参数，从而提高预览视频的质量。在这种情况下，会消耗更多的 CPU 及内存做视频前处理。
      */
      CAPTURER_OUTPUT_PREFERENCE_PREVIEW = 2,
  };
 
-/** The priority of the remote user.
+/** @~english The priority of the remote user.
  */
+/** @~chinese 远端用户的需求优先级。如果将某个用户的优先级设为高，那么发给这个用户的音视频流的优先级就会高于其他用户。
+*/
 enum PRIORITY_TYPE
 {
-  /** 50: The user's priority is high.
+  /** @~english 50: The user's priority is high.
+   */
+  /** @~chinese 50: 用户需求优先级为高。
    */
   PRIORITY_HIGH = 50,
-  /** 100: (Default) The user's priority is normal.
+  /** @~english 100: (Default) The user's priority is normal.
+  */
+  /** @~chinese 100:（默认）用户需求优先级为正常。
   */
   PRIORITY_NORMAL = 100,
 };
 
-/** Connection states. */
+/** @~english Connection states. */
+/** @~chinese 网络连接状态。 */
 enum CONNECTION_STATE_TYPE
 {
-  /** 1: The SDK is disconnected from Agora's edge server.
+  /** @~english 1: The SDK is disconnected from Agora's edge server.
 
    - This is the initial state before calling the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method.
    - The SDK also enters this state when the application calls the \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" method.
    */
+  /** @~chinese 1: 网络连接断开。
+
+   该状态表示 SDK 处于:
+   - 调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 加入频道前的初始化阶段;
+   - 或调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 后的离开频道阶段。
+  */
   CONNECTION_STATE_DISCONNECTED = 1,
-  /** 2: The SDK is connecting to Agora's edge server.
+  /** @~english 2: The SDK is connecting to Agora's edge server.
 
    - When the application calls the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method, the SDK starts to establish a connection to the specified channel, triggers the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback, and switches to the #CONNECTION_STATE_CONNECTING state.
    - When the SDK successfully joins the channel, it triggers the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback and switches to the #CONNECTION_STATE_CONNECTED state.
    - After the SDK joins the channel and when it finishes initializing the media engine, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" callback.
    */
+  /** @~chinese 2: 建立网络连接中。
+
+   - 该状态表示 SDK 在调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 后正在与指定的频道建立连接。
+   - 如果成功加入频道，App 会收到 \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调，通知当前网络状态变成 #CONNECTION_STATE_CONNECTED 。
+   - 建立连接后，SDK 还会初始化媒体，一切就绪后会回调 \ref agora::rtc::IRtcEngineEventHandler::onJoinChannelSuccess "onJoinChannelSuccess" 。
+   */
   CONNECTION_STATE_CONNECTING = 2,
-  /** 3: The SDK is connected to Agora's edge server and has joined a channel. You can now publish or subscribe to a media stream in the channel.
+  /** @~english 3: The SDK is connected to Agora's edge server and has joined a channel. You can now publish or subscribe to a media stream in the channel.
 
    If the connection to the channel is lost because, for example, if the network is down or switched, the SDK automatically tries to reconnect and triggers:
    - The \ref agora::rtc::IRtcEngineEventHandler::onConnectionInterrupted "onConnectionInterrupted" callback (deprecated).
    - The \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback and switches to the #CONNECTION_STATE_RECONNECTING state.
    */
+  /** @~chinese 3: 网络已连接。
+
+   该状态表示用户已经加入频道，可以在频道内发布或订阅媒体流。
+
+   如果因网络断开或切换而导致 SDK 与频道的连接中断，SDK 会自动重连，此时应用程序会收到：
+   - \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调，通知当前网络状态变成 #CONNECTION_STATE_RECONNECTING 。
+   - 同时会收到 \ref agora::rtc::IRtcEngineEventHandler::onConnectionInterrupted "onConnectionInterrupted" 回调（已废弃）。
+   */
   CONNECTION_STATE_CONNECTED = 3,
-  /** 4: The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
+  /** @~english 4: The SDK keeps rejoining the channel after being disconnected from a joined channel because of network issues.
 
    - If the SDK cannot rejoin the channel within 10 seconds after being disconnected from Agora's edge server, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onConnectionLost "onConnectionLost" callback, stays in the #CONNECTION_STATE_RECONNECTING state, and keeps rejoining the channel.
    - If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callback, switches to the #CONNECTION_STATE_FAILED state, and stops rejoining the channel.
    */
+  /** @~chinese 4: 重新建立网络连接中。
+
+   该状态表示 SDK 之前曾加入过频道，但因网络等原因连接中断了，此时 SDK 会自动尝试重新接入频道。
+
+   - 如果 SDK 无法在 10 秒内重新加入频道，则 \ref agora::rtc::IRtcEngineEventHandler::onConnectionLost "onConnectionLost" 会被触发，SDK 会一直保持在 #CONNECTION_STATE_RECONNECTING 的状态，并不断尝试重新加入频道。
+   - 如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，则应用程序会收到 \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调，通知的网络状态进入 #CONNECTION_STATE_FAILED ，SDK 停止尝试重连。
+   */
   CONNECTION_STATE_RECONNECTING = 4,
-  /** 5: The SDK fails to connect to Agora's edge server or join the channel.
+  /** @~english 5: The SDK fails to connect to Agora's edge server or join the channel.
 
    You must call the \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" method to leave this state, and call the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method again to rejoin the channel.
 
    If the SDK is banned from joining the channel by Agora's edge server (through the RESTful API), the SDK triggers the \ref agora::rtc::IRtcEngineEventHandler::onConnectionBanned "onConnectionBanned" (deprecated) and \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" callbacks.
    */
+  /** @~chinese 5: 网络连接失败。
+
+   该状态表示 SDK 已不再尝试重新加入频道，用户必须要调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 离开频道。如果用户还想重新加入频道，则需要再次调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 。
+
+   如果 SDK 因服务器端使用 RESTful API 禁止加入频道，则应用程序会收到 \ref agora::rtc::IRtcEngineEventHandler::onConnectionBanned "onConnectionBanned" 回调（已废弃）和 \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged" 回调。
+   */
   CONNECTION_STATE_FAILED = 5,
 };
 
-/** Reasons for a connection state change. */
+/** @~english Reasons for a connection state change. */
+/** @~chinese 引起网络连接状态发生改变的原因。 */
 enum CONNECTION_CHANGED_REASON_TYPE
 {
-  /** 0: The SDK is connecting to Agora's edge server. */
+  /** @~english 0: The SDK is connecting to Agora's edge server. */
+  /** @~chinese 0: 建立网络连接中。*/
   CONNECTION_CHANGED_CONNECTING = 0,
-  /** 1: The SDK has joined the channel successfully. */
+  /** @~english 1: The SDK has joined the channel successfully. */
+  /** @~chinese 1: 成功加入频道。*/
   CONNECTION_CHANGED_JOIN_SUCCESS = 1,
-  /** 2: The connection between the SDK and Agora's edge server is interrupted. */
+  /** @~english 2: The connection between the SDK and Agora's edge server is interrupted. */
+  /** @~chinese 2: 网络连接中断。 */
   CONNECTION_CHANGED_INTERRUPTED = 2,
-  /** 3: The connection between the SDK and Agora's edge server is banned by Agora's edge server. */
+  /** @~english 3: The connection between the SDK and Agora's edge server is banned by Agora's edge server. */
+  /** @~chinese 3: 网络连接被服务器禁止。可能服务端踢人场景时会报这个错。*/
   CONNECTION_CHANGED_BANNED_BY_SERVER = 3,
-  /** 4: The SDK fails to join the channel for more than 20 minutes and stops reconnecting to the channel. */
+  /** @~english 4: The SDK fails to join the channel for more than 20 minutes and stops reconnecting to the channel. */
+  /** @~chinese 4: 加入频道失败。SDK 在尝试加入频道 20 分钟后还是没能加入频道，会返回该状态，并停止尝试重连。*/
   CONNECTION_CHANGED_JOIN_FAILED = 4,
-  /** 5: The SDK has left the channel. */
+  /** @~english 5: The SDK has left the channel. */
+  /** @~chinese 5: 离开频道。*/
   CONNECTION_CHANGED_LEAVE_CHANNEL = 5,
-  /** 6: The connection failed since Appid is not valid. */
+  /** @~english 6: The connection failed since Appid is not valid. */
+  /** @~chinese 6: 不是有效的 APP ID。请更换有效的 APP ID 重新加入频道。 */
   CONNECTION_CHANGED_INVALID_APP_ID = 6,
-  /** 7: The connection failed since channel name is not valid. */
+  /** @~english 7: The connection failed since channel name is not valid. */
+  /** @~chinese 7: 不是有效的频道名。请更换有效的频道名重新加入频道。 */
   CONNECTION_CHANGED_INVALID_CHANNEL_NAME = 7,
-  /** 8: The connection failed since token is not valid, possibly because:
+  /** @~english 8: The connection failed since token is not valid, possibly because:
 
    - The App Certificate for the project is enabled in Console, but you do not use Token when joining the channel. If you enable the App Certificate, you must use a token to join the channel.
    - The uid that you specify in the \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method is different from the uid that you pass for generating the token.
    */
+  /** @~chinese 8: 生成的 Token 无效。一般有以下原因：
+
+   - 在控制台上启用了 App Certificate，但加入频道未使用 Token。当启用了 App Certificate，必须使用 Token。
+   - 在调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 加入频道时指定的 uid 与生成 Token 时传入的 uid 不一致。
+   */
   CONNECTION_CHANGED_INVALID_TOKEN = 8,
-  /** 9: The connection failed since token is expired. */
+  /** @~english 9: The connection failed since token is expired. */
+  /** @~chinese 9: 当前使用的 Token 过期，不再有效，需要重新在你的服务端申请生成 Token。 */
   CONNECTION_CHANGED_TOKEN_EXPIRED = 9,
-  /** 10: The connection is rejected by server. */
+  /** @~english 10: The connection is rejected by server. */
+  /** @~chinese 10: 此用户被服务器禁止。一般有以下原因：
+   * - 用户已进入频道，再次调用加入频道的 API，例如 \ref IRtcEngine::joinChannel "joinChannel"，会返回此状态。停止调用该方法即可。
+   * - 用户在调用 \ref IRtcEngine::startEchoTest "startEchoTest" 进行通话测试时尝试加入频道。等待通话测试结束后再加入频道即可。
+   */
   CONNECTION_CHANGED_REJECTED_BY_SERVER = 10,
-  /** 11: The connection changed to reconnecting since SDK has set a proxy server. */
+  /** @~english 11: The connection changed to reconnecting since SDK has set a proxy server. */
+  /** @~chinese 11: 由于设置了代理服务器，SDK 尝试重连。 */
   CONNECTION_CHANGED_SETTING_PROXY_SERVER = 11,
-  /** 12: When SDK is in connection failed, the renew token operation will make it connecting. */
+  /** @~english 12: When SDK is in connection failed, the renew token operation will make it connecting. */
+  /** @~chinese 12: 更新 Token 引起网络连接状态改变。 */
   CONNECTION_CHANGED_RENEW_TOKEN = 12,
-  /** 13: The IP Address of SDK client has changed. i.e., Network type or IP/Port changed by network operator might change client IP address. */
+  /** @~english 13: The IP Address of SDK client has changed. i.e., Network type or IP/Port changed by network operator might change client IP address. */
+  /** @~chinese 13: 客户端 IP 地址变更，可能是由于网络类型，或网络运营商的 IP 或端口发生改变引起。 */
   CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED = 13,
-  /** 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to CONNECTION_STATE_RECONNECTING(4). */
+  /** @~english 14: Timeout for the keep-alive of the connection between the SDK and Agora's edge server. The connection state changes to CONNECTION_STATE_RECONNECTING(4). */
+  /** @~chinese 14: SDK 和服务器连接保活超时，进入自动重连状态 CONNECTION_STATE_RECONNECTING(4)。 */
   CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT = 14,
 };
 
-/** Network type. */
+/** @~english Network type. */
+/** @~chinese 网络连接类型 */
 enum NETWORK_TYPE
 {
-  /** -1: The network type is unknown. */
+  /** @~english -1: The network type is unknown. */
+  /** @~chinese -1: 网络连接类型未知。 */
   NETWORK_TYPE_UNKNOWN = -1,
-  /** 0: The SDK disconnects from the network. */
+  /** @~english 0: The SDK disconnects from the network. */
+  /** @~chinese 0: 网络连接已断开。 */
   NETWORK_TYPE_DISCONNECTED = 0,
-  /** 1: The network type is LAN. */
+  /** @~english 1: The network type is LAN. */
+  /** @~chinese 1: 网络类型为 LAN。 */
   NETWORK_TYPE_LAN = 1,
-  /** 2: The network type is Wi-Fi(including hotspots). */
+  /** @~english 2: The network type is Wi-Fi(including hotspots). */
+  /** @~chinese 2: 网络类型为 Wi-Fi(包含热点）。 */
   NETWORK_TYPE_WIFI = 2,
-  /** 3: The network type is mobile 2G. */
+  /** @~english 3: The network type is mobile 2G. */
+  /** @~chinese 3: 网络类型为 2G 移动网络。 */
   NETWORK_TYPE_MOBILE_2G = 3,
-  /** 4: The network type is mobile 3G. */
+  /** @~english 4: The network type is mobile 3G. */
+  /** @~chinese 4: 网络类型为 3G 移动网络。 */
   NETWORK_TYPE_MOBILE_3G = 4,
-  /** 5: The network type is mobile 4G. */
+  /** @~english 5: The network type is mobile 4G. */
+  /** @~chinese 5: 网络类型为 4G 移动网络。 */
   NETWORK_TYPE_MOBILE_4G = 5,
 };
 
-/** States of the last-mile network probe test. */
+/** @~english States of the last-mile network probe test. */
+/** @~chinese Last mile 质量探测结果的状态。 */
 enum LASTMILE_PROBE_RESULT_STATE {
-  /** 1: The last-mile network probe test is complete. */
+  /** @~english 1: The last-mile network probe test is complete. */
+  /** @~chinese 1: 表示本次 last mile 质量探测的结果是完整的。 */
   LASTMILE_PROBE_RESULT_COMPLETE = 1,
-  /** 2: The last-mile network probe test is incomplete and the bandwidth estimation is not available, probably due to limited test resources. */
+  /** @~english 2: The last-mile network probe test is incomplete and the bandwidth estimation is not available, probably due to limited test resources. */
+  /** @~chinese 2: 表示本次 last mile 质量探测未进行带宽预测，因此结果不完整。一个可能的原因是测试资源暂时受限。 */
   LASTMILE_PROBE_RESULT_INCOMPLETE_NO_BWE = 2,
-  /** 3: The last-mile network probe test is not carried out, probably due to poor network conditions. */
+  /** @~english 3: The last-mile network probe test is not carried out, probably due to poor network conditions. */
+  /** @~chinese 3: 未进行 last mile 质量探测。一个可能的原因是网络连接中断。 */
   LASTMILE_PROBE_RESULT_UNAVAILABLE = 3
 };
-/** Audio output routing. */
+/** @~english Audio output routing. */
+/** @~chinese 语音路由 */
 enum AUDIO_ROUTE_TYPE {
-    /** Default.
+    /** @~english Default.
      */
+    /** @~chinese -1: 使用默认的语音路由 */
     AUDIO_ROUTE_DEFAULT = -1,
-    /** Headset.
+    /** @~english Headset.
      */
+    /** @~chinese 0: 使用耳机为语音路由 */
     AUDIO_ROUTE_HEADSET = 0,
-    /** Earpiece.
+    /** @~english Earpiece.
      */
+    /** @~chinese 1: 使用听筒为语音路由 */
     AUDIO_ROUTE_EARPIECE = 1,
-    /** Headset with no microphone.
+    /** @~english Headset with no microphone.
      */
+    /** @~chinese 2: 使用不带麦的耳机为语音路由 */
     AUDIO_ROUTE_HEADSET_NO_MIC = 2,
-    /** Speakerphone.
+    /** @~english Speakerphone.
      */
+    /** @~chinese 3: 使用手机的扬声器为语音路由 */
     AUDIO_ROUTE_SPEAKERPHONE = 3,
-    /** Loudspeaker.
+    /** @~english Loudspeaker.
      */
+    /** @~chinese 4: 使用外接的扬声器为语音路由 */
     AUDIO_ROUTE_LOUDSPEAKER = 4,
-    /** Bluetooth headset.
+    /** @~english Bluetooth headset.
      */
+    /** @~chinese 5: 使用蓝牙耳机为语音路由 */
     AUDIO_ROUTE_BLUETOOTH = 5,
-    /** USB peripheral.
+    /** @~english USB peripheral.
      */
+    /** @~chinese 6: 使用 USB 外围设备为语音路由（仅适用于 macOS） */
     AUDIO_ROUTE_USB = 6,
-    /** HDMI peripheral.
+    /** @~english HDMI peripheral.
      */
+    /** @~chinese 7: 使用 HDMI 外围设备为语音路由（仅适用于 macOS） */
     AUDIO_ROUTE_HDMI = 7,
-    /** DisplayPort peripheral.
+    /** @~english DisplayPort peripheral.
      */
+    /** @~chinese 8: 使用 DisplayPort 外围设备为语音路由（仅适用于 macOS） */
     AUDIO_ROUTE_DISPLAYPORT = 8,
-    /** Apple AirPlay.
+    /** @~english Apple AirPlay.
      */
+    /** @~chinese 9: 使用 Apple AirPlay 为语音路由（仅适用于 macOS） */
     AUDIO_ROUTE_AIRPLAY = 9,
 };
 
 #if (defined(__APPLE__) && TARGET_OS_IOS)
-/** Audio session restriction. */
+/** @~english Audio session restriction. */
+/** @~chinese 音频会话控制权限
+
+Agora SDK 对 Audio Session 的控制权限
+*/
 enum AUDIO_SESSION_OPERATION_RESTRICTION {
-    /** No restriction, the SDK has full control of the audio session operations. */
+    /** @~english No restriction, the SDK has full control of the audio session operations. */
+    /** @~chinese 没有限制，SDK 可以完全控制 Audio Session 操作。 */
     AUDIO_SESSION_OPERATION_RESTRICTION_NONE = 0,
-    /** The SDK does not change the audio session category. */
+    /** @~english The SDK does not change the audio session category. */
+    /** @~chinese SDK 不能更改 Audio Session 的 category。 */
     AUDIO_SESSION_OPERATION_RESTRICTION_SET_CATEGORY = 1,
-    /** The SDK does not change any setting of the audio session (category, mode, categoryOptions). */
+    /** @~english The SDK does not change any setting of the audio session (category, mode, categoryOptions). */
+    /** @~chinese SDK 不能更改 Audio Session 的 category，mode，categoryOptions。 */
     AUDIO_SESSION_OPERATION_RESTRICTION_CONFIGURE_SESSION = 1 << 1,
-    /** The SDK keeps the audio session active when leaving a channel. */
+    /** @~english The SDK keeps the audio session active when leaving a channel. */
+    /** @~chinese 离开某个频道时，SDK 会保持 Audio Session 处于活动状态。 */
     AUDIO_SESSION_OPERATION_RESTRICTION_DEACTIVATE_SESSION = 1 << 2,
-    /** The SDK does not configure the audio session anymore. */
+    /** @~english The SDK does not configure the audio session anymore. */
+    /** @~chinese 限制 SDK 对 Audio Session 进行任何操作，SDK 将不能再对 Audio Session 进行任何配置。 */
     AUDIO_SESSION_OPERATION_RESTRICTION_ALL = 1 << 7,
 };
 #endif
 
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
 enum CAMERA_DIRECTION {
-    /** The rear camera. */
+    /** @~english The rear camera. */
+    /** @~chinese 0: 后置摄像头 */
     CAMERA_REAR = 0,
-    /** The front camera. */
+    /** @~english The front camera. */
+    /** @~chinese 1: 前置摄像头 */
     CAMERA_FRONT = 1,
 };
 #endif
 
-/** The uplink or downlink last-mile network probe test result. */
+/** @~english The uplink or downlink last-mile network probe test result. */
+/** @~chinese 上行或下行 Last mile 网络质量探测结果。 */
 struct LastmileProbeOneWayResult {
-  /** The packet loss rate (%). */
+  /** @~english The packet loss rate (%). */
+  /** @~chinese 丢包率。 */
   unsigned int packetLossRate;
-  /** The network jitter (ms). */
+  /** @~english The network jitter (ms). */
+  /** @~chinese 网络抖动 (ms)。*/
   unsigned int jitter;
-  /* The estimated available bandwidth (bps). */
+  /* @~english The estimated available bandwidth (bps). */
+  /** @~chinese 可用网络带宽预估 (bps)。 */
   unsigned int availableBandwidth;
 };
 
-/** The uplink and downlink last-mile network probe test result. */
+/** @~english The uplink and downlink last-mile network probe test result. */
+/** @~chinese 上行或下行 Last mile 网络质量探测结果。 */
 struct LastmileProbeResult{
-  /** The state of the probe test. */
+  /** @~english The state of the probe test. */
+  /** @~chinese Last mile 质量探测结果的状态。详见: #LASTMILE_PROBE_RESULT_STATE 。
+    */
   LASTMILE_PROBE_RESULT_STATE state;
-  /** The uplink last-mile network probe test result. */
+  /** @~english The uplink last-mile network probe test result. */
+  /** @~chinese 上行网络质量报告。详见: LastmileProbeOneWayResult 。
+    */
   LastmileProbeOneWayResult uplinkReport;
-  /** The downlink last-mile network probe test result. */
+  /** @~english The downlink last-mile network probe test result. */
+  /** @~chinese 下行网络质量报告。详见: LastmileProbeOneWayResult 。
+    */
   LastmileProbeOneWayResult downlinkReport;
-  /** The round-trip delay time (ms). */
+  /** @~english The round-trip delay time (ms). */
+  /** @~chinese 往返时延 (ms)。 */
   unsigned int rtt;
 };
 
-/** Configurations of the last-mile network probe test. */
+/** @~english Configurations of the last-mile network probe test. */
+/** @~chinese Last mile 网络探测配置。 */
 struct LastmileProbeConfig {
-  /** Sets whether or not to test the uplink network. Some users, for example, the audience in a Live-broadcast channel, do not need such a test:
+  /** @~english Sets whether or not to test the uplink network. Some users, for example, the audience in a Live-broadcast channel, do not need such a test:
   - true: test.
   - false: do not test. */
+  /** @~chinese 是否探测上行网络。有些用户，如直播频道中的普通观众，不需要进行网络探测:
+  - true: 探测。
+  - false: 不探测。 */
   bool probeUplink;
-  /** Sets whether or not to test the downlink network:
+  /** @~english Sets whether or not to test the downlink network:
   - true: test.
   - false: do not test. */
+  /** @~chinese 是否探测下行网络。
+  - true: 探测。
+  - false: 不探测。
+  */
   bool probeDownlink;
-  /** The expected maximum sending bitrate (bps) of the local user. The value ranges between 100000 and 5000000. We recommend setting this parameter according to the bitrate value set by \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration". */
+  /** @~english The expected maximum sending bitrate (bps) of the local user. The value ranges between 100000 and 5000000. We recommend setting this parameter according to the bitrate value set by \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration". */
+  /** @~chinese 用户期望的最高发送码率，单位为 bps，范围为 [100000, 5000000]。Agora 推荐参考 \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 中的码率值设置该参数的值。  */
   unsigned int expectedUplinkBitrate;
-  /** The expected maximum receiving bitrate (bps) of the local user. The value ranges between 100000 and 5000000. */
+  /** @~english The expected maximum receiving bitrate (bps) of the local user. The value ranges between 100000 and 5000000. */
+  /** @~chinese 用户期望的最高接收码率，单位为 bps，范围为 [100000, 5000000]。 */
   unsigned int expectedDownlinkBitrate;
 };
 
-/** Properties of the audio volume information.
+/** @~english Properties of the audio volume information.
 
  An array containing the user ID and volume information for each speaker.
  */
+/** @~chinese 用户音量信息。
+ */
 struct AudioVolumeInfo
 {
-   /**
+   /** @~english
     User ID of the speaker. The uid of the local user is 0.
     */
+   /** @~chinese
+    用户 ID。本地用户的 `uid` 为 0。
+    */
     uid_t uid;
-   /** The volume of the speaker. The volume ranges between 0 (lowest volume) and 255 (highest volume).
+   /** @~english The volume of the speaker. The volume ranges between 0 (lowest volume) and 255 (highest volume).
+    */
+   /** @~chinese 用户的音量，取值范围为 [0,255]。
     */
     unsigned int volume;
-    /** Voice activity status of the local user.
+    /** @~english Voice activity status of the local user.
      * - 0: The local user is not speaking.
      * - 1: The local user is speaking.
      *
@@ -2059,81 +2469,129 @@ struct AudioVolumeInfo
      * - The `vad` parameter cannot report the voice activity status of the remote users. In the remote users' callback, `vad` = 0.
      * - Ensure that you set `report_vad`(true) in the \ref agora::rtc::IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method to enable the voice activity detection of the local user.
      */
+    /** @~chinese 本地用户的人声状态。
+     * - 0：本地无人声。
+     * - 1：本地有人声。
+     *
+     * @note
+     * - `vad` 无法报告远端用户的人声状态。对于远端用户，`vad` 的值始终为 0。
+     * - 如需使用此参数，请在调用 \ref agora::rtc::IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" 时设置 `report_vad` 为 `true`。
+     */
     unsigned int vad;
-    /** The channel ID, which indicates which channel the speaker is in.
+    /** @~english The channel ID, which indicates which channel the speaker is in.
+     */
+    /** @~chinese 用户所在频道的频道名称。
      */
     const char * channelId;
 };
 
-/** Statistics of the channel.
+/** @~english Statistics of the channel.
+ */
+/** @~chinese 通话相关的统计信息。
  */
 struct RtcStats
 {
-  /**
+  /** @~english
    Call duration (s), represented by an aggregate value.
    */
+  /** @~chinese
+   本地用户通话时长（秒），累计值。
+   */
     unsigned int duration;
-    /**
+    /** @~english
      Total number of bytes transmitted, represented by an aggregate value.
      */
+    /** @~chinese
+     * 发送字节数（bytes），累计值。
+     */
     unsigned int txBytes;
-    /**
+    /** @~english
      Total number of bytes received, represented by an aggregate value.
      */
+    /** @~chinese
+     * 接收字节数（bytes），累计值。
+     */
     unsigned int rxBytes;
-     /** Total number of audio bytes sent (bytes), represented
+     /** @~english Total number of audio bytes sent (bytes), represented
      * by an aggregate value.
+     */
+     /** @~chinese 发送音频字节数（bytes），累计值。
      */
     unsigned int txAudioBytes;
-    /** Total number of video bytes sent (bytes), represented
+    /** @~english Total number of video bytes sent (bytes), represented
      * by an aggregate value.
      */
+    /** @~chinese 发送视频字节数（bytes），累计值。
+     */
     unsigned int txVideoBytes;
-    /** Total number of audio bytes received (bytes) before
+    /** @~english Total number of audio bytes received (bytes) before
      * network countermeasures, represented by an aggregate value.
      */
+    /** @~chinese 接收音频字节数（bytes），累计值。
+     */
     unsigned int rxAudioBytes;
-    /** Total number of video bytes received (bytes),
+    /** @~english Total number of video bytes received (bytes),
      * represented by an aggregate value.
+     */
+    /** @~chinese 接收视频字节数（bytes），累计值。
      */
     unsigned int rxVideoBytes;
 
-    /**
+    /** @~english
      Transmission bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese
+     发送码率（Kbps），瞬时值。
+     */
     unsigned short txKBitRate;
-    /**
+    /** @~english
      Receive bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese 接收码率（Kbps），瞬时值。
+     */
     unsigned short rxKBitRate;
-    /**
+    /** @~english
      Audio receive bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese 音频接收码率 (Kbps），瞬时值。
+     */
     unsigned short rxAudioKBitRate;
-    /**
+    /** @~english
      Audio transmission bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese 音频发送码率 (Kbps），瞬时值。
+     */
     unsigned short txAudioKBitRate;
-    /**
+    /** @~english
      Video receive bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese 视频接收码率 (Kbps），瞬时值。
+     */
     unsigned short rxVideoKBitRate;
-    /**
+    /** @~english
      Video transmission bitrate (Kbps), represented by an instantaneous value.
      */
+    /** @~chinese 视频发送码率 (Kbps），瞬时值。
+    */
     unsigned short txVideoKBitRate;
-    /** Client-server latency (ms)
+    /** @~english Client-server latency (ms)
+     */
+    /** @~chinese 客户端接入服务器延时 (毫秒)。
      */
     unsigned short lastmileDelay;
-    /** The packet loss rate (%) from the local client to Agora's edge server,
+    /** @~english The packet loss rate (%) from the local client to Agora's edge server,
      * before using the anti-packet-loss method.
+     */
+    /** @~chinese 使用抗丢包技术前，客户端上行发送到服务器丢包率 (%)
      */
     unsigned short txPacketLossRate;
-    /** The packet loss rate (%) from Agora's edge server to the local client,
+    /** @~english The packet loss rate (%) from Agora's edge server to the local client,
      * before using the anti-packet-loss method.
      */
+    /** @~chinese 使用抗丢包技术前，服务器下行发送到客户端丢包率 (%)
+     */
     unsigned short rxPacketLossRate;
-    /** Number of users in the channel.
+    /** @~english Number of users in the channel.
 
      - Communication profile: The number of users in the channel.
      - Live broadcast profile:
@@ -2141,34 +2599,63 @@ struct RtcStats
          -  If the local user is an audience: The number of users in the channel = The number of hosts in the channel + 1.
          -  If the user is a host: The number of users in the channel = The number of hosts in the channel.
      */
+    /** @~chinese 当前频道内的用户人数。
+
+     - 通信场景下，当前频道内的用户人数。
+     - 直播场景下，
+         - 如果本地用户为观众，为频道内的主播人数 + 1；
+         - 如果本地用户为主播，为频道内的主播人数。
+     */
     unsigned int userCount;
-    /**
+    /** @~english
      Application CPU usage (%).
      */
+    /** @~chinese 当前 App 的 CPU 使用率 (%)。 */
     double cpuAppUsage;
-    /**
+    /** @~english
      System CPU usage (%).
 
      In the multi-kernel environment, this member represents the average CPU usage.
      The value **=** 100 **-** System Idle Progress in Task Manager (%).
      */
-    double cpuTotalUsage;
-    /** The round-trip time delay from the client to the local router.
+    /** @~chinese 当前系统的 CPU 使用率 (%)。
+
+     在多核环境中，该成员指多核 CPU 的平均使用率。
+     计算方式为 100 - 任务管理中显示的系统空闲进程 CPU（%）。
      */
+    double cpuTotalUsage;
+    /** @~english The round-trip time delay from the client to the local router.
+     */
+    /** @~chinese 客户端到本地路由器的往返时延 (ms)。 */
     int gatewayRtt;
-    /**
+    /** @~english
      The memory usage ratio of the app (%).
      @note This value is for reference only. Due to system limitations, you may not get the value of this member.
      */
-    double memoryAppUsageRatio;
     /**
+     * @~chinese 当前 App 的内存占比 (%)。
+     *
+     * @note 该值仅作参考。受系统限制可能无法获取。
+     */
+    double memoryAppUsageRatio;
+    /** @~english
      The memory usage ratio of the system (%).
      @note This value is for reference only. Due to system limitations, you may not get the value of this member.
      */
+    /** @~chinese
+     * 当前系统的内存占比 (%)
+     *
+     * @note 该值仅作参考。受系统限制可能无法获取。
+     */
     double memoryTotalUsageRatio;
-    /**
+    /** @~english
      The memory usage of the app (KB).
      @note This value is for reference only. Due to system limitations, you may not get the value of this member.
+     */
+    /** @~chinese
+     * 当前 App 的内存大小 (KB)
+     *
+     * @note 该值仅作参考。受系统限制可能无法获取。
      */
     int memoryAppUsageInKbytes;
   RtcStats()
@@ -2197,288 +2684,436 @@ struct RtcStats
       , memoryAppUsageInKbytes(0) {}
 };
 
-/** Quality change of the local video in terms of target frame rate and target bit rate since last count.
+/** @~english Quality change of the local video in terms of target frame rate and target bit rate since last count.
   */
+/** @~chinese 自上次统计后本地视频质量的自适应情况（基于目标帧率和目标码率）。*/
 enum QUALITY_ADAPT_INDICATION {
-  /** The quality of the local video stays the same. */
+  /** @~english The quality of the local video stays the same. */
+  /** @~chinese 本地视频质量不变。 */
   ADAPT_NONE = 0,
-  /** The quality improves because the network bandwidth increases. */
+  /** @~english The quality improves because the network bandwidth increases. */
+  /** @~chinese 因网络带宽增加，本地视频质量改善。 */
   ADAPT_UP_BANDWIDTH = 1,
-  /** The quality worsens because the network bandwidth decreases. */
+  /** @~english The quality worsens because the network bandwidth decreases. */
+  /** @~chinese 因网络带宽减少，本地视频质量变差。 */
   ADAPT_DOWN_BANDWIDTH = 2,
 };
 
-/** The error code in CHANNEL_MEDIA_RELAY_ERROR. */
+/** @~english The error code in CHANNEL_MEDIA_RELAY_ERROR. */
+/** @~chinese 跨频道媒体流转发出错的错误码。*/
 enum CHANNEL_MEDIA_RELAY_ERROR {
-    /** 0: The state is normal.
+    /** @~english 0: The state is normal.
+     */
+    /** @~chinese 0: 一切正常。
      */
     RELAY_OK = 0,
-    /** 1: An error occurs in the server response.
+    /** @~english 1: An error occurs in the server response.
+     */
+    /** @~chinese 1: 服务器回应出错。
      */
     RELAY_ERROR_SERVER_ERROR_RESPONSE = 1,
-    /** 2: No server response. You can call the
+    /** @~english 2: No server response. You can call the
      * \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" method to
      * leave the channel.
      */
+    /** @~chinese 2: 服务器无回应。
+     * 你可以调用
+     * \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 方法离开频道。
+     */
     RELAY_ERROR_SERVER_NO_RESPONSE = 2,
-    /** 3: The SDK fails to access the service, probably due to limited
+    /** @~english 3: The SDK fails to access the service, probably due to limited
      * resources of the server.
      */
+    /** @~chinese 3: SDK 无法获取服务，可能是因为服务器资源有限导致。
+     */
     RELAY_ERROR_NO_RESOURCE_AVAILABLE = 3,
-    /** 4: Fails to send the relay request.
+    /** @~english 4: Fails to send the relay request.
+     */
+    /** @~chinese 4: 发起跨频道转发媒体流请求失败。
      */
     RELAY_ERROR_FAILED_JOIN_SRC = 4,
-    /** 5: Fails to accept the relay request.
+    /** @~english 5: Fails to accept the relay request.
+     */
+    /** @~chinese 5: 接受跨频道转发媒体流请求失败。
      */
     RELAY_ERROR_FAILED_JOIN_DEST = 5,
-    /** 6: The server fails to receive the media stream.
+    /** @~english 6: The server fails to receive the media stream.
+     */
+    /** @~chinese 6: 服务器接收跨频道转发媒体流失败。
      */
     RELAY_ERROR_FAILED_PACKET_RECEIVED_FROM_SRC = 6,
-    /** 7: The server fails to send the media stream.
+    /** @~english 7: The server fails to send the media stream.
+     */
+    /** @~chinese 7: 服务器发送跨频道转发媒体流失败。
      */
     RELAY_ERROR_FAILED_PACKET_SENT_TO_DEST = 7,
-    /** 8: The SDK disconnects from the server due to poor network
+    /** @~english 8: The SDK disconnects from the server due to poor network
      * connections. You can call the \ref agora::rtc::IRtcEngine::leaveChannel
      * "leaveChannel" method to leave the channel.
      */
+    /** @~chinese 8: SDK 因网络质量不佳与服务器断开。你可以调用
+     * \ref agora::rtc::IRtcEngine::leaveChannel
+     * "leaveChannel" 方法离开当前频道。
+     */
     RELAY_ERROR_SERVER_CONNECTION_LOST = 8,
-    /** 9: An internal error occurs in the server.
+    /** @~english 9: An internal error occurs in the server.
+     */
+    /** @~chinese 9: 服务器内部出错。
      */
     RELAY_ERROR_INTERNAL_ERROR = 9,
-    /** 10: The token of the source channel has expired.
+    /** @~english 10: The token of the source channel has expired.
+     */
+    /** @~chinese 10: 源频道的 Token 已过期。
      */
     RELAY_ERROR_SRC_TOKEN_EXPIRED = 10,
-    /** 11: The token of the destination channel has expired.
+    /** @~english 11: The token of the destination channel has expired.
+     */
+    /** @~chinese 11: 目标频道的 Token 已过期。
      */
     RELAY_ERROR_DEST_TOKEN_EXPIRED = 11,
 };
 
-/** The event code in CHANNEL_MEDIA_RELAY_EVENT. */
+/** @~english The event code in CHANNEL_MEDIA_RELAY_EVENT. */
+/** @~chinese 跨频道媒体流转发事件码。 */
 enum CHANNEL_MEDIA_RELAY_EVENT {
-    /** 0: The user disconnects from the server due to poor network
+    /** @~english 0: The user disconnects from the server due to poor network
      * connections.
      */
+    /** @~chinese 0: 网络中断导致用户与服务器连接断开。
+     */
     RELAY_EVENT_NETWORK_DISCONNECTED = 0,
-    /** 1: The network reconnects.
+    /** @~english 1: The network reconnects.
+     */
+    /** @~chinese 1: 用户与服务器建立连接。
      */
     RELAY_EVENT_NETWORK_CONNECTED = 1,
-    /** 2: The user joins the source channel.
+    /** @~english 2: The user joins the source channel.
+     */
+    /** @~chinese 2: 用户已加入源频道。
      */
     RELAY_EVENT_PACKET_JOINED_SRC_CHANNEL = 2,
-    /** 3: The user joins the destination channel.
+    /** @~english 3: The user joins the destination channel.
+     */
+    /** @~chinese 3: 用户已加入目标频道。
      */
     RELAY_EVENT_PACKET_JOINED_DEST_CHANNEL = 3,
-    /** 4: The SDK starts relaying the media stream to the destination channel.
+    /** @~english 4: The SDK starts relaying the media stream to the destination channel.
+     */
+    /** @~chinese 4: SDK 开始向目标频道发送数据包。
      */
     RELAY_EVENT_PACKET_SENT_TO_DEST_CHANNEL = 4,
-    /** 5: The server receives the video stream from the source channel.
+    /** @~english 5: The server receives the video stream from the source channel.
+     */
+    /** @~chinese 5: 服务器收到了频道发送的视频流。
      */
     RELAY_EVENT_PACKET_RECEIVED_VIDEO_FROM_SRC = 5,
-    /** 6: The server receives the audio stream from the source channel.
+    /** @~english 6: The server receives the audio stream from the source channel.
+     */
+    /** @~chinese 6: 服务器收到了频道发送的音频流。
      */
     RELAY_EVENT_PACKET_RECEIVED_AUDIO_FROM_SRC = 6,
-    /** 7: The destination channel is updated.
+    /** @~english 7: The destination channel is updated.
+     */
+    /** @~chinese 7: 目标频道已更新。
      */
     RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL = 7,
-    /** 8: The destination channel update fails due to internal reasons.
+    /** @~english 8: The destination channel update fails due to internal reasons.
+     */
+    /** @~chinese 8: 内部原因导致目标频道更新失败。
      */
     RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_REFUSED = 8,
-    /** 9: The destination channel does not change, which means that the
+    /** @~english 9: The destination channel does not change, which means that the
      * destination channel fails to be updated.
      */
+    /** @~chinese 9: 目标频道未发生改变，即目标频道更新失败。
+     */
     RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_NOT_CHANGE = 9,
-    /** 10: The destination channel name is NULL.
+    /** @~english 10: The destination channel name is NULL.
+     */
+    /** @~chinese 10: 目标频道名为 NULL。
      */
     RELAY_EVENT_PACKET_UPDATE_DEST_CHANNEL_IS_NULL = 10,
-    /** 11: The video profile is sent to the server.
+    /** @~english 11: The video profile is sent to the server.
+     */
+    /** @~chinese 11: 视频属性已发送至服务器。
      */
     RELAY_EVENT_VIDEO_PROFILE_UPDATE = 11,
 };
 
-/** The state code in CHANNEL_MEDIA_RELAY_STATE. */
+/** @~english The state code in CHANNEL_MEDIA_RELAY_STATE. */
+/** @~chinese 跨频道媒体流转发状态码。 */
 enum CHANNEL_MEDIA_RELAY_STATE {
-    /** 0: The SDK is initializing.
+    /** @~english 0: The SDK is initializing.
+     */
+    /** @~chinese 0: 初始状态。
      */
     RELAY_STATE_IDLE = 0,
-    /** 1: The SDK tries to relay the media stream to the destination channel.
+    /** @~english 1: The SDK tries to relay the media stream to the destination channel.
+     */
+    /** @~chinese 1: SDK 尝试跨频道。
      */
     RELAY_STATE_CONNECTING = 1,
-    /** 2: The SDK successfully relays the media stream to the destination
+    /** @~english 2: The SDK successfully relays the media stream to the destination
      * channel.
      */
+    /** @~chinese 2: 源频道主播成功加入目标频道。
+     */
     RELAY_STATE_RUNNING = 2,
-    /** 3: A failure occurs. See the details in code.
+    /** @~english 3: A failure occurs. See the details in code.
+     */
+    /** @~chinese 3: 发生异常，详见提示的错误信息。
      */
     RELAY_STATE_FAILURE = 3,
 };
 
-/** Statistics of the local video stream.
+/** @~english Statistics of the local video stream.
+ */
+/** @~chinese 本地视频流上传统计信息。
  */
 struct LocalVideoStats
 {
-  /** Bitrate (Kbps) sent in the reported interval, which does not include
+  /** @~english Bitrate (Kbps) sent in the reported interval, which does not include
    * the bitrate of the retransmission video after packet loss.
    */
+  /** @~chinese 实际发送码率 (Kbps)。不包含丢包后重传视频等的发送码率。
+   */
   int sentBitrate;
-  /** Frame rate (fps) sent in the reported interval, which does not include
+  /** @~english Frame rate (fps) sent in the reported interval, which does not include
    * the frame rate of the retransmission video after packet loss.
    */
+  /** @~chinese 实际发送帧率 (fps)。不包含丢包后重传视频等的发送帧率。
+   */
   int sentFrameRate;
-  /** The encoder output frame rate (fps) of the local video.
+  /** @~english The encoder output frame rate (fps) of the local video.
+   */
+  /** @~chinese 本地视频编码器的输出帧率，单位为 fps。
    */
   int encoderOutputFrameRate;
-  /** The render output frame rate (fps) of the local video.
+  /** @~english The render output frame rate (fps) of the local video.
+   */
+  /** @~chinese 本地视频渲染器的输出帧率，单位为 fps
    */
   int rendererOutputFrameRate;
-  /** The target bitrate (Kbps) of the current encoder. This value is estimated by the SDK based on the current network conditions.
+  /** @~english The target bitrate (Kbps) of the current encoder. This value is estimated by the SDK based on the current network conditions.
     */
+  /** @~chinese 当前编码器的目标编码码率 (Kbps)，该码率为 SDK 根据当前网络状况预估的一个值。
+     */
   int targetBitrate;
-  /** The target frame rate (fps) of the current encoder.
+  /** @~english The target frame rate (fps) of the current encoder.
     */
+  /** @~chinese 当前编码器的目标编码帧率 (fps)。
+     */
   int targetFrameRate;
-  /** Quality change of the local video in terms of target frame rate and
+  /** @~english Quality change of the local video in terms of target frame rate and
    * target bit rate in this reported interval. See #QUALITY_ADAPT_INDICATION.
    */
+  /** @~chinese 统计周期内本地视频质量（基于目标帧率和目标码率）的自适应情况。详见 #QUALITY_ADAPT_INDICATION 。*/
   QUALITY_ADAPT_INDICATION qualityAdaptIndication;
-  /** The encoding bitrate (Kbps), which does not include the bitrate of the
+  /** @~english The encoding bitrate (Kbps), which does not include the bitrate of the
    * re-transmission video after packet loss.
    */
+  /** @~chinese 视频编码码率（Kbps）。不包含丢包后重传视频等的编码码率。
+     */
   int encodedBitrate;
-  /** The width of the encoding frame (px).
+  /** @~english The width of the encoding frame (px).
    */
+  /** @~chinese 视频编码宽度（px）。
+     */
   int encodedFrameWidth;
-  /** The height of the encoding frame (px).
+  /** @~english The height of the encoding frame (px).
    */
+  /** @~chinese 视频编码高度（px）。
+     */
   int encodedFrameHeight;
-  /** The value of the sent frames, represented by an aggregate value.
+  /** @~english The value of the sent frames, represented by an aggregate value.
+   */
+  /** @~chinese 发送的视频帧数，累计值。
    */
   int encodedFrameCount;
-  /** The codec type of the local video:
+  /** @~english The codec type of the local video:
    * - VIDEO_CODEC_VP8 = 1: VP8.
    * - VIDEO_CODEC_H264 = 2: (Default) H.264.
    */
+  /** @~chinese 视频的编码类型：
+     * - VIDEO_CODEC_VP8 = 1: VP8。
+     * - VIDEO_CODEC_H264 = 2: （默认值）H.264。
+     */
   VIDEO_CODEC_TYPE codecType;
 };
 
-/** Statistics of the remote video stream.
+/** @~english Statistics of the remote video stream.
+ */
+/** @~chinese 远端视频流的统计信息。
  */
 struct RemoteVideoStats
 {
-  /**
+  /** @~english
  User ID of the remote user sending the video streams.
  */
+  /** @~chinese 用户 ID，指定是哪个用户的视频流。 */
     uid_t uid;
-    /** **DEPRECATED** Time delay (ms).
+    /** @~english **DEPRECATED** Time delay (ms).
      *
      * In scenarios where audio and video is synchronized, you can use the value of
      * `networkTransportDelay` and `jitterBufferDelay` in `RemoteAudioStats` to know the delay statistics of the remote video.
      */
+    /** @~chinese @deprecated
+     延时 (毫秒)。
+
+     在有音画同步机制的音视频场景中，你可以参考 RemoteAudioStats 里的 `networkTransportDelay`
+     和 `jitterBufferDelay` 成员的值，了解视频的延迟数据。
+     */
     int delay;
-/**
+/** @~english
  Width (pixels) of the video stream.
  */
+/** @~chinese 视频流宽（像素）。*/
 	int width;
-  /**
+  /** @~english
  Height (pixels) of the video stream.
  */
+  /** @~chinese 视频流高（像素）。*/
 	int height;
-  /**
+  /** @~english
  Bitrate (Kbps) received since the last count.
  */
+  /** @~chinese （上次统计后）接收到的码率(Kbps)。*/
 	int receivedBitrate;
-  /** The decoder output frame rate (fps) of the remote video.
+  /** @~english The decoder output frame rate (fps) of the remote video.
+   */
+  /** @~chinese 远端视频解码器的输出帧率，单位为 fps。
    */
 	int decoderOutputFrameRate;
-  /** The render output frame rate (fps) of the remote video.
+  /** @~english The render output frame rate (fps) of the remote video.
+   */
+  /** @~chinese 远端视频渲染器的输出帧率，单位为 fps。
    */
   int rendererOutputFrameRate;
-  /** Packet loss rate (%) of the remote video stream after using the anti-packet-loss method.
+  /** @~english Packet loss rate (%) of the remote video stream after using the anti-packet-loss method.
+   */
+  /** @~chinese 远端视频在使用抗丢包技术之后的丢包率(%)。
    */
   int packetLossRate;
-  /** The type of the remote video stream: #REMOTE_VIDEO_STREAM_TYPE
+  /** @~english The type of the remote video stream: #REMOTE_VIDEO_STREAM_TYPE
    */
+  /** @~chinese 视频流类型：大流或小流，详见 #REMOTE_VIDEO_STREAM_TYPE。*/
   REMOTE_VIDEO_STREAM_TYPE rxStreamType;
-  /**
+  /** @~english
    The total freeze time (ms) of the remote video stream after the remote user joins the channel.
    In a video session where the frame rate is set to no less than 5 fps, video freeze occurs when
    the time interval between two adjacent renderable video frames is more than 500 ms.
    */
+  /** @~chinese
+  远端用户在加入频道后发生视频卡顿的累计时长（ms）。
+  通话过程中，视频帧率设置不低于 5 fps 时，连续渲染的两帧视频之间间隔超过 500 ms，为一次视频卡顿。
+  */
     int totalFrozenTime;
-  /**
+  /** @~english
    The total video freeze time as a percentage (%) of the total time when the video is available.
    */
+  /** @~chinese 远端用户在加入频道后发生视频卡顿的累计时长占视频总有效时长的百分比 (%)。视频有效时长是指远端用户加入频道后视频未被停止发送或禁用的时长。 */
     int frozenRate;
-    /**
+    /** @~english
     The total time (ms) when the remote user in the Communication profile or the remote
     broadcaster in the Live-broadcast profile neither stops sending the video stream nor
     disables the video module after joining the channel.
 
     @since v3.0.1
     */
+    /** @~chinese
+    视频有效时长（毫秒），即远端用户/主播加入频道后，既没有停止发送视频流，也没有禁用视频模块的通话时长。
+
+    @since v3.0.1
+    */
     int totalActiveTime;
 };
 
-/** Audio statistics of the local user */
+/** @~english Audio statistics of the local user */
+/** @~chinese 本地音频统计数据。 */
 struct LocalAudioStats
 {
-    /** The number of channels.
+    /** @~english The number of channels.
+     */
+    /** @~chinese 声道数。
      */
     int numChannels;
-    /** The sample rate (Hz).
+    /** @~english The sample rate (Hz).
+     */
+    /** @~chinese 发送的采样率，单位为 Hz。
      */
     int sentSampleRate;
-    /** The average sending bitrate (Kbps).
+    /** @~english The average sending bitrate (Kbps).
+     */
+    /** @~chinese 发送码率的平均值，单位为 Kbps。
      */
     int sentBitrate;
 };
 
-/** Audio statistics of a remote user */
+/** @~english Audio statistics of a remote user */
+/** @~chinese 远端用户的音频统计 */
 struct RemoteAudioStats
 {
-    /** User ID of the remote user sending the audio streams.
+    /** @~english User ID of the remote user sending the audio streams.
      *
      */
+    /** @~chinese 用户 ID，指定是哪个用户/主播的音频流。 */
     uid_t uid;
-    /** Audio quality received by the user: #QUALITY_TYPE.
+    /** @~english Audio quality received by the user: #QUALITY_TYPE.
      */
+    /** @~chinese 远端用户发送的音频流质量：#QUALITY_TYPE 。 */
     int quality;
-    /** Network delay (ms) from the sender to the receiver.
+    /** @~english Network delay (ms) from the sender to the receiver.
      */
+    /** @~chinese 音频发送端到接收端的网络延迟（毫秒）。*/
     int networkTransportDelay;
-    /** Network delay (ms) from the receiver to the jitter buffer.
+    /** @~english Network delay (ms) from the receiver to the jitter buffer.
+     */
+    /** @~chinese 接收端到网络抖动缓冲的网络延迟（毫秒）。
      */
     int jitterBufferDelay;
-    /** The audio frame loss rate in the reported interval.
+    /** @~english The audio frame loss rate in the reported interval.
      */
+    /** @~chinese 统计周期内的远端音频流的丢帧率 (%)。 */
     int audioLossRate;
-    /** The number of channels.
+    /** @~english The number of channels.
      */
+    /** @~chinese 声道数。 */
     int numChannels;
-    /** The sample rate (Hz) of the received audio stream in the reported
+    /** @~english The sample rate (Hz) of the received audio stream in the reported
      * interval.
      */
+    /** @~chinese 统计周期内接收到的远端音频采样率。 */
     int receivedSampleRate;
-    /** The average bitrate (Kbps) of the received audio stream in the
+    /** @~english The average bitrate (Kbps) of the received audio stream in the
      * reported interval. */
+    /** @~chinese 接收流在统计周期内的平均码率（Kbps）。 */
     int receivedBitrate;
-    /** The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
+    /** @~english The total freeze time (ms) of the remote audio stream after the remote user joins the channel. In a session, audio freeze occurs when the audio frame loss rate reaches 4%.
+     */
+    /** @~chinese 远端用户在加入频道后发生音频卡顿的累计时长（ms）。通话过程中，音频丢帧率达到 4% 即记为一次音频卡顿。
      */
     int totalFrozenTime;
-    /** The total audio freeze time as a percentage (%) of the total time when the audio is available. */
+    /** @~english The total audio freeze time as a percentage (%) of the total time when the audio is available. */
+    /** @~chinese 远端用户在加入频道后发生音频卡顿的累计时长占音频总有效时长的百分比 (%)。音频有效时长是指远端用户加入频道后音频未被停止发送或禁用的时长。 */
     int frozenRate;
-    /** The total time (ms) when the remote user in the Communication profile or the remote broadcaster in
+    /** @~english The total time (ms) when the remote user in the Communication profile or the remote broadcaster in
      the Live-broadcast profile neither stops sending the audio stream nor disables the audio module after joining the channel.
      */
+    /** @~chinese 音频有效时长（毫秒），即远端用户/主播加入频道后，既没有停止发送音频流，也没有禁用音频模块的通话时长。 */
     int totalActiveTime;
 };
 
-/**
+/** @~english
  * Video dimensions.
  */
+/** @~chinese 视频尺寸。
+ */
 struct VideoDimensions {
-    /** Width (pixels) of the video. */
+    /** @~english Width (pixels) of the video. */
+    /** @~chinese 视频宽度，单位为像素。*/
     int width;
-      /** Height (pixels) of the video. */
+      /** @~english Height (pixels) of the video. */
+      /** @~chinese 视频高度，单位为像素。*/
     int height;
     VideoDimensions()
         : width(640), height(480)
@@ -2488,7 +3123,7 @@ struct VideoDimensions {
     {}
 };
 
-/** (Recommended) The standard bitrate set in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method.
+/** @~english (Recommended) The standard bitrate set in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method.
 
  In this mode, the bitrates differ between the live broadcast and communication profiles:
 
@@ -2496,33 +3131,53 @@ struct VideoDimensions {
  - Live broadcast profile: The video bitrate is twice the base bitrate.
 
  */
+/** @~chinese \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 的标准码率。
+
+（推荐）标准码率模式。该模式下，视频在通信和直播场景下的码率有所不同：
+- 通信场景下，码率与基准码率一致；
+- 直播场景下，码率对照基准码率翻倍。
+ */
 const int STANDARD_BITRATE = 0;
 
-/** The compatible bitrate set in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method.
+/** @~english The compatible bitrate set in the \ref IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" method.
 
  The bitrate remains the same regardless of the channel profile. If you choose this mode in the Live-broadcast profile, the video frame rate may be lower than the set value.
  */
+/** @~chinese \ref agora::rtc::IRtcEngine::setVideoEncoderConfiguration "setVideoEncoderConfiguration" 的兼容码率。
+
+ 适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，视频帧率可能会低于设置的值。
+ */
 const int COMPATIBLE_BITRATE = -1;
 
-/** Use the default minimum bitrate.
+/** @~english Use the default minimum bitrate.
+ */
+/** @~chinese 使用系统默认最低编码码率。
  */
 const int DEFAULT_MIN_BITRATE = -1;
 
-/** Video encoder configurations.
+/** @~english Video encoder configurations.
+ */
+/** @~chinese 视频编码器配置的属性。
  */
 struct VideoEncoderConfiguration {
-  /** The video frame dimensions (px) used to specify the video quality and measured by the total number of pixels along a frame's width and height: VideoDimensions. The default value is 640 x 360.
+  /** @~english The video frame dimensions (px) used to specify the video quality and measured by the total number of pixels along a frame's width and height: VideoDimensions. The default value is 640 x 360.
+  */
+  /** @~chinese 视频编码的分辨率 (px)。视频编码的像素，用于衡量编码质量，以长 &times; 宽表示，默认值为 640 x 360。用户可以自行设置分辨率: VideoDimensions 。
   */
     VideoDimensions dimensions;
-    /** The frame rate of the video: #FRAME_RATE. The default value is 15.
+    /** @~english The frame rate of the video: #FRAME_RATE. The default value is 15.
 
      Note that we do not recommend setting this to a value greater than 30.
     */
+    /** @~chinese 视频编码的帧率: #FRAME_RATE 。默认值为 15。Agora 不建议设置成高于 30 的值。
+    */
     FRAME_RATE frameRate;
-    /** The minimum frame rate of the video. The default value is -1.
+    /** @~english The minimum frame rate of the video. The default value is -1.
      */
+    /** @~chinese 视频的最小帧率。默认值为 -1。
+   */
     int minFrameRate;
-    /** The video encoding bitrate (Kbps).
+    /** @~english The video encoding bitrate (Kbps).
 
      Choose one of the following options:
 
@@ -2574,24 +3229,85 @@ struct VideoEncoderConfiguration {
      | 3840 * 2160            | 60               | 6500                                   | 6500                                   |
 
      */
+    /** @~chinese 视频编码码率，单位为 Kbps:
+
+     你可以根据场景需要参照下表手动设置你想要的码率。若设置的视频码率超出合理范围，SDK 会自动按照合理区间处理码率。你也可以直接选择如下任意一种模式进行设置：
+     - #STANDARD_BITRATE : (推荐) 标准码率模式。该模式下，视频在通信和直播场景下的码率有所不同：
+       - 通信场景下，码率与基准码率一致；
+       - 直播场景下，码率对照基准码率翻倍。
+     - #COMPATIBLE_BITRATE : 适配码率模式。该模式下，视频在通信和直播场景下的码率均与基准码率一致。直播下如果选择该模式，视频帧率可能会低于设置的值。
+
+     Agora 在通信和直播场景下采用不同的编码方式，以提升不同场景下的用户体验。通信场景保证流畅，而直播场景则更注重画面质量，因此直播场景对码率的需求大于通信场景。所以声网推荐将该参数设置为 #STANDARD_BITRATE 。
+
+     |分辨率                   |帧率（fps）        |通信码率（Kbps）                           |直播码率（Kbps）                          |
+     |------------------------|------------------|----------------------------------------|----------------------------------------|
+     | 160 &times; 120        | 15               | 65                                     | 130                                    |
+     | 120 &times; 120        | 15               | 50                                     | 100                                    |
+     | 320 &times; 180        | 15               | 140                                    | 280                                    |
+     | 180 &times; 180        | 15               | 100                                    | 200                                    |
+     | 240 &times; 180        | 15               | 120                                    | 240                                    |
+     | 320 &times; 240        | 15               | 200                                    | 400                                    |
+     | 240 &times; 240        | 15               | 140                                    | 280                                    |
+     | 424 &times; 240        | 15               | 220                                    | 440                                    |
+     | 640 &times; 360        | 15               | 400                                    | 800                                    |
+     | 360 &times; 360        | 15               | 260                                    | 520                                    |
+     | 640 &times; 360        | 30               | 600                                    | 1200                                   |
+     | 360 &times; 360        | 30               | 400                                    | 800                                    |
+     | 480 &times; 360        | 15               | 320                                    | 640                                    |
+     | 480 &times; 360        | 30               | 490                                    | 980                                    |
+     | 640 &times; 480        | 15               | 500                                    | 1000                                   |
+     | 480 &times; 480        | 15               | 400                                    | 800                                    |
+     | 640 &times; 480        | 30               | 750                                    | 1500                                   |
+     | 480 &times; 480        | 30               | 600                                    | 1200                                   |
+     | 848 &times; 480        | 15               | 610                                    | 1220                                   |
+     | 848 &times; 480        | 30               | 930                                    | 1860                                   |
+     | 640 &times; 480        | 10               | 400                                    | 800                                    |
+     | 1280 &times; 720       | 15               | 1130                                   | 2260                                   |
+     | 1280 &times; 720       | 30               | 1710                                   | 3420                                   |
+     | 960 &times; 720        | 15               | 910                                    | 1820                                   |
+     | 960 &times; 720        | 30               | 1380                                   | 2760                                   |
+     | 1920 &times; 1080      | 15               | 2080                                   | 4160                                   |
+     | 1920 &times; 1080      | 30               | 3150                                   | 6300                                   |
+     | 1920 &times; 1080      | 60               | 4780                                   | 6500                                   |
+     | 2560 &times; 1440      | 30               | 4850                                   | 6500                                   |
+     | 2560 &times; 1440      | 60               | 6500                                   | 6500                                   |
+     | 3840 &times; 2160      | 30               | 6500                                   | 6500                                   |
+     | 3840 &times; 2160      | 60               | 6500                                   | 6500                                   |
+
+     @note 该表中的基准码率适用于通信场景。直播场景下通常需要较大码率来提升视频质量。声网推荐通过设置 #STANDARD_BITRATE 模式来实现。你也可以直接将码率值设为基准码率值 &times; 2。
+     */
     int bitrate;
-    /** The minimum encoding bitrate (Kbps).
+    /** @~english The minimum encoding bitrate (Kbps).
 
      The SDK automatically adjusts the encoding bitrate to adapt to the network conditions. Using a value greater than the default value forces the video encoder to output high-quality images but may cause more packet loss and hence sacrifice the smoothness of the video transmission. That said, unless you have special requirements for image quality, Agora does not recommend changing this value.
 
      @note This parameter applies only to the Live-broadcast profile.
      */
+    /** @~chinese 最低编码码率，单位为 Kbps。
+
+     SDK 会根据网络状况自动调整视频编码码率。将参数设为高于默认值可强制视频编码器输出高质量图片，但在网络状况不佳情况下可能导致网络丢包并影响视频播放的流畅度造成卡顿。因此如非对画质有特殊需求，声网建议不要修改该参数的值。
+
+     @note 该参数仅适用于直播场景。
+     */
     int minBitrate;
-    /** The video orientation mode of the video: #ORIENTATION_MODE.
+    /** @~english The video orientation mode of the video: #ORIENTATION_MODE.
     */
+    /** @~chinese 视频编码的方向模式: #ORIENTATION_MODE 。
+     */
     ORIENTATION_MODE orientationMode;
-    /** The video encoding degradation preference under limited bandwidth: #DEGRADATION_PREFERENCE.
+    /** @~english The video encoding degradation preference under limited bandwidth: #DEGRADATION_PREFERENCE.
+     */
+    /** @~chinese 带宽受限时，视频编码降级偏好: #DEGRADATION_PREFERENCE 。
      */
     DEGRADATION_PREFERENCE degradationPreference;
-    /** Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See #VIDEO_MIRROR_MODE_TYPE
+    /** @~english Sets the mirror mode of the published local video stream. It only affects the video that the remote user sees. See #VIDEO_MIRROR_MODE_TYPE
 
     @note: The SDK disables the mirror mode by default.
     */
+    /** @~chinese 设置本地发送视频的镜像模式，只影响远端用户看到的视频画面。详见 #VIDEO_MIRROR_MODE_TYPE。
+
+    @note 默认关闭镜像模式。
+     */
     VIDEO_MIRROR_MODE_TYPE mirrorMode;
 
     VideoEncoderConfiguration(
@@ -2621,27 +3337,35 @@ struct VideoEncoderConfiguration {
     {}
 };
 
-/** The video and audio properties of the user displaying the video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN streaming channel.
+/** @~english The video and audio properties of the user displaying the video in the CDN live. Agora supports a maximum of 17 transcoding users in a CDN streaming channel.
+*/
+/** @~chinese TranscodingUser 用于管理参与旁路直播的音视频转码合图的用户。最多支持 17 人同时参与转码合图。
 */
 typedef struct TranscodingUser {
-  /** User ID of the user displaying the video in the CDN live.
+  /** @~english User ID of the user displaying the video in the CDN live.
+  */
+  /** @~chinese 旁路主播的用户 ID。
   */
     uid_t uid;
 
-/** Horizontal position (pixel) of the video frame relative to the top left corner.
+/** @~english Horizontal position (pixel) of the video frame relative to the top left corner.
 */
+/** @~chinese 屏幕里该区域相对左上角的横坐标绝对值 (pixel)。*/
     int x;
-    /** Vertical position (pixel) of the video frame relative to the top left corner.
+    /** @~english Vertical position (pixel) of the video frame relative to the top left corner.
     */
+    /** @~chinese 屏幕里该区域相对左上角的纵坐标绝对值 (pixel)。*/
     int y;
-    /** Width (pixel) of the video frame. The default value is 360.
+    /** @~english Width (pixel) of the video frame. The default value is 360.
     */
+    /** @~chinese 视频帧宽度 (pixel)。默认值为 360。*/
     int width;
-    /** Height (pixel) of the video frame. The default value is 640.
+    /** @~english Height (pixel) of the video frame. The default value is 640.
     */
+    /** @~chinese 视频帧高度 (pixel)。默认值为640。*/
     int height;
 
-    /** The layer index of the video frame. An integer. The value range is [0, 100].
+    /** @~english The layer index of the video frame. An integer. The value range is [0, 100].
 
      - 0: (Default) Bottom layer.
      - 100: Top layer.
@@ -2650,14 +3374,28 @@ typedef struct TranscodingUser {
      - If zOrder is beyond this range, the SDK reports #ERR_INVALID_ARGUMENT.
      - As of v2.3, the SDK supports zOrder = 0.
      */
+    /** @~chinese 视频帧图层编号。
+
+     - 0:（默认）表示该区域图像位于最下层，
+     - 100: 表示该区域图像位于最上层。
+
+     @note
+     - 如果取值小于 0 或大于 100，会返回错误 #ERR_INVALID_ARGUMENT 。
+     - 从 v2.3 开始，支持将 zOrder 设置为 0。
+     */
     int zOrder;
-    /** The transparency level of the user's video. The value ranges between 0 and 1.0:
+    /** @~english The transparency level of the user's video. The value ranges between 0 and 1.0:
 
      - 0: Completely transparent
      - 1.0: (Default) Opaque
      */
+    /** @~chinese 直播视频上用户视频的透明度。
+
+     - 0: 该区域图像完全透明；
+     - 1:（默认）该区域图像完全不透明。
+    */
     double alpha;
-    /** The audio channel of the sound. The default value is 0:
+    /** @~english The audio channel of the sound. The default value is 0:
 
      - 0: (Default) Supports dual channels at most, depending on the upstream of the broadcaster.
      - 1: The audio stream of the broadcaster uses the FL audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels are mixed into mono first.
@@ -2667,6 +3405,17 @@ typedef struct TranscodingUser {
      - 5: The audio stream of the broadcaster uses the BR audio channel. If the upstream of the broadcaster uses multiple audio channels, these channels are mixed into mono first.
 
      @note If your setting is not 0, you may need a specialized player.
+     */
+    /** @~chinese 音频所在声道。取值范围为 [0, 5]，默认值为 0：
+
+     - 0: (推荐) 默认混音设置，最多支持双声道，与主播端上行音频相关。
+     - 1: 对应主播的音频，推流中位于 FL 声道。如果主播端上行音频是多声道，会先把多声道混音成单声道。
+     - 2: 对应主播的音频，推流中位于 FC 声道。如果主播端上行音频是多声道，会先把多声道混音成单声道。
+     - 3: 对应主播的音频，推流中位于 FR 声道。如果主播端上行音频是多声道，会先把多声道混音成单声道。
+     - 4: 对应主播的音频，推流中位于 BL 声道。如果主播端上行音频是多声道，会先把多声道混音成单声道。
+     - 5: 对应主播的音频，推流中位于 BR 声道。如果主播端上行音频是多声道，会先把多声道混音成单声道。
+
+     @note 选项不为 0 时，需要特殊的播放器支持。
      */
     int audioChannel;
     TranscodingUser()
@@ -2682,10 +3431,14 @@ typedef struct TranscodingUser {
 
 } TranscodingUser;
 
-/** Image properties.
+/** @~english Image properties.
 
  The properties of the watermark and background images.
  */
+/** @~chinese 图像属性。
+
+用于设置直播视频的水印和背景图片的属性。
+*/
 typedef struct RtcImage {
     RtcImage() :
        url(NULL),
@@ -2694,92 +3447,144 @@ typedef struct RtcImage {
        width(0),
        height(0)
     {}
-    /** HTTP/HTTPS URL address of the image on the broadcasting video. The maximum length of this parameter is 1024 bytes. */
+    /** @~english HTTP/HTTPS URL address of the image on the broadcasting video. The maximum length of this parameter is 1024 bytes. */
+    /** @~chinese 直播视频上图片的 HTTP/HTTPS 地址。字符长度不得超过 1024 字节。*/
     const char* url;
-    /** Horizontal position of the image from the upper left of the broadcasting video. */
+    /** @~english Horizontal position of the image from the upper left of the broadcasting video. */
+    /** @~chinese 水印或背景图片在视频帧左上角的横轴坐标。*/
     int x;
-    /** Vertical position of the image from the upper left of the broadcasting video. */
+    /** @~english Vertical position of the image from the upper left of the broadcasting video. */
+    /** @~chinese 水印或背景图片在视频帧左上角的纵轴坐标。*/
     int y;
-    /** Width of the image on the broadcasting video. */
+    /** @~english Width of the image on the broadcasting video. */
+    /** @~chinese 水印或背景图片在视频帧上的宽度。*/
     int width;
-    /** Height of the image on the broadcasting video. */
+    /** @~english Height of the image on the broadcasting video. */
+    /** @~chinese 水印或背景图片在视频帧上的高度。*/
     int height;
 } RtcImage;
-
-/** A struct for managing CDN live audio/video transcoding settings.
+/** @~english A struct for managing CDN live audio/video transcoding settings.
+*/
+/** @~chinese LiveTranscoding 定义。
 */
 typedef struct LiveTranscoding {
-   /** The width of the video in pixels. The default value is 360.
+   /** @~english The width of the video in pixels. The default value is 360.
     * - When pushing video streams to the CDN, ensure that `width` is at least 64; otherwise, the Agora server adjusts the value to 64.
     * - When pushing audio streams to the CDN, set `width` and `height` as 0.
     */
+   /** @~chinese 推流视频的总宽度，默认值 360，单位为像素。
+     * - 如果推视频流，`width` 值不得低于 64，否则 Agora 会调整为 64。
+     * - 如果推音频流，请将 `width` 和 `height` 设为 0。
+     */
     int width;
-    /** The height of the video in pixels. The default value is 640.
+    /** @~english The height of the video in pixels. The default value is 640.
      * - When pushing video streams to the CDN, ensure that `height` is at least 64; otherwise, the Agora server adjusts the value to 64.
      * - When pushing audio streams to the CDN, set `width` and `height` as 0.
     */
+    /** @~chinese 推流视频的总高度，默认值 640，单位为像素。
+     * - 如果推视频流，`height` 值不得低于 64，否则 Agora 会调整为 64。
+     * - 如果推音频流，请将 `width` 和 `height` 设为 0。
+    */
     int height;
-    /** Bitrate of the CDN live output video stream. The default value is 400 Kbps.
+    /** @~english Bitrate of the CDN live output video stream. The default value is 400 Kbps.
 
 	Set this parameter according to the Video Bitrate Table. If you set a bitrate beyond the proper range, the SDK automatically adapts it to a value within the range.
     */
+    /** @~chinese 用于旁路推流的输出视频的码率。 单位为 Kbps。 400 Kbps 为默认值。
+    用户可以根据 Video Bitrate 参考表中的码率值进行设置；如果设置的码率超出合理范围，Agora 服务器会在合理区间内自动调整码率值。
+    */
     int videoBitrate;
-    /** Frame rate of the output video stream set for the CDN live broadcast. The default value is 15 fps, and the value range is (0,30].
+    /** @~english Frame rate of the output video stream set for the CDN live broadcast. The default value is 15 fps, and the value range is (0,30].
 
 	@note The Agora server adjusts any value over 30 to 30.
     */
+    /** @~chinese 用于旁路推流的输出视频的帧率。取值范围是 (0,30]，单位为 fps。15 fps 为默认值。
+
+     @note Agora 会将所有高于 30 fps 的帧率统一设为 30 fps。
+    */
     int videoFramerate;
 
-    /** **DEPRECATED** Latency mode:
+    /** @~english **DEPRECATED** Latency mode:
 
      - true: Low latency with unassured quality.
      - false: (Default) High latency with assured quality.
      */
+    /** @~chinese @deprecated
+
+     - true: 低延时，不保证画质；
+     - false:（默认值）高延时，保证画质。
+     */
     bool lowLatency;
 
-    /** Video GOP in frames. The default value is 30 fps.
+    /** @~english Video GOP in frames. The default value is 30 fps.
+    */
+    /** @~chinese 用于旁路直播的输出视频的 GOP。单位为帧。默认值为 30 fps。
     */
     int videoGop;
-    /** Self-defined video codec profile: #VIDEO_CODEC_PROFILE_TYPE.
+    /** @~english Self-defined video codec profile: #VIDEO_CODEC_PROFILE_TYPE.
 
 	@note If you set this parameter to other values, Agora adjusts it to the default value of 100.
     */
+    /** @~chinese 用于旁路推流的输出视频的编码规格: #VIDEO_CODEC_PROFILE_TYPE 。
+
+     @note 如果你将这个参数设为其他值，Agora 会将其设为默认值 100。
+    */
     VIDEO_CODEC_PROFILE_TYPE videoCodecProfile;
-    /** The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
+    /** @~english The background color in RGB hex value. Value only. Do not include a preceeding #. For example, 0xFFB6C1 (light pink). The default value is 0x000000 (black).
+     */
+    /** @~chinese 用于旁路直播的输出视频的背景色，格式为 RGB 定义下的十六进制整数，不要带 # 号，如 0xFFB6C1 表示浅粉色。默认0x000000，黑色。
      */
     unsigned int backgroundColor;
-    /** The number of users in the live broadcast.
+    /** @~english The number of users in the live broadcast.
      */
+    /** @~chinese 参与合图的用户数量，默认 0。
+    */
     unsigned int userCount;
-    /** TranscodingUser
+    /** @~english TranscodingUser
+    */
+    /** @~chinese TranscodingUser
     */
     TranscodingUser *transcodingUsers;
-    /** Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
+    /** @~english Reserved property. Extra user-defined information to send SEI for the H.264/H.265 video stream to the CDN live client. Maximum length: 4096 Bytes.
 
      For more information on SEI frame, see [SEI-related questions](https://docs.agora.io/en/faq/sei).
      */
+    /** @~chinese 预留参数：用户自定义的发送到旁路推流客户端的信息。用于填充 H.264/H.265 视频中 SEI 帧内容。长度限制 4096 字节。关于 SEI 的详细信息，详见 [SEI 帧相关问题](https://docs.agora.io/cn/faq/sei)。
+     */
     const char *transcodingExtraInfo;
 
-    /** **DEPRECATED** The metadata sent to the CDN live client defined by the RTMP or HTTP-FLV metadata.
+    /** @~english **DEPRECATED** The metadata sent to the CDN live client defined by the RTMP or HTTP-FLV metadata.
+     */
+    /** @~chinese @deprecated 发送给 CDN 客户端的 metadata。
      */
     const char *metadata;
-    /** The watermark image added to the CDN live publishing stream.
+    /** @~english The watermark image added to the CDN live publishing stream.
 
 	Ensure that the format of the image is PNG. Once a watermark image is added, the audience of the CDN live publishing stream can see the watermark image. See RtcImage.
     */
+    /** @~chinese 用于旁路直播的输出视频上的水印图片。
+
+    添加后所有旁路直播的观众都可以看到水印。水印图片的定义详见 RtcImage 。必须为 PNG 格式。
+     */
     RtcImage* watermark;
-    /** The background image added to the CDN live publishing stream.
+    /** @~english The background image added to the CDN live publishing stream.
 
      Once a background image is added, the audience of the CDN live publishing stream can see the background image. See RtcImage.
     */
-    RtcImage* backgroundImage;
-    /** Self-defined audio-sample rate: #AUDIO_SAMPLE_RATE_TYPE.
-    */
-    AUDIO_SAMPLE_RATE_TYPE audioSampleRate;
-    /** Bitrate of the CDN live audio output stream. The default value is 48 Kbps, and the highest value is 128.
+    /** @~chinese 用于旁路直播的输出视频上的背景图片。添加后所有旁路直播的观众都可以看到背景图片。背景图片的定义详见 RtcImage 。
      */
+    RtcImage* backgroundImage;
+    /** @~english Self-defined audio-sample rate: #AUDIO_SAMPLE_RATE_TYPE.
+    */
+    /** @~chinese 自定义音频采样率: #AUDIO_SAMPLE_RATE_TYPE 。
+     */
+    AUDIO_SAMPLE_RATE_TYPE audioSampleRate;
+    /** @~english Bitrate of the CDN live audio output stream. The default value is 48 Kbps, and the highest value is 128.
+     */
+    /** @~chinese 用于旁路推流的输出音频的码率。单位为 Kbps，默认值为 48，最大值为 128。
+    */
     int audioBitrate;
-    /** The numbder of audio channels for the CDN live stream. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose option 3, 4, or 5:
+    /** @~english The numbder of audio channels for the CDN live stream. Agora recommends choosing 1 (mono), or 2 (stereo) audio channels. Special players are required if you choose option 3, 4, or 5:
 
      - 1: (Default) Mono.
      - 2: Stereo.
@@ -2787,8 +3592,18 @@ typedef struct LiveTranscoding {
      - 4: Four audio channels.
      - 5: Five audio channels.
      */
+    /** @~chinese 用于旁路推流的输出音频的声道数，默认值为 1。取值范围为 [1,5] 中的整型，建议取 1 或 2：
+
+     - 1: 单声道（默认）
+     - 2: 双声道
+     - 3: 三声道
+     - 4: 四声道
+     - 5: 五声道
+     */
     int audioChannels;
-    /** Self-defined audio codec profile: #AUDIO_CODEC_PROFILE_TYPE.
+    /** @~english Self-defined audio codec profile: #AUDIO_CODEC_PROFILE_TYPE.
+     */
+    /** @~chinese 用于旁路推流的输出音频的编码规格: #AUDIO_CODEC_PROFILE_TYPE 。
      */
 
     AUDIO_CODEC_PROFILE_TYPE audioCodecProfile;
@@ -2816,54 +3631,83 @@ typedef struct LiveTranscoding {
     {}
 } LiveTranscoding;
 
- /** Camera capturer configuration.
+ /** @~english Camera capturer configuration.
   */
+/** @~chinese 摄像头采集偏好设置
+ */
  struct CameraCapturerConfiguration{
 
-     /** Camera capturer preference settings. See: #CAPTURER_OUTPUT_PREFERENCE. */
+     /** @~english Camera capturer preference settings. See: #CAPTURER_OUTPUT_PREFERENCE. */
+     /** @~chinese 摄像头采集偏好，详见 #CAPTURER_OUTPUT_PREFERENCE */
      CAPTURER_OUTPUT_PREFERENCE preference;
      #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
-     /** Camera direction settings (for Android/iOS only). See: #CAMERA_DIRECTION. */
+     /** @~english Camera direction settings (for Android/iOS only). See: #CAMERA_DIRECTION. */
+     /** @~chinese （仅适用于 Android 和 iOS 平台）摄像头方向，详见 #CAMERA_DIRECTION */
      CAMERA_DIRECTION cameraDirection;
      #endif
  };
 
-/** Configuration of the imported live broadcast voice or video stream.
+/** @~english Configuration of the imported live broadcast voice or video stream.
  */
+/** @~chinese InjectStreamConfig 定义。
+*/
 struct InjectStreamConfig {
-    /** Width of the added stream in the live broadcast. The default value is 0 (same width as the original stream).
+    /** @~english Width of the added stream in the live broadcast. The default value is 0 (same width as the original stream).
      */
+    /** @~chinese 添加进入直播的外部视频源宽度。默认值为 0，即保留视频源原始宽度。*/
     int width;
-    /** Height of the added stream in the live broadcast. The default value is 0 (same height as the original stream).
+    /** @~english Height of the added stream in the live broadcast. The default value is 0 (same height as the original stream).
      */
+    /** @~chinese 添加进入直播的外部视频源高度。默认值为 0，即保留视频源原始高度。*/
     int height;
-    /** Video GOP of the added stream in the live broadcast in frames. The default value is 30 fps.
+    /** @~english Video GOP of the added stream in the live broadcast in frames. The default value is 30 fps.
      */
+    /** @~chinese 用于旁路直播的输出视频的 GOP。单位为帧。默认值为 30 帧。*/
     int videoGop;
-    /** Video frame rate of the added stream in the live broadcast. The default value is 15 fps.
+    /** @~english Video frame rate of the added stream in the live broadcast. The default value is 15 fps.
      */
+    /** @~chinese 添加进入直播的外部视频源帧率。默认值为 15 fps。*/
     int videoFramerate;
-    /** Video bitrate of the added stream in the live broadcast. The default value is 400 Kbps.
+    /** @~english Video bitrate of the added stream in the live broadcast. The default value is 400 Kbps.
 
      @note The setting of the video bitrate is closely linked to the resolution. If the video bitrate you set is beyond a reasonable range, the SDK sets it within a reasonable range.
      */
+    /** @~chinese 添加进入直播的外部视频源码率。默认设置为 400 Kbps。
+
+     @note 视频码率的设置与分辨率相关。如果设置的视频码率超出合理范围，SDK 会按照合理区间自动设置码率。
+     */
     int videoBitrate;
-    /** Audio-sample rate of the added stream in the live broadcast: #AUDIO_SAMPLE_RATE_TYPE. The default value is 48000 Hz.
+    /** @~english Audio-sample rate of the added stream in the live broadcast: #AUDIO_SAMPLE_RATE_TYPE. The default value is 48000 Hz.
 
      @note We recommend setting the default value.
+     */
+    /** @~chinese 添加进入直播的外部音频采样率。默认值为 48000。详见 #AUDIO_SAMPLE_RATE_TYPE 。
+
+     @note 声网建议目前采用默认值，不要自行设置。
      */
     AUDIO_SAMPLE_RATE_TYPE audioSampleRate;
-    /** Audio bitrate of the added stream in the live broadcast. The default value is 48.
+    /** @~english Audio bitrate of the added stream in the live broadcast. The default value is 48.
 
      @note We recommend setting the default value.
      */
+    /** @~chinese 添加进入直播的外部音频码率。默认值为 48 Kbps。
+
+     @note 声网建议目前采用默认值，不要自行设置。
+     */
     int audioBitrate;
-    /** Audio channels in the live broadcast.
+    /** @~english Audio channels in the live broadcast.
 
      - 1: (Default) Mono
      - 2: Two-channel stereo
 
      @note We recommend setting the default value.
+     */
+    /** @~chinese 添加进入直播的外部音频频道。
+
+     - 1: 单声道（默认）
+     - 2: 双声道
+
+     @note 声网建议目前采用默认值，不要自行设置。
      */
     int audioChannels;
 
@@ -2879,43 +3723,71 @@ struct InjectStreamConfig {
         , audioChannels(1)
     {}
 };
-/** The definition of ChannelMediaInfo.
+/** @~english The definition of ChannelMediaInfo.
+ */
+/** @~chinese ChannelMediaInfo 类定义。
  */
 struct ChannelMediaInfo {
-    /** The channel name.
+    /** @~english The channel name.
+     */
+    /** @~chinese 频道名。
      */
 	const char* channelName;
-    /** The token that enables the user to join the channel.
+    /** @~english The token that enables the user to join the channel.
+     */
+    /** @~chinese 能加入频道的 Token。
      */
 	const char* token;
-    /** The user ID.
+    /** @~english The user ID.
+     */
+    /** @~chinese 用户 ID。
      */
 	uid_t uid;
 };
 
-/** The definition of ChannelMediaRelayConfiguration.
+/** @~english The definition of ChannelMediaRelayConfiguration.
+ */
+/** @~chinese ChannelMediaRelayConfiguration 类定义。
  */
 struct ChannelMediaRelayConfiguration {
-    /** Pointer to the information of the source channel: ChannelMediaInfo. It contains the following members:
+    /** @~english Pointer to the information of the source channel: ChannelMediaInfo. It contains the following members:
      * - `channelName`: The name of the source channel. The default value is `NULL`, which means the SDK applies the name of the current channel.
      * - `uid`: ID of the broadcaster whose media stream you want to relay. The default value is 0, which means the SDK generates a random UID. You must set it as 0.
      * - `token`: The token for joining the source channel. It is generated with the `channelName` and `uid` you set in `srcInfo`.
      *   - If you have not enabled the App Certificate, set this parameter as the default value `NULL`, which means the SDK applies the App ID.
      *   - If you have enabled the App Certificate, you must use the `token` generated with the `channelName` and `uid`, and the `uid` must be set as 0.
      */
+    /** @~chinese 源频道信息指针 ChannelMediaInfo，包含如下成员：
+     * - `channelName`：源频道名。默认值为 `NULL`，表示 SDK 填充当前的频道名。
+     * - `uid`：标识源频道中的转发媒体流的 UID。默认值为 0，表示 SDK 随机分配一个 `uid`。请确保设为 0。
+     * - `token`：能加入源频道的 `token`。由你在 `srcInfo` 中设置的 `channelName` 和 `uid` 生成。
+     *   - 如未启用 App Certificate，可直接将该参数设为默认值 `NULL`，表示 SDK 填充 App ID。
+     *   - 如已启用 App Certificate，则务必填入使用 `channelName` 和 `uid` 生成的 `token`，且其中的 `uid` 必须为 0。
+     */
 	ChannelMediaInfo *srcInfo;
-    /** Pointer to the information of the destination channel: ChannelMediaInfo. It contains the following members:
+    /** @~english Pointer to the information of the destination channel: ChannelMediaInfo. It contains the following members:
      * - `channelName`: The name of the destination channel.
      * - `uid`: ID of the broadcaster in the destination channel. The value ranges from 0 to (2<sup>32</sup>-1). To avoid UID conflicts, this `uid` must be different from any other UIDs in the destination channel. The default value is 0, which means the SDK generates a random UID.
      * - `token`: The token for joining the destination channel. It is generated with the `channelName` and `uid` you set in `destInfos`.
      *   - If you have not enabled the App Certificate, set this parameter as the default value `NULL`, which means the SDK applies the App ID.
      *   - If you have enabled the App Certificate, you must use the `token` generated with the `channelName` and `uid`.
      */
+    /** @~chinese 目标频道信息指针 ChannelMediaInfo，包含如下成员：
+     * - `channelName`：目标频道的频道名。
+     * - `uid`：标识目标频道中的转发媒体流的 UID。取值范围为 0 到（2<sup>32</sup>-1），请确保与目标频道中的所有 UID 不同。默认值为 0，
+     * 表示 SDK 随机分配一个 UID。请确保不要将该参数设为目标频道的主播的 UID，并与目标频道中的所有 UID 都不同。
+     * - `token`：能加入目标频道的 `token`。由你在 `destInfos` 中设置的 `channelName` 和 `uid` 生成。
+     *   - 如未启用 App Certificate，可直接将该参数设为默认值 `NULL`，表示 SDK 填充 App ID。
+     *   - 如已启用 App Certificate，则务必填入使用 `channelName` 和 `uid` 生成的 `token`。
+     */
 	ChannelMediaInfo *destInfos;
-    /** The number of destination channels. The default value is 0, and the
+    /** @~english The number of destination channels. The default value is 0, and the
      * value range is [0,4). Ensure that the value of this parameter
      * corresponds to the number of ChannelMediaInfo structs you define in
      * `destInfos`.
+     */
+    /** @~chinese 目标频道数量，默认值为 0，取值范围为 [0，4]。该参数应与你在 `destInfo`
+     * 中定义的 ChannelMediaInfo 数组的数目一致。
      */
 	int destCount;
 
@@ -2926,47 +3798,67 @@ struct ChannelMediaRelayConfiguration {
 	{}
 };
 
-/**  **DEPRECATED** Lifecycle of the CDN live video stream.
+/**  @~english **DEPRECATED** Lifecycle of the CDN live video stream.
+*/
+/**  @~chinese @deprecated 服务端转码推流的生命周期。
 */
 enum RTMP_STREAM_LIFE_CYCLE_TYPE
 {
-  /** Bind to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
+  /** @~english Bind to the channel lifecycle. If all hosts leave the channel, the CDN live streaming stops after 30 seconds.
+  */
+  /** @~chinese @deprecated 跟频道生命周期绑定，即频道内所有主播离开，服务端转码推流会在 30 秒之后停止。
   */
 	RTMP_STREAM_LIFE_CYCLE_BIND2CHANNEL = 1,
-  /** Bind to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
+  /** @~english Bind to the owner of the RTMP stream. If the owner leaves the channel, the CDN live streaming stops immediately.
+  */
+  /** @~chinese @deprecated 跟启动服务端转码推流的主播生命周期绑定，即该主播离开，服务端转码推流会立即停止。
   */
 	RTMP_STREAM_LIFE_CYCLE_BIND2OWNER = 2,
 };
 
-/** Content hints for screen sharing.
+/** @~english Content hints for screen sharing.
 */
+/** @~chinese 屏幕共享的内容类型 */
 enum VideoContentHint
 {
-    /** (Default) No content hint.
+    /** @~english (Default) No content hint.
      */
+    /** @~chinese （默认）无指定的内容类型 */
     CONTENT_HINT_NONE,
-    /** Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
+    /** @~english Motion-intensive content. Choose this option if you prefer smoothness or when you are sharing a video clip, movie, or video game.
      */
+    /** @~chinese 内容类型为动画。当共享的内容是视频、电影或视频游戏时，推荐选择该内容类型。 */
     CONTENT_HINT_MOTION,
-    /** Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
+    /** @~english Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slide, or text.
      */
+    /** @~chinese 内容类型为细节。当共享的内容是图片或文字时，推荐选择该内容类型。 */
     CONTENT_HINT_DETAILS
 };
 
-/** The relative location of the region to the screen or window.
+/** @~english The relative location of the region to the screen or window.
+ */
+/** @~chinese 待共享区域相对于整个屏幕或窗口的位置，如不填，则表示共享整个屏幕或窗口。
  */
 struct Rectangle
 {
-    /** The horizontal offset from the top-left corner.
+    /** @~english The horizontal offset from the top-left corner.
+    */
+    /** @~chinese 左上角的横向偏移。
     */
     int x;
-    /** The vertical offset from the top-left corner.
+    /** @~english The vertical offset from the top-left corner.
+    */
+    /** @~chinese 左上角的纵向偏移。
     */
     int y;
-    /** The width of the region.
+    /** @~english The width of the region.
+    */
+    /** @~chinese 待共享区域的宽。
     */
     int width;
-    /** The height of the region.
+    /** @~english The height of the region.
+    */
+    /** @~chinese 待共享区域的高。
     */
     int height;
 
@@ -2974,18 +3866,27 @@ struct Rectangle
     Rectangle(int xx, int yy, int ww, int hh): x(xx), y(yy), width(ww), height(hh) {}
 };
 
-/**  **DEPRECATED** Definition of the rectangular region. */
+/** @~english **DEPRECATED** Definition of the rectangular region. */
+/** @~chinese @deprecated 定义矩形区域。*/
 typedef struct Rect {
-    /** Y-axis of the top line.
+    /** @~english Y-axis of the top line.
+     */
+    /** @~chinese 矩形上边的 Y 轴坐标。
      */
     int top;
-    /** X-axis of the left line.
+    /** @~english X-axis of the left line.
+     */
+    /** @~chinese 矩形左边的 X 轴坐标。
      */
     int left;
-    /** Y-axis of the bottom line.
+    /** @~english Y-axis of the bottom line.
+     */
+    /** @~chinese 矩形下边的 Y 轴坐标。
      */
     int bottom;
-    /** X-axis of the right line.
+    /** @~english X-axis of the right line.
+     */
+    /** @~chinese 矩形右边的 X 轴坐标。
      */
     int right;
 
@@ -2993,22 +3894,31 @@ typedef struct Rect {
     Rect(int t, int l, int b, int r): top(t), left(l), bottom(b), right(r) {}
 } Rect;
 
-/** The options of the watermark image to be added. */
+/** @~english The options of the watermark image to be added. */
+/** @~chinese 待添加的水印图片的设置选项。 */
 typedef struct WatermarkOptions {
-    /** Sets whether or not the watermark image is visible in the local video preview:
+    /** @~english Sets whether or not the watermark image is visible in the local video preview:
      * - true: (Default) The watermark image is visible in preview.
      * - false: The watermark image is not visible in preview.
      */
+    /** @~chinese 是否将水印设为预览时本地可见：
+     - true：(默认) 预览时水印本地可见；
+     - false：预览时水印本地不可见。
+     */
     bool visibleInPreview;
-    /**
+    /** @~english
      * The watermark position in the landscape mode. See Rectangle.
      * For detailed information on the landscape mode, see the advanced guide *Video Rotation*.
      */
+    /** @~chinese 视频编码模式为横屏时（详见进阶功能《视频采集旋转》）的水印坐标。详见 Rectangle 。
+     */
     Rectangle positionInLandscapeMode;
-    /**
+    /** @~english
      * The watermark position in the portrait mode. See Rectangle.
      * For detailed information on the portrait mode, see the advanced guide *Video Rotation*.
      */
+    /** @~chinese 视频编码模式为竖屏时（详见进阶功能《视频采集旋转》）的水印坐标。详见 Rectangle 。
+    */
     Rectangle positionInPortraitMode;
 
     WatermarkOptions()
@@ -3018,11 +3928,13 @@ typedef struct WatermarkOptions {
     {}
 } WatermarkOptions;
 
-/** Screen sharing encoding parameters.
+/** @~english Screen sharing encoding parameters.
 */
+/** @~chinese 屏幕共享的参数配置。
+ */
 struct ScreenCaptureParameters
 {
-    /** The maximum encoding dimensions of the shared region in terms of width * height.
+    /** @~english The maximum encoding dimensions of the shared region in terms of width * height.
 
 	 The default value is 1920 * 1080 pixels, that is, 2073600 pixels. Agora uses the value of this parameter to calculate the charges.
 
@@ -3031,21 +3943,39 @@ struct ScreenCaptureParameters
 	 - If the value of the screen dimensions is lower than that of the encoding dimensions, for example, 1000 * 1000, the SDK uses 1000 * 1000 for encoding.
 	 - If the value of the screen dimensions is higher than that of the encoding dimensions, for example, 2000 * 1500, the SDK uses the maximum value under 1920 * 1080 with the aspect ratio of the screen dimension (4:3) for encoding, that is, 1440 * 1080.
      */
+    /** @~chinese 屏幕共享视频发送的最大像素值。
+
+     默认值为 1920 &times; 1080，即 2073600 像素。该像素值为计费标准。
+
+     当共享的屏幕分辨率宽高比与该值设置不一致时，SDK 按如下策略进行编码。假设 dimensions 为 1920 &times; 1080：
+
+     - 如果屏幕分辨率小于 dimensions，如 1000 &times; 1000，SDK 直接按 1000 &times; 1000 进行编码；
+     - 如果屏幕分辨率大于 dimensions，如 2000 &times; 1500，SDK 按屏幕分辨率的宽高比，即 4：3，取 dimensions 以内的最大分辨率进行编码，即 1440 &times; 1080 。
+     */
     VideoDimensions dimensions;
-    /** The frame rate (fps) of the shared region.
+    /** @~english The frame rate (fps) of the shared region.
 
 	The default value is 5. We do not recommend setting this to a value greater than 15.
      */
+    /** @~chinese 共享视频的帧率，单位为 fps；默认值为 5，建议不要超过 15。
+     */
     int frameRate;
-    /** The bitrate (Kbps) of the shared region.
+    /** @~english The bitrate (Kbps) of the shared region.
 
 	The default value is 0 (the SDK works out a bitrate according to the dimensions of the current screen).
      */
+    /** @~chinese 共享视频的码率，单位为 Kbps；默认值为 0，表示 SDK 根据当前共享屏幕的分辨率计算出一个合理的值。
+     */
     int bitrate;
-    /** Sets whether or not to capture the mouse for screen sharing:
+    /** @~english Sets whether or not to capture the mouse for screen sharing:
 
 	- true: (Default) Capture the mouse.
 	- false: Do not capture the mouse.
+     */
+    /** @~chinese 是否采集鼠标用于屏幕共享
+
+     - true: （默认）采集鼠标
+     - false: 不采集鼠标
      */
     bool captureMouseCursor;
 
@@ -3054,17 +3984,23 @@ struct ScreenCaptureParameters
     ScreenCaptureParameters(int width, int height, int f, int b, bool c) : dimensions(width, height), frameRate(f), bitrate(b), captureMouseCursor(c) {}
 };
 
-/** Video display settings of the VideoCanvas class.
+/** @~english Video display settings of the VideoCanvas class.
+*/
+/** @~chinese VideoCanvas 类的视频显示设置。
 */
 struct VideoCanvas
 {
-    /** Video display window (view).
+    /** @~english Video display window (view).
      */
+    /** @~chinese 视频显示窗口 (view)。
+  */
     view_t view;
-    /** The rendering mode of the video view. See RENDER_MODE_TYPE
+    /** @~english The rendering mode of the video view. See RENDER_MODE_TYPE
      */
+    /** @~chinese 视频渲染模式，详见 #RENDER_MODE_TYPE
+    */
     int renderMode;
-    /** The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
+    /** @~english The unique channel name for the AgoraRTC session in the string format. The string length must be less than 64 bytes. Supported character scopes are:
      - All lowercase English letters: a to z.
      - All uppercase English letters: A to Z.
      - All numeric characters: 0 to 9.
@@ -3075,15 +4011,32 @@ struct VideoCanvas
      - The default value is the empty string "". Use the default value if the user joins the channel using the \ref IRtcEngine::joinChannel "joinChannel" method in the IRtcEngine class. The `VideoCanvas` struct defines the video canvas of the user in the channel.
      - If the user joins the channel using the \ref IRtcEngine::joinChannel "joinChannel" method in the IChannel class, set this parameter as the `channelId` of the `IChannel` object. The `VideoCanvas` struct defines the video canvas of the user in the channel with the specified channel ID.
      */
+    /** @~chinese 能标识频道的频道名，长度在 64 字节以内的字符。以下为支持的字符集范围（共 89 个字符）：
+     - 26 个小写英文字母 a~z；
+     - 26 个大写英文字母 A~Z；
+     - 10 个数字 0~9；
+     - 空格；
+     - "!"、"#"、"$"、"%"、"&"、"("、")"、"+"、"-"、":"、";"、"<"、"="、"."、">"、"?"、"@"、"["、"]"、"^"、"_"、" {"、"}"、"|"、"~"、","。
+
+     @note
+     - 该参数默认值为空字符 ""。如果用户是通过 IRtcEngine 类的 \ref IRtcEngine::joinChannel "joinChannel" 方法加入频道的，则将参数设为默认值，表示该用户在频道内的渲染视图。
+     - 如果用户是通过 IChannel 类的 \ref IChannel::joinChannel "joinChannel" 方法加入频道的，则将该参数设为该 IChannel 类对应的 `channelId`，表示该用户在该 `channelId` 对应频道内的渲染视图。
+     */
     char channelId[MAX_CHANNEL_ID_LENGTH];
-    /** The user ID. */
+    /** @~english The user ID. */
+    /** @~chinese 用户 ID */
     uid_t uid;
     void *priv; // private data (underlying video engine denotes it)
-    /** The mirror mode of the video view. See VIDEO_MIRROR_MODE_TYPE
+    /** @~english The mirror mode of the video view. See VIDEO_MIRROR_MODE_TYPE
      @note
      - For the mirror mode of the local video view: If you use a front camera, the SDK enables the mirror mode by default; if you use a rear camera, the SDK disables the mirror mode by default.
      - For the mirror mode of the remote video view: The SDK disables the mirror mode by default.
     */
+    /** @~chinese 视图镜像模式，详见 #VIDEO_MIRROR_MODE_TYPE
+     @note
+     - 本地视图镜像模式：如果你使用前置摄像头，默认启动本地视图镜像模式；如果你使用后置摄像头，默认关闭本地视图镜像模式。
+     - 远端用户视图镜像模式：默认关闭远端用户的镜像模式。
+     */
     VIDEO_MIRROR_MODE_TYPE mirrorMode;
 
     VideoCanvas()
@@ -3135,33 +4088,46 @@ struct VideoCanvas
     }
 };
 
-/** Image enhancement options.
+/** @~english Image enhancement options.
+*/
+/** @~chinese 美颜选项。
 */
 struct BeautyOptions {
-    /** The contrast level, used with the @p lightening parameter.
+    /** @~english The contrast level, used with the @p lightening parameter.
     */
+    /** @~chinese 亮度明暗对比度，和参数 @p lightening 一起使用。 */
     enum LIGHTENING_CONTRAST_LEVEL
     {
-        /** Low contrast level. */
+        /** @~english Low contrast level. */
+        /** @~chinese 低对比度。 */
         LIGHTENING_CONTRAST_LOW = 0,
-        /** (Default) Normal contrast level. */
+        /** @~english (Default) Normal contrast level. */
+        /** @~chinese 正常对比度。 */
         LIGHTENING_CONTRAST_NORMAL,
-        /** High contrast level. */
+        /** @~english High contrast level. */
+        /** @~chinese 高对比度。 */
         LIGHTENING_CONTRAST_HIGH
     };
 
-/** The contrast level, used with the @p lightening parameter.
+/** @~english The contrast level, used with the @p lightening parameter.
+*/
+/** @~chinese 亮度明暗对比度,和参数 @p lightening 一起使用。
 */
 LIGHTENING_CONTRAST_LEVEL lighteningContrastLevel;
 
-/** The brightness level. The value ranges from 0.0 (original) to 1.0. */
+/** @~english The brightness level. The value ranges from 0.0 (original) to 1.0. */
+/** @~chinese 亮度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始亮度。可用来实现美白等视觉效果。 */
 float lighteningLevel;
 
-/** The sharpness level. The value ranges between 0 (original) and 1. This parameter is usually used to remove blemishes.
+/** @~english The sharpness level. The value ranges between 0 (original) and 1. This parameter is usually used to remove blemishes.
  */
+/** @~chinese 平滑度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始平滑等级。可用来实现祛痘、磨皮等视觉效果。
+*/
 float smoothnessLevel;
 
-/** The redness level. The value ranges between 0 (original) and 1. This parameter adjusts the red saturation level.
+/** @~english The redness level. The value ranges between 0 (original) and 1. This parameter adjusts the red saturation level.
+*/
+/** @~chinese 红色度，取值范围为 [0.0, 1.0]，其中 0.0 表示原始红色度。可用来实现红润肤色等视觉效果。
 */
 float rednessLevel;
 
@@ -3178,16 +4144,25 @@ BeautyOptions()
     rednessLevel(0) {}
 };
 
-/**
+/** @~english
  * The UserInfo struct.
  */
+/** @~chinese
+ * UserInfo 的定义。
+ */
 struct UserInfo {
-  /**
+  /** @~english
    * The user ID.
    */
+  /** @~chinese
+   * 用户 ID。
+   */
   uid_t uid;
-  /**
+  /** @~english
    * The user account.
+   */
+  /** @~chinese
+   * 用户 Account。
    */
   char userAccount[MAX_USER_ACCOUNT_LENGTH];
   UserInfo()
@@ -3196,117 +4171,200 @@ struct UserInfo {
   }
 };
 
-/**
+/** @~english
  * IP areas.
  */
+/** @~chinese
+ * 访问区域。
+ */
 enum AREA_CODE {
-    /**
+    /** @~english
      * Mainland China.
      */
+    /** @~chinese
+     * 中国大陆。
+     */
     AREA_CODE_CN = (1 << 0),
-    /**
+    /** @~english
      * North America.
      */
+    /** @~chinese
+     * 北美区域。
+     */
     AREA_CODE_NA = (1 << 1),
-    /**
+    /** @~english
      * Europe.
      */
+    /** @~chinese
+     * 欧洲区域。
+     */
     AREA_CODE_EUR = (1 << 2),
-    /**
+    /** @~english
      * Asia, excluding mainland China.
      */
+    /** @~chinese
+     * 除中国大陆以外的亚洲区域。
+     */
     AREA_CODE_AS = (1 << 3),
-    /**
+    /** @~english
      * (Default) Global.
+     */
+    /** @~chinese
+     * （默认）全球。
      */
     AREA_CODE_GLOBAL = (0xFFFFFFFF)
 };
 
 enum ENCRYPTION_CONFIG {
-    /**
+    /** @~english
 	 * - 1: Force set master key and mode;
 	 * - 0: Not force set, checking whether encryption plugin exists
 	 */
+    /** @~chinese
+	 * - 1: 强制配置加密密钥和模式。
+	 * - 0: 不强制配置加密密钥和模式，检查是否存在加密插件。
+	 */
     ENCRYPTION_FORCE_SETTING = (1 << 0),
-    /**
+    /** @~english
 	 * - 1: Force not encrypting packet;
 	 * - 0: Not force encrypting;
 	 */
+    /** @~chinese
+	 * - 1: 强制加密数据包。
+	 * - 0: 不强制加密数据包。
+	 */
     ENCRYPTION_FORCE_DISABLE_PACKET = (1 << 1)
 };
-/** Definition of IPacketObserver.
+/** @~english Definition of IPacketObserver.
 */
+/** @~chinese IPacketObserver 定义。
+ */
 class IPacketObserver
 {
 public:
-/** Definition of Packet.
+/** @~english Definition of Packet.
  */
+/** @~chinese Packet 定义。
+     */
 	struct Packet
 	{
-        /** Buffer address of the sent or received data.
+        /** @~english Buffer address of the sent or received data.
          * @note Agora recommends that the value of buffer is more than 2048 bytes, otherwise, you may meet undefined behaviors such as a crash.
          */
+        /** @~chinese 需要发送或接收的数据的缓存地址。
+         * @note Agora 建议 buffer 值不要小于 2048 字节，否则有可能会出现未定义行为（例如崩溃）。
+         */
 		const unsigned char* buffer;
-        /** Buffer size of the sent or received data.
+        /** @~english Buffer size of the sent or received data.
+         */
+        /** @~chinese 将要发送或接收的数据的缓存大小。
          */
 		unsigned int size;
 	};
-	/** Occurs when the local user sends an audio packet.
+	/** @~english Occurs when the local user sends an audio packet.
 
      @param packet The sent audio packet. See Packet.
      @return
      - true: The audio packet is sent successfully.
      - false: The audio packet is discarded.
      */
+    /** @~chinese 已发送音频包回调。
+
+     在音频包被发送给对方用户前由 SDK 调用。
+
+     @param packet 详见: Packet 。
+     @return
+     - true: 发送音频包；
+     - false: 丢弃音频包。
+     */
 	virtual bool onSendAudioPacket(Packet& packet) = 0;
-	/** Occurs when the local user sends a video packet.
+	/** @~english Occurs when the local user sends a video packet.
 
      @param packet The sent video packet. See Packet.
      @return
      - true: The video packet is sent successfully.
      - false: The video packet is discarded.
      */
+    /** @~chinese 已发送视频包回调。
+
+     在视频包被发送给对方用户前由 SDK 调用。
+
+     @param packet 详见: Packet 。
+     @return
+     - true: 发送视频包；
+     - false: 丢弃视频包。
+     */
 	virtual bool onSendVideoPacket(Packet& packet) = 0;
-	/** Occurs when the local user receives an audio packet.
+	/** @~english Occurs when the local user receives an audio packet.
 
      @param packet The received audio packet. See Packet.
      @return
      - true: The audio packet is received successfully.
      - false: The audio packet is discarded.
 	 */
+    /** @~chinese 收到音频包回调。
+
+     在收到对方用户的音频包之前由 SDK 调用。
+
+     @param packet 详见: Packet 。
+     @return
+     - true: 发送音频包；
+     - false: 丢弃音频包。
+     */
 	virtual bool onReceiveAudioPacket(Packet& packet) = 0;
-	/** Occurs when the local user receives a video packet.
+	/** @~english Occurs when the local user receives a video packet.
 
      @param packet The received video packet. See Packet.
      @return
      - true: The video packet is received successfully.
      - false: The video packet is discarded.
 	 */
+    /** @~chinese 收到视频包回调。
+
+     在收到对方用户的视频包之前由 SDK 调用。
+
+     @param packet 详见: Packet 。
+     @return
+     - true: 发送视频包；
+     - false: 丢弃视频包。
+     */
 	virtual bool onReceiveVideoPacket(Packet& packet) = 0;
 };
 
-/** The SDK uses the IRtcEngineEventHandler interface class to send callbacks to the application. The application inherits the methods of this interface class to retrieve these callbacks.
+/** @~english The SDK uses the IRtcEngineEventHandler interface class to send callbacks to the application. The application inherits the methods of this interface class to retrieve these callbacks.
 
  All methods in this interface class have default (empty) implementations. Therefore, the application can only inherit some required events. In the callbacks, avoid time-consuming tasks or calling blocking APIs, such as the SendMessage method. Otherwise, the SDK may not work properly.
  */
+/** @~chinese
+IRtcEngineEventHandler 接口类用于 SDK 向 App 发送回调事件通知，App 通过继承该接口类的方法获取 SDK 的事件通知。
+
+接口类的所有方法都由缺省（空）实现，App 可以根据需要只继承关心的事件。在回调方法中，App 不应该做耗时或者调用可能会引起阻塞的 API（如发送消息），否则可能影响 SDK 的运行。
+*/
 class IRtcEngineEventHandler
 {
 public:
     virtual ~IRtcEngineEventHandler() {}
 
-    /** Reports a warning during SDK runtime.
+    /** @~english Reports a warning during SDK runtime.
 
      In most cases, the application can ignore the warning reported by the SDK because the SDK can usually fix the issue and resume running. For example, when losing connection with the server, the SDK may report #WARN_LOOKUP_CHANNEL_TIMEOUT and automatically try to reconnect.
 
      @param warn Warning code: #WARN_CODE_TYPE.
      @param msg Pointer to the warning message.
      */
+    /** @~chinese 发生警告回调。
+
+     该回调方法表示 SDK 运行时出现了（网络或媒体相关的）警告。通常情况下，SDK 上报的警告信息 App 可以忽略，SDK 会自动恢复。比如和服务器失去连接时，SDK 可能会上报 #WARN_OPEN_CHANNEL_TIMEOUT 警告，同时自动尝试重连。
+
+     @param warn 警告代码： #WARN_CODE_TYPE 。
+     @param msg 警告描述。
+     */
     virtual void onWarning(int warn, const char* msg) {
         (void)warn;
         (void)msg;
     }
 
-    /** Reports an error during SDK runtime.
+    /** @~english Reports an error during SDK runtime.
 
      In most cases, the SDK cannot fix the issue and resume running. The SDK requires the application to take action or informs the user about the issue.
 
@@ -3315,12 +4373,19 @@ public:
      @param err Error code: #ERROR_CODE_TYPE.
      @param msg Pointer to the error message.
      */
+    /** @~chinese 发生错误回调。
+
+     该回调方法表示 SDK 运行时出现了（网络或媒体相关的）错误。通常情况下，SDK 上报的错误意味着 SDK 无法自动恢复，需要 App 干预或提示用户。 比如启动通话失败时，SDK 会上报 #ERR_START_CALL 错误。App 可以提示用户启动通话失败，并调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 退出频道。
+
+     @param err 错误代码： #ERROR_CODE_TYPE 。
+     @param msg 错误描述。
+     */
     virtual void onError(int err, const char* msg) {
         (void)err;
         (void)msg;
     }
 
-    /** Occurs when a user joins a channel.
+    /** @~english Occurs when a user joins a channel.
 
      This callback notifies the application that a user joins a specified channel when the application calls the \ref IRtcEngine::joinChannel "joinChannel" method.
 
@@ -3332,13 +4397,23 @@ public:
      @param  uid User ID of the user joining the channel.
      @param  elapsed Time elapsed (ms) from the user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
      */
+    /** @~chinese 加入频道回调。
+
+     该回调方法表示该客户端成功加入了指定的频道。
+
+     channel ID 基于 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 中指定的 channel name 分配。如果调用 IRtcEngine::joinChannel 时并没有指定 user ID。服务器会自动分配一个。
+
+     @param channel      频道名。
+     @param  uid 用户 ID。如果 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 中指定了 uid，则此处返回该 ID；否则使用 Agora 服务器自动分配的 ID。
+     @param  elapsed 从 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 开始到发生此事件过去的时间（毫秒）。
+     */
     virtual void onJoinChannelSuccess(const char* channel, uid_t uid, int elapsed) {
         (void)channel;
         (void)uid;
         (void)elapsed;
     }
 
-    /** Occurs when a user rejoins the channel after disconnection due to network problems.
+    /** @~english Occurs when a user rejoins the channel after disconnection due to network problems.
 
     When a user loses connection with the server because of network problems, the SDK automatically tries to reconnect and triggers this callback upon reconnection.
 
@@ -3346,13 +4421,21 @@ public:
      @param uid User ID of the user rejoining the channel.
      @param elapsed Time elapsed (ms) from starting to reconnect until the SDK triggers this callback.
      */
+    /** @~chinese 重新加入频道回调。
+
+     有时候由于网络原因，客户端可能会和服务器失去连接，SDK 会进行自动重连，自动重连成功后触发此回调方法。
+
+     @param channel 频道名。
+     @param uid 用户 ID。
+     @param elapsed 从开始重连到重连成功的时间（毫秒）。
+     */
     virtual void onRejoinChannelSuccess(const char* channel, uid_t uid, int elapsed) {
         (void)channel;
         (void)uid;
         (void)elapsed;
     }
 
-    /** Occurs when a user leaves the channel.
+    /** @~english Occurs when a user leaves the channel.
 
     This callback notifies the application that a user leaves the channel when the application calls the \ref IRtcEngine::leaveChannel "leaveChannel" method.
 
@@ -3360,11 +4443,17 @@ public:
 
      @param stats Pointer to the statistics of the call: RtcStats.
      */
+    /** @~chinese 离开频道回调。
+
+     App 调用 \ref agora::rtc::IRtcEngine::leaveChannel "leaveChannel" 方法时，SDK提示 App 离开频道成功。在该回调方法中，App 可以得到此次通话的总通话时长、SDK 收发数据的流量等信息。App 通过该回调获取通话时长以及 SDK 接收到或发送的数据统计信息。
+
+     @param stats 通话的统计数据: RtcStats 。
+     */
     virtual void onLeaveChannel(const RtcStats& stats) {
         (void)stats;
     }
 
-    /** Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
+    /** @~english Occurs when the user role switches in a live broadcast. For example, from a host to an audience or vice versa.
 
     This callback notifies the application of a user role switch when the application calls the \ref IRtcEngine::setClientRole "setClientRole" method.
 
@@ -3372,10 +4461,17 @@ public:
      @param oldRole Role that the user switches from: #CLIENT_ROLE_TYPE.
      @param newRole Role that the user switches to: #CLIENT_ROLE_TYPE.
      */
+    /** @~chinese 直播场景下用户角色已切换回调。
+
+     直播场景下，当用户切换角色时会触发此回调，即主播切换为观众时，或观众切换为主播时。
+     该回调由本地用户在加入频道后调用 \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" 改变用户角色触发的。
+     @param oldRole 切换前的角色: #CLIENT_ROLE_TYPE 。
+     @param newRole 切换后的角色: #CLIENT_ROLE_TYPE 。
+     */
     virtual void onClientRoleChanged(CLIENT_ROLE_TYPE oldRole, CLIENT_ROLE_TYPE newRole) {
     }
 
-    /** Occurs when a remote user (Communication)/ host (Live Broadcast) joins the channel.
+    /** @~english Occurs when a remote user (Communication)/ host (Live Broadcast) joins the channel.
 
      - Communication profile: This callback notifies the application that another user joins the channel. If other users are already in the channel, the SDK also reports to the application on the existing users.
      - Live-broadcast profile: This callback notifies the application that the host joins the channel. If other hosts are already in the channel, the SDK also reports to the application on the existing hosts. We recommend limiting the number of hosts to 17.
@@ -3394,12 +4490,31 @@ public:
      @param uid User ID of the user or host joining the channel.
      @param elapsed Time delay (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
      */
+    /** @~chinese 远端用户（通信场景）/主播（直播场景）加入当前频道回调。
+
+     - 通信场景下，该回调提示有远端用户加入了频道，并返回新加入用户的 ID；如果加入之前，已经有其他用户在频道中了，新加入的用户也会收到这些已有用户加入频道的回调。
+     - 直播场景下，该回调提示有主播加入了频道，并返回该主播的 ID。如果在加入之前，已经有主播在频道中了，新加入的用户也会收到已有主播加入频道的回调。声网建议连麦主播不超过 17 人。
+
+     该回调在如下情况下会被触发：
+     - 远端用户/主播调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 方法加入频道
+     - 远端用户加入频道后调用 \ref agora::rtc::IRtcEngine::setClientRole "setClientRole" 将用户角色改变为主播
+     - 远端用户/主播网络中断后重新加入频道
+     - 主播通过调用 \ref agora::rtc::IRtcEngine::addInjectStreamUrl "addInjectStreamUrl" 方法成功输入在线媒体流
+
+     @note 直播场景下，
+     - 主播间能相互收到新主播加入频道的回调，并能获得该主播的 uid。
+     - 观众也能收到新主播加入频道的回调，并能获得该主播的 uid。
+     - 当 Web 端加入直播频道时，只要 Web 端有推流，SDK 会默认该 Web 端为主播，并触发该回调。
+
+     @param uid 新加入频道的远端用户/主播 ID。
+     @param elapsed 从本地用户调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 到该回调触发的延迟（毫秒)。
+     */
     virtual void onUserJoined(uid_t uid, int elapsed) {
         (void)uid;
         (void)elapsed;
     }
 
-    /** Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
+    /** @~english Occurs when a remote user (Communication)/host (Live Broadcast) leaves the channel.
 
     Reasons why the user is offline:
 
@@ -3409,32 +4524,58 @@ public:
      @param uid User ID of the user leaving the channel or going offline.
      @param reason Reason why the user is offline: #USER_OFFLINE_REASON_TYPE.
      */
+    /** @~chinese 远端用户（通信场景）/主播（直播场景）离开当前频道回调。
+
+     提示有远端用户/主播离开了频道（或掉线）。用户离开频道有两个原因，即正常离开和超时掉线：
+     - 正常离开的时候，远端用户/主播会发送类似“再见”的消息。接收此消息后，判断用户离开频道。
+     - 超时掉线的依据是，在一定时间内（直播场景稍有延时），
+     用户没有收到对方的任何数据包，则判定为对方掉线。在网络较差的情况下，有可能会误报。
+     我们建议使用 Agora 实时消息 SDK 来做可靠的掉线检测。
+
+     @param uid 离线用户或主播的用户 ID。
+     @param reason 离线原因: #USER_OFFLINE_REASON_TYPE 。
+     */
     virtual void onUserOffline(uid_t uid, USER_OFFLINE_REASON_TYPE reason) {
         (void)uid;
         (void)reason;
     }
 
-    /** Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
+    /** @~english Reports the last mile network quality of the local user once every two seconds before the user joins the channel.
 
      Last mile refers to the connection between the local device and Agora's edge server. After the application calls the \ref IRtcEngine::enableLastmileTest "enableLastmileTest" method, this callback reports once every two seconds the uplink and downlink last mile network conditions of the local user before the user joins the channel.
 
      @param quality The last mile network quality: #QUALITY_TYPE.
      */
+    /** @~chinese 通话前网络上下行 last mile 质量报告回调。
+
+     该回调描述本地用户在加入频道前的 last mile 网络探测的结果，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
+
+     在调用 \ref agora::rtc::IRtcEngine::enableLastmileTest "enableLastmileTest" 之后，该回调函数每 2 秒触发一次。如果远端有多个用户/主播，该回调每 2 秒会被触发多次。
+
+     @param quality 网络上下行质量，基于上下行网络的丢包率和抖动计算，探测结果主要反映上行网络的状态。详见: #QUALITY_TYPE 。
+     */
     virtual void onLastmileQuality(int quality) {
         (void)quality;
     }
 
-    /** Reports the last-mile network probe result.
+    /** @~english Reports the last-mile network probe result.
 
     The SDK triggers this callback within 30 seconds after the app calls the \ref agora::rtc::IRtcEngine::startLastmileProbeTest "startLastmileProbeTest" method.
 
     @param result The uplink and downlink last-mile network probe test result. See LastmileProbeResult.
     */
+    /** @~chinese 通话前网络质量探测报告回调。
+
+    通话前网络上下行 Last mile 质量探测报告回调。在调用 \ref agora::rtc::IRtcEngine::startLastmileProbeTest "startLastmileProbeTest" 之后，SDK 会在约 30 秒内返回该回调。
+
+    @param result 上下行 Last mile 质量探测结果。 详见: LastmileProbeResult 。
+
+     */
     virtual void onLastmileProbeResult(const LastmileProbeResult& result) {
         (void)result;
     }
 
-    /** **DEPRECATED** Occurs when the connection between the SDK and the server is interrupted.
+    /** @~english **DEPRECATED** Occurs when the connection between the SDK and the server is interrupted.
 
      Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_RECONNECTING, CONNECTION_CHANGED_INTERRUPTED)" callback.
 
@@ -3449,9 +4590,19 @@ public:
      If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
 
     */
+    /** @~chinese 网络连接中断回调。已废弃，被 \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_RECONNECTING, CONNECTION_CHANGED_INTERRUPTED)" 取代。
+
+     SDK 在和服务器建立连接后，失去了网络连接超过 4 秒，会触发该回调。在触发事件后，SDK 会主动重连服务器，所以该事件可以用于 UI 提示。
+
+     与 \ref agora::rtc::IRtcEngineEventHandler::onConnectionLost "onConnectionLost" 回调的区别是：
+     - *onConnectionInterrupted* 回调一定是发生在加入频道成功后，且 SDK 刚失去和服务器连接超过 4 秒时触发。
+     - *onConnectionLost* 回调是无论之前加入频道是否成功，只要 10 秒内和服务器无法建立连接都会触发。
+
+     如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，SDK 会停止尝试重连。
+     */
     virtual void onConnectionInterrupted() {}
 
-    /** Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
+    /** @~english Occurs when the SDK cannot reconnect to Agora's edge server 10 seconds after its connection to the server is interrupted.
 
     The SDK triggers this callback when it cannot connect to the server 10 seconds after calling the \ref IRtcEngine::joinChannel "joinChannel" method, whether or not it is in the channel.
 
@@ -3463,19 +4614,40 @@ public:
     If the SDK fails to rejoin the channel 20 minutes after being disconnected from Agora's edge server, the SDK stops rejoining the channel.
 
      */
+    /** @~chinese 网络连接丢失回调。
+
+     SDK 在调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 后无论是否加入成功，只要 10 秒和服务器无法连接就会触发该回调。
+
+     与 \ref agora::rtc::IRtcEngineEventHandler::onConnectionInterrupted "onConnectionInterrupted" 的区别是：
+
+     - *onConnectionInterrupted* 回调一定是发生在加入频道成功后，且 SDK 刚失去和服务器连接超过 4 秒时触发。
+     - *onConnectionLost* 回调是无论之前加入频道是否成功，只要 10 秒内和服务器无法建立连接都会触发。
+
+     如果 SDK 在断开连接后，20 分钟内还是没能重新加入频道，SDK 会停止尝试重连。
+     */
     virtual void onConnectionLost() {}
 
-    /** **DEPRECATED** Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_FAILED, CONNECTION_CHANGED_BANNED_BY_SERVER)" callback.
+    /** @~english **DEPRECATED** Deprecated as of v2.3.2. Replaced by the \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_FAILED, CONNECTION_CHANGED_BANNED_BY_SERVER)" callback.
 
     Occurs when your connection is banned by the Agora Server.
      */
+    /** @~chinese @deprecated 连接已被服务器禁止回调。已废弃，被 \ref agora::rtc::IRtcEngineEventHandler::onConnectionStateChanged "onConnectionStateChanged(CONNECTION_STATE_FAILED, CONNECTION_CHANGED_BANNED_BY_SERVER)" 取代。
+
+     当你被服务端禁掉连接的权限时，会触发该回调。
+     */
     virtual void onConnectionBanned() {}
 
-    /** Occurs when a method is executed by the SDK.
+    /** @~english Occurs when a method is executed by the SDK.
 
      @param err The error code (#ERROR_CODE_TYPE) returned by the SDK when a method call fails. If the SDK returns 0, then the method call is successful.
      @param api Pointer to the method executed by the SDK.
      @param result Pointer to the result of the method call.
+     */
+    /** @~chinese API 方法已执行回调。
+
+     @param err 当该方法调用失败时 SDK 返回的错误码。如果方法调用失败，会返回错误码 #ERROR_CODE_TYPE 。如果该方法调用成功，SDK 将返回 0。
+     @param api SDK 执行的 API。
+     @param result SDK 调用 API 的调用结果。
      */
     virtual void onApiCallExecuted(int err, const char* api, const char* result) {
         (void)err;
@@ -3483,26 +4655,39 @@ public:
         (void)result;
     }
 
-    /** Occurs when the token expires.
+    /** @~english Occurs when the token expires.
 
      After a token is specified by calling the \ref IRtcEngine::joinChannel "joinChannel" method, if the SDK losses connection with the Agora server due to network issues, the token may expire after a certain period of time and a new token may be required to reconnect to the server.
 
      This callback notifies the app to generate a new token and call joinChannel to rejoin the channel with the new token.
      */
+    /** @~chinese Token 已过期回调。
+
+     在调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel", 时如果指定了 Token，由于 Token 具有一定的时效，
+     在通话过程中 SDK 可能由于网络原因和服务器失去连接，重连时可能需要新的 Token。
+
+     该回调通知 App 需要生成新的 Token，并调用 \ref agora::rtc::IRtcEngine::renewToken "renewToken" 更新 Token。
+     */
     virtual void onRequestToken() {
     }
 
-    /** Occurs when the token expires in 30 seconds.
+    /** @~english Occurs when the token expires in 30 seconds.
 
      The user becomes offline if the token used in the \ref IRtcEngine::joinChannel "joinChannel" method expires. The SDK triggers this callback 30 seconds before the token expires to remind the application to get a new token. Upon receiving this callback, generate a new token on the server and call the \ref IRtcEngine::renewToken "renewToken" method to pass the new token to the SDK.
 
      @param token Pointer to the token that expires in 30 seconds.
      */
+    /** @~chinese Token 服务即将过期回调。
+
+     在调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 时如果指定了 Token，由于 Token 具有一定的时效，在通话过程中如果 Token 即将失效，SDK 会提前 30 秒触发该回调，提醒 App 更新 Token。 当收到该回调时，用户需要重新在服务端生成新的 Token，然后调用 \ref agora::rtc::IRtcEngine::renewToken "renewToken" 将新生成的 Token 传给 SDK。
+
+     @param token 即将服务失效的 Token。
+     */
     virtual void onTokenPrivilegeWillExpire(const char* token) {
         (void)token;
     }
 
-    /** **DEPRECATED** Reports the statistics of the audio stream from each remote user/host.
+    /** @~english **DEPRECATED** Reports the statistics of the audio stream from each remote user/host.
 
     Deprecated as of v2.3.2. Use the \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStats "onRemoteAudioStats" callback instead.
 
@@ -3513,6 +4698,17 @@ public:
      @param delay Time delay (ms) of sending the audio packet from the sender to the receiver, including the time delay of audio sampling pre-processing, transmission, and the jitter buffer.
      @param lost Packet loss rate (%) of the audio packet sent from the sender to the receiver.
      */
+    /** @~chinese @deprecated 远端声音质量回调。
+
+     已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStats "onRemoteAudioStats" 方法。
+
+     该回调描述远端用户在通话中的音频质量，针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播，该回调每 2 秒会被触发多次。
+
+     @param uid 用户 ID，指定是谁发的音频流。
+     @param quality 语音质量，详见: #QUALITY_TYPE 。
+     @param delay 音频包从发送端到接收端的延迟（毫秒）。包括声音采样前处理、网络传输、网络抖动缓冲引起的延迟。
+     @param lost 音频包从发送端到接收端的丢包率 (%)。
+     */
     virtual void onAudioQuality(uid_t uid, int quality, unsigned short delay, unsigned short lost) {
         (void)uid;
         (void)quality;
@@ -3520,17 +4716,23 @@ public:
         (void)lost;
     }
 
-    /** Reports the statistics of the current call.
+    /** @~english Reports the statistics of the current call.
 
      The SDK triggers this callback once every two seconds after the user joins the channel.
 
      @param stats Statistics of the IRtcEngine: RtcStats.
      */
+    /** @~chinese 当前通话统计回调。
+
+     SDK 定期向 App 报告当前通话的统计信息，每两秒触发一次。
+
+     @param stats RTC 引擎统计数据: RtcStats 。
+     */
     virtual void onRtcStats(const RtcStats& stats) {
         (void)stats;
     }
 
-    /** Reports the last mile network quality of each user in the channel once every two seconds.
+    /** @~english Reports the last mile network quality of each user in the channel once every two seconds.
 
      Last mile refers to the connection between the local device and Agora's edge server. This callback reports once every two seconds the last mile network conditions of each user in the channel. If a channel includes multiple users, the SDK triggers this callback as many times.
 
@@ -3538,13 +4740,23 @@ public:
      @param txQuality Uplink transmission quality rating of the user in terms of the transmission bitrate, packet loss rate, average RTT (Round-Trip Time), and jitter of the uplink network. @p txQuality is a quality rating helping you understand how well the current uplink network conditions can support the selected VideoEncoderConfiguration. For example, a 1000 Kbps uplink network may be adequate for video frames with a resolution of 640 * 480 and a frame rate of 15 fps in the Live-broadcast profile, but may be inadequate for resolutions higher than 1280 * 720. See #QUALITY_TYPE.
      @param rxQuality Downlink network quality rating of the user in terms of the packet loss rate, average RTT, and jitter of the downlink network. See #QUALITY_TYPE.
      */
+    /** @~chinese 通话中每个用户的网络上下行 last mile 质量报告回调。
+
+     该回调描述每个用户在通话中的 last mile 网络状态，其中 last mile 是指设备到 Agora 边缘服务器的网络状态。
+
+     该回调每 2 秒触发一次。如果远端有多个用户，该回调每 2 秒会被触发多次。
+
+     @param uid 用户 ID。表示该回调报告的是持有该 ID 的用户的网络质量。当 uid 为 0 时，返回的是本地用户的网络质量。
+     @param txQuality 该用户的上行网络质量，基于发送码率、上行丢包率、平均往返时延和网络抖动计算。该值代表当前的上行网络质量，帮助判断是否可以支持当前设置的视频编码属性。假设上行码率是 1000 Kbps，那么支持直播场景下 640 &times; 480 的分辨率、15 fps 的帧率没有问题，但是支持 1280 &times; 720 的分辨率就会有困难。详见 #QUALITY_TYPE 。
+     @param rxQuality 该用户的下行网络质量，基于下行网络的丢包率、平均往返延时和网络抖动计算。详见 #QUALITY_TYPE 。
+     */
     virtual void onNetworkQuality(uid_t uid, int txQuality, int rxQuality) {
     (void)uid;
     (void)txQuality;
     (void)rxQuality;
     }
 
-    /** Reports the statistics of the local video stream.
+    /** @~english Reports the statistics of the local video stream.
      *
      * The SDK triggers this callback once every two seconds for each
      * user/host. If there are multiple users/hosts in the channel, the SDK
@@ -3559,11 +4771,17 @@ public:
      *
      * @param stats Statistics of the local video stream. See LocalVideoStats.
      */
+    /** @~chinese 本地视频流统计信息回调。
+
+    该回调描述本地设备发送视频流的统计信息，每 2 秒触发一次。
+
+     @param stats 本地视频流统计信息。详见: LocalVideoStats 。
+     */
    virtual void onLocalVideoStats(const LocalVideoStats& stats) {
     (void)stats;
     }
 
-    /** Reports the statistics of the video stream from each remote user/host.
+    /** @~english Reports the statistics of the video stream from each remote user/host.
      *
      * The SDK triggers this callback once every two seconds for each remote
      * user/host. If a channel includes multiple remote users, the SDK
@@ -3572,22 +4790,36 @@ public:
      * @param stats Statistics of the remote video stream. See
      * RemoteVideoStats.
      */
+    /** @~chinese 通话中远端视频流的统计信息回调。
+     *
+     * 该回调描述远端用户在通话中端到端的视频流统计信息，
+     * 针对每个远端用户/主播每 2 秒触发一次。如果远端同时存在多个用户/主播，
+     * 该回调每 2 秒会被触发多次。
+     *
+     * @param stats 远端视频统计数据。详见: RemoteVideoStats 。
+     */
     virtual void onRemoteVideoStats(const RemoteVideoStats& stats) {
       (void)stats;
       }
 
-    /** Reports the statistics of the local audio stream.
+    /** @~english Reports the statistics of the local audio stream.
      *
      * The SDK triggers this callback once every two seconds.
      *
      * @param stats The statistics of the local audio stream.
      * See LocalAudioStats.
      */
+    /** @~chinese 通话中本地音频流的统计信息回调。
+     *
+     * 该回调描述本地设备发送音频流的统计信息。SDK 每 2 秒触发该回调一次。
+     *
+     * @param stats 本地音频统计数据。详见 LocalAudioStats 。
+     */
     virtual void onLocalAudioStats(const LocalAudioStats& stats) {
         (void)stats;
     }
 
-    /** Reports the statistics of the audio stream from each remote user/host.
+    /** @~english Reports the statistics of the audio stream from each remote user/host.
 
      This callback replaces the \ref agora::rtc::IRtcEngineEventHandler::onAudioQuality "onAudioQuality" callback.
 
@@ -3595,11 +4827,17 @@ public:
 
      @param stats Pointer to the statistics of the received remote audio streams. See RemoteAudioStats.
      */
+    /** @~chinese 通话中远端音频流的统计信息回调。用于取代 \ref agora::rtc::IRtcEngineEventHandler::onAudioQuality "onAudioQuality" 回调。
+
+     该回调描述远端用户在通话中端到端的音频流统计信息。该回调函数针对每个发送音频流的远端用户/主播每 2 秒触发一次。如果远端有多个用户/主播发送音频流，该回调每 2 秒会被触发多次。
+
+     @param stats 接收到的远端音频统计数据，详细定义见: RemoteAudioStats 。
+     */
     virtual void onRemoteAudioStats(const RemoteAudioStats& stats) {
         (void)stats;
     }
 
-    /** Occurs when the local audio state changes.
+    /** @~english Occurs when the local audio state changes.
      *
      * This callback indicates the state change of the local audio stream,
      * including the state of the audio recording and encoding, and allows
@@ -3613,12 +4851,25 @@ public:
      * @param error The error information of the local audio.
      * See #LOCAL_AUDIO_STREAM_ERROR.
      */
+    /** @~chinese 本地音频状态发生改变回调。
+     *
+     * 本地音频的状态发生改变时（包括本地麦克风采集状态和音频编码状态），
+     * SDK 会触发该回调报告当前的本地音频状态。在本地音频出现故障时，
+     * 该回调可以帮助你了解当前音频的状态以及出现故障的原因，方便你排查问题。
+     *
+     * @note
+     * 当状态为 #LOCAL_AUDIO_STREAM_STATE_FAILED (3) 时，
+     * 你可以在 `error` 参数中查看返回的错误信息。
+     *
+     * @param state 当前的本地音频状态。详见 #LOCAL_AUDIO_STREAM_STATE 。
+     * @param error 本地音频出错原因。详见 #LOCAL_AUDIO_STREAM_ERROR 。
+     */
     virtual void onLocalAudioStateChanged(LOCAL_AUDIO_STREAM_STATE state, LOCAL_AUDIO_STREAM_ERROR error) {
         (void)state;
         (void)error;
     }
 
-    /** Occurs when the remote audio state changes.
+    /** @~english Occurs when the remote audio state changes.
 
      This callback indicates the state change of the remote audio stream.
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
@@ -3631,6 +4882,18 @@ public:
      \ref IRtcEngine::joinChannel "joinChannel" method until the SDK
      triggers this callback.
      */
+    /** @~chinese 远端音频流状态发生改变回调。
+
+     远端用户/主播音频状态发生改变时，SDK 会触发该回调向本地用户报告当前的远端音频流状态。
+
+     @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+
+     @param uid 发生音频状态改变的远端用户 ID。
+     @param state 远端音频流状态。 详见 #REMOTE_AUDIO_STATE 。
+     @param reason 远端音频流状态改变的具体原因。详见 #REMOTE_AUDIO_STATE_REASON 。
+     @param elapsed 从本地用户调用 \ref IRtcEngine::joinChannel "joinChannel"
+     方法到发生本事件经历的时间，单位为 ms。
+     */
     virtual void onRemoteAudioStateChanged(uid_t uid, REMOTE_AUDIO_STATE state, REMOTE_AUDIO_STATE_REASON reason, int elapsed) {
         (void)uid;
         (void)state;
@@ -3638,7 +4901,7 @@ public:
         (void)elapsed;
     }
 
-    /** Reports which users are speaking, the speakers' volume and whether the local user is speaking.
+    /** @~english Reports which users are speaking, the speakers' volume and whether the local user is speaking.
 
      This callback reports the IDs and volumes of the loudest speakers (at most 3 users) at the moment in the channel, and whether the local user is speaking.
 
@@ -3673,13 +4936,33 @@ public:
      - In the local user’s callback, `totalVolume` is the sum of the voice volume and audio-mixing volume of the local user.
      - In the remote speakers' callback, `totalVolume` is the sum of the voice volume and audio-mixing volume of all the remote speakers.
      */
+    /** @~chinese 用户音量提示回调。
+
+     该回调默认禁用，你可以通过 \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" 开启。
+     开启后，只要频道内有发流用户，SDK 会在加入频道后按 `enableAudioVolumeIndication` 中设置的时间间隔触发
+     `onAudioVolumeIndication` 回调。每次会触发两个 `onAudioVolumeIndication` 回调，一个报告本地发流用户的音量相关信息，另一个报告
+     瞬时音量最高的远端用户（最多 3 位）的音量相关信息。
+
+     @note 启用该功能后，如果有用户将自己静音（调用了 \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream"），SDK 行为会受如下影响：
+     - 本地用户静音后，SDK 立即停止报告本地用户的音量提示回调。
+     - 远端说话者静音后 20 秒，远端的音量提示回调中将不再包含该用户；如果远端所有用户都将自己静音，20 秒后 SDK 不再报告远端用户的音量提示回调。
+
+     @param speakers 用户音量信息，详见 AudioVolumeInfo 数组。如果 `speakers` 为空，则表示远端用户不发流或没有远端用户。
+     @param speakerNumber 用户数量。
+     - 在本地用户的回调中，只要本地用户在发流，speakerNumber 始终为 1。
+     - 在远端用户的回调中，`speakerNumber` 取值范围为 [0,3]。如果远端发流用户数量大于 3，则此回调中 `speakerNumber` 值为 3。
+     @param totalVolume 混音后的总音量，取值范围为 [0,255]。
+     - 在本地用户的回调中，`totalVolume` 为本地发流用户的音量。
+     - 在远端用户的回调中，`totalVolume` 为瞬时音量最高的远端用户（最多 3 位）混音后的总音量。
+     如果用户调用了 \ref agora::rtc::IRtcEngine::startAudioMixing "startAudioMixing"，则 `totalVolume` 为音乐文件和用户声音的总音量。
+     */
     virtual void onAudioVolumeIndication(const AudioVolumeInfo* speakers, unsigned int speakerNumber, int totalVolume) {
         (void)speakers;
         (void)speakerNumber;
         (void)totalVolume;
     }
 
-    /** Reports which user is the loudest speaker.
+    /** @~english Reports which user is the loudest speaker.
 
     If the user enables the audio volume indication by calling the \ref IRtcEngine::enableAudioVolumeIndication(int, int, bool) "enableAudioVolumeIndication" method, this callback returns the @p uid of the active speaker detected by the audio volume detection module of the SDK.
 
@@ -3689,32 +4972,57 @@ public:
 
     @param uid User ID of the active speaker. A @p uid of 0 represents the local user.
     */
+    /** @~chinese 监测到最活跃用户回调。
+
+     成功调用 \ref agora::rtc::IRtcEngine::enableAudioVolumeIndication "enableAudioVolumeIndication" 后，SDK 会持续监测音量
+     最大的远端用户，并统计该用户被判断为音量最大者的次数。当前时间段内，该次数累积最多的远端用户为最活跃的用户。
+
+     当频道内用户数量大于或等于 2 且有活跃用户时，SDK 会触发该回调并报告最活跃用户的 `uid`。
+     - 如果最活跃用户一直是同一位用户，则 SDK 不会再次触发 `onActiveSpeaker` 回调。
+     - 如果最活跃用户有变化，则 SDK 会再次触发该回调并报告新的最活跃用户的 `uid`。
+
+     @param uid 远端最活跃用户的 ID。
+     */
     virtual void onActiveSpeaker(uid_t uid) {
         (void)uid;
     }
 
-    /** **DEPRECATED** Occurs when the video stops playing.
+    /** @~english **DEPRECATED** Occurs when the video stops playing.
 
      The application can use this callback to change the configuration of the view (for example, displaying other pictures in the view) after the video stops playing.
 
      Deprecated as of v2.4.1. Use LOCAL_VIDEO_STREAM_STATE_STOPPED(0) in the \ref agora::rtc::IRtcEngineEventHandler::onLocalVideoStateChanged "onLocalVideoStateChanged" callback instead.
      */
+    /** @~chinese @deprecated 视频功能已停止回调。
+
+     提示视频功能已停止。 App 如需在停止视频后对 view 做其他处理（比如显示其他画面），可以在这个回调中进行。
+
+     已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onLocalVideoStateChanged "onLocalVideoStateChanged" 回调中的 LOCAL_VIDEO_STREAM_STATE_STOPPED(0)。
+     */
     virtual void onVideoStopped() {}
 
-    /** Occurs when the first local video frame is displayed/rendered on the local video view.
+    /** @~english Occurs when the first local video frame is displayed/rendered on the local video view.
 
     @param width Width (px) of the first local video frame.
     @param height Height (px) of the first local video frame.
     @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
     If you call the \ref IRtcEngine::startPreview "startPreview" method  before calling the *joinChannel* method, then @p elapsed is the time elapsed from calling the *startPreview* method until the SDK triggers this callback.
     */
+    /** @~chinese 已显示本地视频首帧回调。
+
+     本地视频首帧显示在本地视图上时，SDK 会触发此回调。
+
+     @param width 本地渲染视频的宽 (px) 。
+     @param height 本地渲染视频的高 (px)。
+     @param elapsed 从调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 到发生此事件过去的时间（毫秒）。如果在 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 前调用了 \ref agora::rtc::IRtcEngine::startPreview "startPreview"，则是从 \ref agora::rtc::IRtcEngine::startPreview "startPreview" 到发生此事件过去的时间。
+     */
     virtual void onFirstLocalVideoFrame(int width, int height, int elapsed) {
         (void)width;
         (void)height;
         (void)elapsed;
     }
 
-    /** Occurs when the first remote video frame is received and decoded.
+    /** @~english Occurs when the first remote video frame is received and decoded.
      *
      * @deprecated v2.9.0
      *
@@ -3747,6 +5055,32 @@ public:
      * \ref IRtcEngine::joinChannel "joinChannel" method until the SDK
      * triggers this callback.
      */
+    /** @~chinese 已接收到远端视频并完成解码回调。
+     *
+     * @deprecated
+     *
+     * 该回调已废弃，请改用 \ref onRemoteVideoStateChanged()
+     * "onRemoteVideoStateChanged" 回调的：
+     * - #REMOTE_VIDEO_STATE_STARTING (1)。
+     * - #REMOTE_VIDEO_STATE_DECODING (2)。
+     *
+     * 引擎收到第一帧远端视频流并解码成功时，触发此调用。
+     * App 可在此回调中设置该用户的 view。有两种情况：
+     * - 远端用户首次上线后发送视频。
+     * - 远端用户视频离线再上线后发送视频。出现这种中断的可能原因包括：
+     *  - 远端用户离开频道。
+     *  - 远端用户掉线。
+     *  - 远端用户调用 \ref agora::rtc::IRtcEngine::muteLocalVideoStream
+     * "muteLocalVideoStream" 方法停止发送本地视频流。
+     *  - 远端用户调用 \ref agora::rtc::IRtcEngine::disableVideo
+     * "disableVideo" 方法关闭视频模块。
+     *
+     * @param uid 用户 ID，指定是哪个用户的视频流。
+     * @param width 视频流宽（px）。
+     * @param height 视频流高（px）。
+     * @param elapsed 从本地调用 \ref agora::rtc::IRtcEngine::joinChannel
+     * "joinChannel" 开始到该回调触发的延迟（毫秒)。
+     */
     virtual void onFirstRemoteVideoDecoded(uid_t uid, int width, int height, int elapsed) {
         (void)uid;
         (void)width;
@@ -3754,7 +5088,7 @@ public:
         (void)elapsed;
     }
 
-    /** Occurs when the first remote video frame is rendered.
+    /** @~english Occurs when the first remote video frame is rendered.
 
      The SDK triggers this callback when the first frame of the remote video is displayed in the user's video window. The application can retrieve the time elapsed from a user joining the channel until the first video frame is displayed.
 
@@ -3763,6 +5097,15 @@ public:
      @param height Height (px) of the video stream.
      @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
     */
+    /** @~chinese 已显示首帧远端视频回调。
+
+     第一帧远端视频显示在视图上时，触发此调用。 App 可在此调用中获知出图时间（elapsed）。
+
+     @param uid 用户 ID，指定是哪个用户的视频流。
+     @param width 视频流宽（px）。
+     @param height 视频流高（px）。
+     @param elapsed 从本地调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 到发生此事件过去的时间（毫秒)。
+     */
     virtual void onFirstRemoteVideoFrame(uid_t uid, int width, int height, int elapsed) {
         (void)uid;
         (void)width;
@@ -3770,7 +5113,7 @@ public:
         (void)elapsed;
     }
 
-    /** @deprecated This method is deprecated from v3.0.0, use the \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged" callback instead.
+    /** @~english @deprecated This method is deprecated from v3.0.0, use the \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged" callback instead.
 
      Occurs when a remote user's audio stream playback pauses/resumes.
 
@@ -3783,12 +5126,27 @@ public:
      - true: Muted.
      - false: Unmuted.
      */
+    /** @~chinese 远端用户静音回调。
+
+     @deprecated 该回调已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged"
+
+     提示有远端用户已将其音频流静音（或取消静音）。
+
+     该回调是由远端用户调用 \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" 方法关闭或开启音频发送触发的。
+
+     @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+
+     @param uid 用户 ID。
+     @param muted 该用户是否静音：
+     - true: 该用户已将音频静音；
+     - false: 该用户取消了音频静音。
+     */
     virtual void onUserMuteAudio(uid_t uid, bool muted) {
         (void)uid;
         (void)muted;
     }
 
-    /** Occurs when a remote user's video stream playback pauses/resumes.
+    /** @~english Occurs when a remote user's video stream playback pauses/resumes.
      *
      * You can also use the
      * \ref onRemoteVideoStateChanged() "onRemoteVideoStateChanged" callback
@@ -3811,12 +5169,30 @@ public:
      * - true: Paused.
      * - false: Resumed.
      */
+    /** @~chinese 远端用户暂停/恢复发送视频流回调。
+     * @deprecated 该回调已废弃。你也可以使用
+     * \ref onRemoteVideoStateChanged() "onRemoteVideoStateChanged" 回调的：
+     * - #REMOTE_VIDEO_STATE_STOPPED (0) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5) 。
+     * - #REMOTE_VIDEO_STATE_DECODING (2) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6)。
+     *
+     * 该回调是由远端用户调用 \ref agora::rtc::IRtcEngine::muteLocalVideoStream
+     * "muteLocalVideoStream" 方法关闭或开启视频发送触发的。
+     *
+     * @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+     *
+     * @param uid 远端用户 ID。
+     * @param muted 该用户是否暂停发送其视频流
+     * - true: 该用户已暂停发送其视频流；
+     * - false: 该用户已恢复发送其视频流。
+     */
     virtual void onUserMuteVideo(uid_t uid, bool muted) {
         (void)uid;
         (void)muted;
     }
 
-    /** Occurs when a specific remote user enables/disables the video
+    /** @~english Occurs when a specific remote user enables/disables the video
      * module.
      *
      * @deprecated v2.9.0
@@ -3848,12 +5224,34 @@ public:
      * - false: Disable. The remote user can only enter a voice session, and
      * cannot send or receive any video stream.
      */
+    /**
+     * @~chinese 远端用户开关本地视频采集回调。
+     *
+     * @deprecated 该回调已废弃，请改用 \ref onRemoteVideoStateChanged() "onRemoteVideoStateChanged"
+     * 回调的：
+     * - #REMOTE_VIDEO_STATE_STOPPED (0) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5)。
+     * - #REMOTE_VIDEO_STATE_DECODING (2) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6)。
+     *
+     * 提示有远端用户开关了本地视频采集。关闭视频功能是指该用户只能进行语音通话，不能显示、
+     * 发送自己的视频，也不能接收、显示别人的视频。
+     * 该回调是由远端用户调用 \ref agora::rtc::IRtcEngine::enableVideo
+     * "enableVideo" 或 \ref agora::rtc::IRtcEngine::disableVideo
+     * "disableVideo" 方法开启或关闭视频模块触发的。
+     *
+     * @param uid 用户 ID，提示是哪个用户的视频流。
+     * @param enabled
+     * - true: 该用户已启用了视频功能。启用后，该用户可以进行视频通话或直播。
+     * - false: 该用户已关闭了视频功能。关闭后，该用户只能进行语音通话或直播，不能显示、
+     * 发送自己的视频，也不能接收、显示别人的视频。
+     */
     	virtual void onUserEnableVideo(uid_t uid, bool enabled) {
     		(void)uid;
     		(void)enabled;
     	}
 
-    /** Occurs when the audio device state changes.
+    /** @~english Occurs when the audio device state changes.
 
      This callback notifies the application that the system's audio device state is changed. For example, a headset is unplugged from the device.
 
@@ -3861,13 +5259,21 @@ public:
      @param deviceType Device type: #MEDIA_DEVICE_TYPE.
      @param deviceState Device state: #MEDIA_DEVICE_STATE_TYPE.
      */
+    /** @~chinese 音频设备变化回调。
+
+     提示系统音频设备状态发生改变，比如耳机被拔出。
+
+     @param deviceId 设备 ID。
+     @param deviceType 设备类型定义: #MEDIA_DEVICE_TYPE 。
+     @param deviceState 设备状态定义: #MEDIA_DEVICE_STATE_TYPE 。
+    */
     virtual void onAudioDeviceStateChanged(const char* deviceId, int deviceType, int deviceState) {
         (void)deviceId;
         (void)deviceType;
         (void)deviceState;
     }
 
-    /** Occurs when the volume of the playback device, microphone, or application changes.
+    /** @~english Occurs when the volume of the playback device, microphone, or application changes.
 
      @param deviceType Device type: #MEDIA_DEVICE_TYPE.
      @param volume Volume of the device. The value ranges between 0 and 255.
@@ -3875,21 +5281,35 @@ public:
      - true: The audio device is muted.
      - false: The audio device is not muted.
      */
+    /** @~chinese 回放、音频采集设备、或 App 的音量发生改变。
+
+     @param deviceType 设备类型定义: #MEDIA_DEVICE_TYPE 。
+     @param volume 音量：范围 [0,255]。
+     @param muted
+     - true: 音频设备已被静音；
+     - false: 音频设备未被静音。
+     */
     virtual void onAudioDeviceVolumeChanged(MEDIA_DEVICE_TYPE deviceType, int volume, bool muted) {
         (void)deviceType;
         (void)volume;
         (void)muted;
     }
 
-    /** **DEPRECATED** Occurs when the camera turns on and is ready to capture the video.
+    /** @~english **DEPRECATED** Occurs when the camera turns on and is ready to capture the video.
 
      If the camera fails to turn on, fix the error reported in the \ref IRtcEngineEventHandler::onError "onError" callback.
 
      Deprecated as of v2.4.1. Use #LOCAL_VIDEO_STREAM_STATE_CAPTURING (1) in the \ref agora::rtc::IRtcEngineEventHandler::onLocalVideoStateChanged "onLocalVideoStateChanged" callback instead.
      */
+    /** @~chinese @deprecated 摄像头就绪回调。
+
+     提示已成功打开摄像头，可以开始捕获视频。如果摄像头打开失败，可在 \ref agora::rtc::IRtcEngineEventHandler::onError "onError" 中处理相应错误。
+
+     已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onLocalVideoStateChanged "onLocalVideoStateChanged" 回调中的 #LOCAL_VIDEO_STREAM_STATE_CAPTURING (1)。
+     */
     virtual void onCameraReady() {}
 
-    /** Occurs when the camera focus area changes.
+    /** @~english Occurs when the camera focus area changes.
 
      The SDK triggers this callback when the local user changes the camera focus position by calling the setCameraFocusPositionInPreview method.
 
@@ -3900,6 +5320,18 @@ public:
      @param width Width of the changed camera focus area.
      @param height Height of the changed camera focus area.
      */
+    /** @~chinese 相机对焦区域已改变回调。
+
+     该回调表示相机的对焦区域发生了改变。
+     该回调是由本地用户调用 setCameraFocusPositionPreview 方法改变对焦位置触发的。
+
+     @note 该回调只适用于 Android 和 iOS 平台。
+
+     @param x 发生改变的对焦区域的 x 坐标。
+     @param y 发生改变的对焦区域的 y 坐标。
+     @param width 发生改变的对焦区域的宽度。
+     @param height 发生改变的对焦区域的高度。
+     */
     virtual void onCameraFocusAreaChanged(int x, int y, int width, int height) {
         (void)x;
         (void)y;
@@ -3907,7 +5339,7 @@ public:
         (void)height;
     }
 #if defined(__ANDROID__) || (defined(__APPLE__) && TARGET_OS_IOS)
-    /**
+    /** @~english
      * Reports the face detection result of the local user. Applies to Android and iOS only.
      * @since v3.0.1
      *
@@ -3933,6 +5365,30 @@ public:
      * @param vecDistance The distance (cm) between the human face and the screen.
      * @param numFaces The number of faces detected. If the value is 0, it means that no human face is detected.
      */
+    /** @~chinese
+     * 报告本地人脸检测结果。仅适用于 Android 和 iOS 平台。
+     * @since v3.0.1
+     *
+     * 调用 \ref IRtcEngine::enableFaceDetection "enableFaceDetection"(true) 开启本地人脸检测后，你可以通过该回调实时获取以下人脸检测的信息：
+     * - 摄像头采集的画面大小
+     * - 人脸在画面中的位置
+     * - 人脸距设备屏幕的距离
+     *
+     * 其中，人脸距设备屏幕的距离由 SDK 通过摄像头采集的画面大小和人脸在画面中的位置拟合计算得出。
+     * @note
+     * - 当检测到摄像头前没有人脸时，该回调触发频率会降低，以节省设备耗能。
+     * - 当人脸距离设备屏幕过近时，SDK 不会触发该回调。
+     * - Android 平台上，人脸距设备屏幕的距离（`distance`）值有一定误差，请不要用它进行精确计算。
+     * @param imageWidth 摄像头采集画面的宽度 (px)。
+     * @param imageHeight 摄像头采集画面的高度 (px)。
+     * @param vecRectangle 检测到的人脸信息：
+     * - `x`：人脸在画面中的 x 坐标 (px)。以摄像头采集画面的左上角为原点，x 坐标为人脸左上角相对于原点的横向位移。
+     * - `y`：人脸在画面中的 y 坐标 (px)。以摄像头采集画面的左上角为原点，y 坐标为人脸左上角相对原点的纵向位移。
+     * - `width`：人脸在画面中的宽度 (px)。
+     * - `height`：人脸在画面中的高度 (px)。
+     * @param vecDistance 人脸距设备屏幕的距离 (cm)。
+     * @param numFaces 检测的人脸数量。如果为 0，则表示没有检测到人脸。
+     */
     virtual void onFacePositionChanged(int imageWidth, int imageHeight, Rectangle* vecRectangle, int* vecDistance, int numFaces){
        (void)imageWidth;
        (void)imageHeight;
@@ -3941,7 +5397,7 @@ public:
         (void)numFaces;
     }
 #endif
-    /** Occurs when the camera exposure area changes.
+    /** @~english Occurs when the camera exposure area changes.
 
     The SDK triggers this callback when the local user changes the camera exposure position by calling the setCameraExposurePosition method.
 
@@ -3952,6 +5408,16 @@ public:
      @param width Width of the changed camera exposure area.
      @param height Height of the changed camera exposure area.
      */
+    /** @~chinese 摄像头曝光区域已改变回调。
+     该回调是由本地用户调用 setCameraExposurePosition 方法改变曝光位置触发的。
+
+     @note 该回调只适用于 Android 和 iOS 平台。
+
+     @param x 发生改变的曝光区域的 x 坐标。
+     @param y 发生改变的曝光区域的 y 坐标。
+     @param width 发生改变的曝光区域的宽度。
+     @param height 发生改变的曝光区域的高度。
+     */
     virtual void onCameraExposureAreaChanged(int x, int y, int width, int height) {
         (void)x;
         (void)y;
@@ -3959,7 +5425,7 @@ public:
         (void)height;
     }
 
-    /** Occurs when the audio mixing file playback finishes.
+    /** @~english Occurs when the audio mixing file playback finishes.
 
      **DEPRECATED**  use onAudioMixingStateChanged instead.
 
@@ -3968,10 +5434,15 @@ public:
      If the *startAudioMixing* method call fails, an error code returns in the \ref IRtcEngineEventHandler::onError "onError" callback.
 
      */
+    /** @~chinese 本地音乐文件播放已结束回调。
+    **DEPRECATED**  请改用 onAudioMixingStateChanged 。
+     当调用 \ref agora::rtc::IRtcEngine::startAudioMixing "startAudioMixing" 播放本地音乐文件结束后，会触发该回调。
+     如果调用  \ref agora::rtc::IRtcEngine::startAudioMixing "startAudioMixing" 失败，会在 \ref agora::rtc::IRtcEngineEventHandler::onError "onError" 回调里，返回错误码 #WARN_AUDIO_MIXING_OPEN_ERROR 。
+     */
     virtual void onAudioMixingFinished() {
     }
 
-    /** Occurs when the state of the local user's audio mixing file changes.
+    /** @~english Occurs when the state of the local user's audio mixing file changes.
 
      When you call the \ref IRtcEngine::startAudioMixing "startAudioMixing" method and the state of audio mixing file changes, the SDK triggers this callback.
      - When the audio mixing file plays, pauses playing, or stops playing, this callback returns 710, 711, or 713 in @p state, and 0 in @p errorCode.
@@ -3981,30 +5452,53 @@ public:
      @param state The state code. See #AUDIO_MIXING_STATE_TYPE.
      @param errorCode The error code. See #AUDIO_MIXING_ERROR_TYPE.
      */
+    /** @~chinese 本地用户的音乐文件播放状态已改变回调。
+
+     该回调在音乐文件播放状态发生改变时触发，并报告当前的播放状态和错误码。
+
+     如果本地音乐文件不存在、文件格式不支持或无法访问在线音乐文件 URL，SDK 会返回警告码 #WARN_AUDIO_MIXING_OPEN_ERROR (701)。
+
+     @param state 音乐文件播放状态，详见 #AUDIO_MIXING_STATE_TYPE
+     @param errorCode 错误码，详见 #AUDIO_MIXING_ERROR_TYPE
+     */
     virtual void onAudioMixingStateChanged(AUDIO_MIXING_STATE_TYPE state, AUDIO_MIXING_ERROR_TYPE errorCode){
     }
-    /** Occurs when a remote user starts audio mixing.
+    /** @~english Occurs when a remote user starts audio mixing.
 
      When a remote user calls \ref IRtcEngine::startAudioMixing "startAudioMixing" to play the background music, the SDK reports this callback.
      */
+    /** @~chinese 远端音乐文件播放已开始回调。
+
+     当远端有用户调用 \ref agora::rtc::IRtcEngine::startAudioMixing "startAudioMixing" 播放本地音乐文件，会触发该回调。
+     */
     virtual void onRemoteAudioMixingBegin() {
     }
-    /** Occurs when a remote user finishes audio mixing.
+    /** @~english Occurs when a remote user finishes audio mixing.
+     */
+    /** @~chinese 远端音乐文件播放已结束回调。
+
+     当远端有用户播放本地音乐文件结束，会触发该回调。
      */
     virtual void onRemoteAudioMixingEnd() {
     }
 
-    /** Occurs when the local audio effect playback finishes.
+    /** @~english Occurs when the local audio effect playback finishes.
 
      The SDK triggers this callback when the local audio effect file playback finishes.
 
      @param soundId ID of the local audio effect. Each local audio effect has a unique ID.
      */
+    /** @~chinese 本地音效文件播放已结束回调。
+
+     当播放音效结束后，会触发该回调。
+
+     @param soundId 指定音效的 ID。每个音效均有唯一的 ID。
+     */
     virtual void onAudioEffectFinished(int soundId) {
     }
 
 
-    /**
+    /** @~english
      Occurs when the SDK decodes the first remote audio frame for playback.
 
      @deprecated v3.0.0
@@ -4023,12 +5517,28 @@ public:
      @param uid User ID of the remote user sending the audio stream.
      @param elapsed Time elapsed (ms) from the local user calling the \ref IRtcEngine::joinChannel "joinChannel" method until the SDK triggers this callback.
      */
+    /** @~chinese
+     已解码远端音频首帧的回调。
+
+     @deprecated 该回调已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged"
+
+     SDK 完成远端音频首帧解码，并发送给音频模块用以播放时，会触发此回调。有两种情况：
+     - 远端用户首次上线后发送音频
+     - 远端用户音频离线再上线发送音频。音频离线指本地在 15 秒内没有收到音频包，可能有如下原因：
+         - 远端用户离开频道
+         - 远端用户掉线
+         - 远端用户调用 \ref agora::rtc::IRtcEngine::muteLocalAudioStream "muteLocalAudioStream" 方法停止发送音频流
+         - 远端用户调用 \ref agora::rtc::IRtcEngine::disableAudio "disableAudio" 方法关闭音频
+
+     @param uid 远端用户 ID
+     @param elapsed 从本地用户调用 \ref IRtcEngine::joinChannel "joinChannel" 直至该回调触发的延迟，单位为毫秒。
+     */
     virtual void onFirstRemoteAudioDecoded(uid_t uid, int elapsed) {
         (void)uid;
         (void)elapsed;
     }
 
-    /** Occurs when the video device state changes.
+    /** @~english Occurs when the video device state changes.
 
      @note On a Windows device with an external camera for video capturing, the video disables once the external camera is unplugged.
 
@@ -4036,13 +5546,21 @@ public:
      @param deviceType Device type: #MEDIA_DEVICE_TYPE.
      @param deviceState Device state: #MEDIA_DEVICE_STATE_TYPE.
      */
+    /** @~chinese 视频设备变化回调。
+
+     @note 该回调提示系统视频设备状态发生改变，比如被拔出或移除。如果设备已使用外接摄像头采集，外接摄像头被拔开后，视频会中断。
+
+     @param deviceId 设备 ID。
+     @param deviceType 设备类型: #MEDIA_DEVICE_TYPE 。
+     @param deviceState 设备状态: #MEDIA_DEVICE_STATE_TYPE 。
+     */
     virtual void onVideoDeviceStateChanged(const char* deviceId, int deviceType, int deviceState) {
         (void)deviceId;
         (void)deviceType;
         (void)deviceState;
     }
 
-    /** Occurs when the local video stream state changes.
+    /** @~english Occurs when the local video stream state changes.
 
      This callback indicates the state of the local video stream, including camera capturing and video encoding, and allows you to troubleshoot issues when exceptions occur.
 
@@ -4051,17 +5569,35 @@ public:
      @param localVideoState State type #LOCAL_VIDEO_STREAM_STATE. When the state is LOCAL_VIDEO_STREAM_STATE_FAILED (3), see the `error` parameter for details.
      @param error The detailed error information: #LOCAL_VIDEO_STREAM_ERROR.
      */
+    /** @~chinese 本地视频状态发生改变回调
+
+     本地视频的状态发生改变时，SDK 会触发该回调返回当前的本地视频状态。
+
+     在本地视频出现故障时，你可以通过该回调了解当前视频的状态以及出现故障的原因，方便排查问题。
+
+     @note 对某些机型而言，当本地视频采集设备正在使用中时，SDK 不会在本地视频状态发生改变时触发该回调，你需要自行做超时判断。
+
+     @param localVideoState 本地视频状态，详见: #LOCAL_VIDEO_STREAM_STATE 。当本地视频状态为 #LOCAL_VIDEO_STREAM_STATE_FAILED (3) 时，你可以在 `error` 参数中查看返回的错误原因。
+     @param error 本地视频出错原因，详见: #LOCAL_VIDEO_STREAM_ERROR 。
+     */
     virtual void onLocalVideoStateChanged(LOCAL_VIDEO_STREAM_STATE localVideoState, LOCAL_VIDEO_STREAM_ERROR error) {
         (void)localVideoState;
         (void)error;
     }
 
-    /** Occurs when the video size or rotation of a specified user changes.
+    /** @~english Occurs when the video size or rotation of a specified user changes.
 
      @param uid User ID of the remote user or local user (0) whose video size or rotation changes.
      @param width New width (pixels) of the video.
      @param height New height (pixels) of the video.
      @param rotation New rotation of the video [0 to 360).
+     */
+    /** @~chinese 本地或远端视频大小和旋转信息发生改变回调。
+
+     @param uid 图像尺寸和旋转信息发生变化的用户的用户 ID（本地用户的 uid 为 0）。
+     @param width 视频流的宽度（像素）。
+     @param height 视频流的高度（像素）。
+     @param rotation 旋转信息 [0,360)。
      */
     virtual void onVideoSizeChanged(uid_t uid, int width, int height, int rotation) {
         (void)uid;
@@ -4069,7 +5605,7 @@ public:
         (void)height;
         (void)rotation;
     }
-    /** Occurs when the remote video state changes.
+    /** @~english Occurs when the remote video state changes.
      @note This callback does not work properly when the number of users (in the Communication profile) or broadcasters (in the Live-broadcast profile) in the channel exceeds 17.
 
      @param uid ID of the remote user whose video state changes.
@@ -4080,6 +5616,16 @@ public:
      \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" method until the
      SDK triggers this callback.
      */
+    /** @~chinese 远端视频状态发生改变回调。
+
+     @note 频道内的用户（通信场景）或主播（直播场景）人数超过 17 人时，该回调不生效。
+
+     @param uid 发生视频状态改变的远端用户 ID。
+     @param state 远端视频流状态。详见 #REMOTE_VIDEO_STATE 。
+     @param reason 远端视频流状态改变的具体原因。详见 #REMOTE_VIDEO_STATE_REASON 。
+     @param elapsed 从本地用户调用 \ref agora::rtc::IRtcEngine::joinChannel
+     "joinChannel" 方法到发生本事件经历的时间，单位为 ms。
+     */
     virtual void onRemoteVideoStateChanged(uid_t uid, REMOTE_VIDEO_STATE state, REMOTE_VIDEO_STATE_REASON reason, int elapsed) {
         (void)uid;
         (void)state;
@@ -4087,7 +5633,7 @@ public:
         (void)elapsed;
     }
 
-	/** Occurs when a specified remote user enables/disables the local video
+	/** @~english Occurs when a specified remote user enables/disables the local video
      * capturing function.
      *
      * @deprecated v2.9.0
@@ -4117,13 +5663,34 @@ public:
      * video stream from this remote user, while this remote user can still
      * receive the video streams from other users.
      */
+    /** @~chinese 其他用户启用/关闭本地视频。
+     *
+     * @deprecated 该回调已废弃，请改用 \ref onRemoteVideoStateChanged()
+     * "onRemoteVideoStateChanged" 回调的：
+     * - #REMOTE_VIDEO_STATE_STOPPED (0) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED (5)。
+     * - #REMOTE_VIDEO_STATE_DECODING (2) 和
+     * #REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED (6)。
+     *
+     * 提示有其他用户启用/关闭了本地视频功能。关闭视频功能是指该用户只能进行语音通话，
+     * 不能显示、发送自己的视频，也不能接收、显示别人的视频。
+     *
+     * 该回调是由远端用户调用 \ref agora::rtc::IRtcEngine::enableLocalVideo
+     * "enableLocalVideo" 方法开启或关闭视频采集触发的。
+     *
+     * @param uid 用户 ID，提示是哪个用户的视频流。
+     * @param enabled
+     * - true: 该用户已启用视频功能。启用后，其他用户可以接收到该用户的视频流。
+     * - false: 该用户已关闭视频功能。关闭后，该用户仍然可以接收其他用户的视频流，
+     * 但其他用户接收不到该用户的视频流。
+     */
     virtual void onUserEnableLocalVideo(uid_t uid, bool enabled) {
         (void)uid;
         (void)enabled;
     }
 
 //    virtual void onStreamError(int streamId, int code, int parameter, const char* message, size_t length) {}
-    /** Occurs when the local user receives the data stream from the remote user within five seconds.
+    /** @~english Occurs when the local user receives the data stream from the remote user within five seconds.
 
     The SDK triggers this callback when the local user receives the stream message that the remote user sends by calling the \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method.
     @param uid User ID of the remote user sending the message.
@@ -4131,6 +5698,15 @@ public:
     @param data Pointer to the data received by the local user.
     @param length Length of the data in bytes.
     */
+    /** @~chinese 接收到对方数据流消息的回调。
+
+     该回调表示本地用户收到了远端用户调用 \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" 方法发送的流消息。
+
+     @param uid 发送消息的用户 ID。
+     @param streamId Stream ID。
+     @param data 接收到的数据。
+     @param length 数据长度。
+     */
     virtual void onStreamMessage(uid_t uid, int streamId, const char* data, size_t length) {
         (void)uid;
         (void)streamId;
@@ -4138,7 +5714,7 @@ public:
         (void)length;
     }
 
-	/** Occurs when the local user does not receive the data stream from the remote user within five seconds.
+	/** @~english Occurs when the local user does not receive the data stream from the remote user within five seconds.
 
      The SDK triggers this callback when the local user fails to receive the stream message that the remote user sends by calling the \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" method.
      @param uid User ID of the remote user sending the message.
@@ -4146,6 +5722,16 @@ public:
      @param code Error code: #ERROR_CODE_TYPE.
      @param missed Number of lost messages.
      @param cached Number of incoming cached messages when the data stream is interrupted.
+     */
+    /** @~chinese 接收对方数据流消息发生错误的回调。
+
+     该回调表示本地用户未收到远端用户调用 \ref agora::rtc::IRtcEngine::sendStreamMessage "sendStreamMessage" 方法发送的流消息。
+
+     @param uid 发送消息的用户 ID。
+     @param streamId Stream ID。
+     @param code 错误码: #ERROR_CODE_TYPE 。
+     @param missed 丢失的消息数量。
+     @param cached 数据流中断时，后面缓存的消息数量。
      */
 	virtual void onStreamMessageError(uid_t uid, int streamId, int code, int missed, int cached) {
         (void)uid;
@@ -4155,14 +5741,16 @@ public:
         (void)cached;
     }
 
-    /** Occurs when the media engine loads.*/
+    /** @~english Occurs when the media engine loads.*/
+    /** @~chinese 媒体引擎成功加载的回调。*/
     virtual void onMediaEngineLoadSuccess() {
     }
-    /** Occurs when the media engine call starts.*/
+    /** @~english Occurs when the media engine call starts.*/
+    /** @~chinese 媒体引擎成功启动的回调。*/
     virtual void onMediaEngineStartCallSuccess() {
     }
 
-    /** Occurs when the state of the media stream relay changes.
+    /** @~english Occurs when the state of the media stream relay changes.
      *
      * The SDK returns the state of the current media relay with any error
      * message.
@@ -4170,25 +5758,45 @@ public:
      * @param state The state code in #CHANNEL_MEDIA_RELAY_STATE.
      * @param code The error code in #CHANNEL_MEDIA_RELAY_ERROR.
      */
+    /** @~chinese 跨频道媒体流转发状态发生改变回调。
+     *
+     * 当跨频道媒体流转发状态发生改变时，SDK 会触发该回调，
+     * 并报告当前的转发状态以及相关的错误信息。
+     *
+     * @param state 跨频道媒体流转发状态。详见 #CHANNEL_MEDIA_RELAY_STATE 。
+     * @param code 跨频道媒体流转发出错的错误码。详见 #CHANNEL_MEDIA_RELAY_ERROR 。
+     */
     virtual void onChannelMediaRelayStateChanged(CHANNEL_MEDIA_RELAY_STATE state,CHANNEL_MEDIA_RELAY_ERROR code) {
     }
 
-    /** Reports events during the media stream relay.
+    /** @~english Reports events during the media stream relay.
      *
      * @param code The event code in #CHANNEL_MEDIA_RELAY_EVENT.
+     */
+    /** @~chinese 跨频道媒体流转发事件回调。
+     *
+     * 该回调报告跨频道媒体流转发过程中发生的事件。
+     *
+     * @param code 跨频道媒体流转发事件码。详见 #CHANNEL_MEDIA_RELAY_EVENT 。
      */
     virtual void onChannelMediaRelayEvent(CHANNEL_MEDIA_RELAY_EVENT code) {
     }
 
-    /** Occurs when the engine sends the first local audio frame.
+    /** @~english Occurs when the engine sends the first local audio frame.
 
     @param elapsed Time elapsed (ms) from the local user calling \ref IRtcEngine::joinChannel "joinChannel" until the SDK triggers this callback.
     */
+    /** @~chinese 已发送本地音频首帧回调。
+     *
+     * @deprecated 该回调自 v3.1.0 废弃，请改用 \ref IRtcEngineEventHandler::onFirstLocalAudioFramePublished "onFirstLocalAudioFramePublished" 回调。
+     *
+     * @param elapsed 从调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 方法直至该回调被触发的时间。
+     */
     virtual void onFirstLocalAudioFrame(int elapsed) {
         (void)elapsed;
     }
 
-    /** Occurs when the engine receives the first audio frame from a specific remote user.
+    /** @~english Occurs when the engine receives the first audio frame from a specific remote user.
 
     @deprecated v3.0.0
 
@@ -4197,12 +5805,21 @@ public:
     @param uid User ID of the remote user.
     @param elapsed Time elapsed (ms) from the remote user calling \ref IRtcEngine::joinChannel "joinChannel" until the SDK triggers this callback.
     */
+    /** @~chinese 已接收远端音频首帧回调。
+
+     @deprecated
+
+     该回调已废弃。请改用 \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStateChanged "onRemoteAudioStateChanged"
+
+     @param uid 发送音频帧的远端用户的用户 ID。
+     @param elapsed 从调用 \ref agora::rtc::IRtcEngine::joinChannel "joinChannel" 方法直至该回调被触发的时间。
+     */
     virtual void onFirstRemoteAudioFrame(uid_t uid, int elapsed) {
         (void)uid;
         (void)elapsed;
     }
 
-  /**
+  /** @~english
    Occurs when the state of the RTMP streaming changes.
 
    The SDK triggers this callback to report the result of the local user calling the \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" or \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method.
@@ -4213,13 +5830,23 @@ public:
    @param state The RTMP streaming state. See: #RTMP_STREAM_PUBLISH_STATE.
    @param errCode The detailed error information for streaming. See: #RTMP_STREAM_PUBLISH_ERROR.
    */
+  /** @~chinese RTMP/RTMPS 推流状态发生改变回调。
+
+     该回调返回本地用户调用 \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 或 \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" 方法的结果。
+     RTMP/RTMPS 推流状态发生改变时，SDK 会触发该回调，并在回调中明确状态发生改变的 URL 地址及当前推流状态。
+     该回调方便推流用户了解当前的推流状态；推流出错时，你可以通过返回的错误码了解出错的原因，方便排查问题。
+
+     @param url 推流状态发生改变的 URL 地址。
+     @param state 当前的推流状态，详见 #RTMP_STREAM_PUBLISH_STATE 。当推流状态为 RTMP_STREAM_PUBLISH_STATE_FAILURE (4) 时，你可以在 errorCode 参数中查看返回的错误信息。
+     @param errCode 推流错误信息，详见 #RTMP_STREAM_PUBLISH_ERROR 。
+     */
   virtual void onRtmpStreamingStateChanged(const char *url, RTMP_STREAM_PUBLISH_STATE state, RTMP_STREAM_PUBLISH_ERROR errCode) {
     (void) url;
     (void) state;
     (void) errCode;
   }
 
-    /** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
+    /** @~english @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
 
      Reports the result of calling the \ref IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" method. (CDN live only.)
 
@@ -4238,11 +5865,35 @@ public:
      - #ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR (154)
      - #ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED (156)
      */
+    /** @~chinese 旁路推流已开启回调。
+
+     @deprecated
+
+     此方法已废弃，请改用 \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged"
+
+     该回调用于通知主播推流状态。
+
+     @param url 主播推流的 URL 地址 。
+     @param error #ERROR_CODE_TYPE 。
+     - #ERR_OK (0): 推流成功。
+     - #ERR_FAILED (1): 推流失败。
+     - #ERR_INVALID_ARGUMENT (2): 参数错误。如果你在调用 \ref agora::rtc::IRtcEngine::addPublishStreamUrl "addPublishStreamUrl" 前没有调用 \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" 配置 LiveTranscoding ，SDK 会回调 #ERR_INVALID_ARGUMENT 。
+     - #ERR_TIMEDOUT (10): 推流超时未成功。
+     - #ERR_ALREADY_IN_USE (19): 推流地址已推流。
+     - #ERR_ABORTED (20): SDK 与推流服务器断开连接。推流中断。
+     - #ERR_RESOURCE_LIMITED (22): 后台没有足够资源推流。
+     - #ERR_ENCRYPTED_STREAM_NOT_ALLOWED_PUBLISH (130): 推流已加密不能推流。
+     - #ERR_PUBLISH_STREAM_CDN_ERROR (151)
+     - #ERR_PUBLISH_STREAM_NUM_REACH_LIMIT (152)
+     - #ERR_PUBLISH_STREAM_NOT_AUTHORIZED (153)
+     - #ERR_PUBLISH_STREAM_INTERNAL_SERVER_ERROR (154)
+     - #ERR_PUBLISH_STREAM_FORMAT_NOT_SUPPORTED (156)
+     */
     virtual void onStreamPublished(const char *url, int error) {
         (void)url;
         (void)error;
     }
-    /** @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
+    /** @~english @deprecated This method is deprecated, use the \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged" callback instead.
 
      Reports the result of calling the \ref agora::rtc::IRtcEngine::removePublishStreamUrl "removePublishStreamUrl" method. (CDN live only.)
 
@@ -4250,31 +5901,52 @@ public:
 
      @param url The RTMP URL address.
      */
+    /** @~chinese 旁路推流已停止回调。
+
+     @deprecated 此方法已废弃，请改用 \ref agora::rtc::IRtcEngineEventHandler::onRtmpStreamingStateChanged "onRtmpStreamingStateChanged"
+
+     回调用于通知主播停止推流成功。
+
+     @param url 被删除的 RTMP/RTMPS 推流地址。
+     */
     virtual void onStreamUnpublished(const char *url) {
         (void)url;
     }
-/** Occurs when the publisher's transcoding is updated.
+/** @~english Occurs when the publisher's transcoding is updated.
  *
  * When the `LiveTranscoding` class in the \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" method updates, the SDK triggers the `onTranscodingUpdated` callback to report the update information to the local host.
  *
  * @note If you call the `setLiveTranscoding` method to set the LiveTranscoding class for the first time, the SDK does not trigger the `onTranscodingUpdated` callback.
  *
  */
+/** @~chinese 旁路推流设置已被更新回调。
+     *
+     * \ref agora::rtc::IRtcEngine::setLiveTranscoding "setLiveTranscoding" 方法中的直播参数 `LiveTranscoding` 更新时，`onTranscodingUpdated` 回调会被触发并向主播报告更新信息。
+     *
+     * @note 首次调用 `setLiveTranscoding` 方法设置转码参数 `LiveTranscoding` 时，不会触发此回调。
+     *
+     */
     virtual void onTranscodingUpdated() {
     }
-   /** Occurs when a voice or video stream URL address is added to a live broadcast.
+   /** @~english Occurs when a voice or video stream URL address is added to a live broadcast.
 
     @param url Pointer to the URL address of the externally injected stream.
     @param uid User ID.
     @param status State of the externally injected stream: #INJECT_STREAM_STATUS.
     */
+    /** @~chinese 输入在线媒体流状态回调。
+
+     @param url 在线媒体流的地址。
+     @param uid 用户 ID。
+     @param status 输入的在线媒体流状态: #INJECT_STREAM_STATUS 。
+     */
     virtual void onStreamInjectedStatus(const char* url, uid_t uid, int status) {
         (void)url;
         (void)uid;
         (void)status;
     }
 
-    /** Occurs when the local audio route changes.
+    /** @~english Occurs when the local audio route changes.
 
      The SDK triggers this callback when the local audio route switches to an earpiece, speakerphone, headset, or Bluetooth device.
 
@@ -4282,11 +5954,19 @@ public:
 
      @param routing Audio output routing. See: #AUDIO_ROUTE_TYPE.
      */
+    /** @~chinese 语音路由已发生变化回调。
+
+     当语音路由发生变化时，SDK 会触发此回调。
+
+     @note 该回调仅适用于安卓和 iOS 。
+
+     @param routing 当前的语音路由。详见： #AUDIO_ROUTE_TYPE 。
+     */
     virtual void onAudioRouteChanged(AUDIO_ROUTE_TYPE routing) {
 		(void)routing;
 	}
 
-   /** Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to the video after the network conditions improve.
+   /** @~english Occurs when the published media stream falls back to an audio-only stream due to poor network conditions or switches back to the video after the network conditions improve.
 
     If you call \ref IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" and set *option* as #STREAM_FALLBACK_OPTION_AUDIO_ONLY, the SDK triggers this callback when the
     published stream falls back to audio-only mode due to poor uplink conditions, or when the audio stream switches back to the video after the uplink network condition improves.
@@ -4296,11 +5976,21 @@ public:
     - true: The published stream falls back to audio-only due to poor network conditions.
     - false: The published stream switches back to the video after the network conditions improve.
     */
+    /** @~chinese 本地发布流已回退为音频流回调。
+
+     如果你调用了 \ref agora::rtc::IRtcEngine::setLocalPublishFallbackOption "setLocalPublishFallbackOption" 接口并将 option 设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY ，当上行网络环境不理想、本地发布的媒体流回退为音频流时，或当上行网络改善、媒体流恢复为音视频流时，会触发该回调。
+
+     @note 如果本地发流已回退为音频流，远端的 App 上会收到 \ref agora::rtc::IRtcEngineEventHandler::onUserMuteVideo "onUserMuteVideo" 的回调事件。
+
+     @param isFallbackOrRecover
+     - true: 由于网络环境不理想，本地发布的媒体流已回退为音频流；
+     - false: 由于网络环境改善，发布的音频流已恢复为音视频流。
+     */
     virtual void onLocalPublishFallbackToAudioOnly(bool isFallbackOrRecover) {
         (void)isFallbackOrRecover;
     }
 
-    /** Occurs when the remote media stream falls back to audio-only stream
+    /** @~english Occurs when the remote media stream falls back to audio-only stream
      * due to poor network conditions or switches back to the video stream
      * after the network conditions improve.
      *
@@ -4324,12 +6014,23 @@ public:
      * - false: The remotely subscribed media stream switches back to the
      * video stream after the network conditions improved.
      */
+    /** @~chinese 远端订阅流已回退为音频流回调。
+
+     如果你调用了 \ref agora::rtc::IRtcEngine::setRemoteSubscribeFallbackOption "setRemoteSubscribeFallbackOption" 接口并将 option 设置为 #STREAM_FALLBACK_OPTION_AUDIO_ONLY ，当下行网络环境不理想、仅接收远端音频流时，或当下行网络改善、恢复订阅音视频流时，会触发该回调。
+
+     @note 远端订阅流因弱网环境不能同时满足音视频而回退为小流时，你可以使用 RemoteVideoStats 来监控远端视频大小流的切换。
+
+     @param uid    远端用户的用户 ID。
+     @param  isFallbackOrRecover
+     - true: 由于网络环境不理想，远端订阅流已回退为音频流；
+     - false: 由于网络环境改善，订阅的音频流已恢复为音视频流。
+     */
     virtual void onRemoteSubscribeFallbackToAudioOnly(uid_t uid, bool isFallbackOrRecover) {
         (void)uid;
         (void)isFallbackOrRecover;
     }
 
-    /** Reports the transport-layer statistics of each remote audio stream.
+    /** @~english Reports the transport-layer statistics of each remote audio stream.
      *
      * @deprecated
      * This callback is deprecated and replaced by the
@@ -4347,6 +6048,23 @@ public:
      * @param rxKBitRate  Received bitrate (Kbps) of the audio packet sent
      * from the remote user.
      */
+    /** @~chinese @deprecated 通话中远端音频流传输的统计信息回调。
+     *
+     * 该回调已废弃，请改用 \ref onRemoteAudioStats() "onRemoteAudioStats"。
+     *
+     * 该回调描述远端用户通话中端到端的网络统计信息，通过音频包计算，用客观的数据，如丢包、
+     * 网络延迟等，展示当前网络状态。
+     *
+     * 通话中，当用户收到远端用户/主播发送的音频数据包后 ，会每 2 秒触发一次该回调。
+     *
+     * 和 \ref agora::rtc::IRtcEngineEventHandler::onRemoteAudioStats
+     * "onRemoteAudioStats" 回调相比，该回调以数据展示当前网络状态，因此更客观。
+     *
+     * @param uid  用户 ID，指定是哪个用户/主播的音频包。
+     * @param delay 音频包从发送端到接收端的延时（毫秒）。
+     * @param lost 音频包从发送端到接收端的丢包率 (%)。
+     * @param rxKBitRate  远端音频包的接收码率（Kbps）。
+     */
     virtual void onRemoteAudioTransportStats(
         uid_t uid, unsigned short delay, unsigned short lost,
         unsigned short rxKBitRate) {
@@ -4356,7 +6074,7 @@ public:
         (void)rxKBitRate;
     }
 
-    /** Reports the transport-layer statistics of each remote video stream.
+    /** @~english Reports the transport-layer statistics of each remote video stream.
      *
      * @deprecated
      * This callback is deprecated and replaced by the
@@ -4374,6 +6092,23 @@ public:
      * @param rxKBitRate Received bitrate (Kbps) of the video packet sent
      * from the remote user.
      */
+    /** @~chinese @deprecated 通话中远端视频流传输的统计信息回调。
+     *
+     * 该回调已废弃，请改用 \ref onRemoteVideoStats() "onRemoteVideoStats"。
+     *
+     * 该回调描述远端用户通话中端到端的网络统计信息，通过视频包计算，用客观的数据，如丢包、
+     * 网络延迟等，展示当前网络状态。
+     *
+     * 通话中，当用户收到远端用户/主播发送的视频数据包后，会每 2 秒触发一次该回调。
+     *
+     * 和 \ref agora::rtc::IRtcEngineEventHandler::onRemoteVideoStats
+     * "onRemoteVideoStats" 回调相比，该回调以数据展示当前网络状态，因此更客观。
+     *
+     * @param uid 用户 ID，指定是哪个用户/主播的视频包。
+     * @param delay 视频包从发送端到接收端的延时（毫秒）。
+     * @param lost 视频包从发送端到接收端的丢包率 (%)。
+     * @param rxKBitRate 远端视频包的接收码率（Kbps）。
+     */
     virtual void onRemoteVideoTransportStats(
         uid_t uid, unsigned short delay, unsigned short lost,
         unsigned short rxKBitRate) {
@@ -4383,7 +6118,7 @@ public:
         (void)rxKBitRate;
     }
 
-    /** Occurs when the microphone is enabled/disabled.
+    /** @~english Occurs when the microphone is enabled/disabled.
      *
      * @deprecated v2.9.0
      *
@@ -4401,13 +6136,35 @@ public:
      * - true: Enabled.
      * - false: Disabled.
      */
+    /** @~chinese 麦克风状态已改变回调。
+     *
+     * @deprecated 此方法已废弃，请改用 \ref onLocalAudioStateChanged()
+     * "onLocalAudioStateChanged" 回调的：
+     * - #LOCAL_AUDIO_STREAM_STATE_STOPPED (0)。
+     * - #LOCAL_AUDIO_STREAM_STATE_RECORDING (1)。
+     *
+     * 该回调由本地用户调用
+     * \ref agora::rtc::IRtcEngine::enableLocalAudio "enableLocalAudio"
+     * 方法开启或关闭本地音频采集触发的.
+     *
+     * @param enabled
+     * - true: 麦克风已启用；
+     * - false: 麦克风已禁用。
+     */
     virtual void onMicrophoneEnabled(bool enabled) {
         (void)enabled;
     }
-    /** Occurs when the connection state between the SDK and the server changes.
+    /** @~english Occurs when the connection state between the SDK and the server changes.
 
      @param state See #CONNECTION_STATE_TYPE.
      @param reason See #CONNECTION_CHANGED_REASON_TYPE.
+     */
+    /** @~chinese 网络连接状态已改变回调。
+
+     该回调在网络连接状态发生改变的时候触发，并告知用户当前的网络连接状态和引起网络状态改变的原因。
+
+     @param state 详见： #CONNECTION_STATE_TYPE 。
+     @param reason 详见： #CONNECTION_CHANGED_REASON_TYPE 。
      */
     virtual void onConnectionStateChanged(
         CONNECTION_STATE_TYPE state, CONNECTION_CHANGED_REASON_TYPE reason) {
@@ -4415,31 +6172,56 @@ public:
       (void)reason;
     }
 
-    /** Occurs when the local network type changes.
+    /** @~english Occurs when the local network type changes.
 
 	When the network connection is interrupted, this callback indicates whether the interruption is caused by a network type change or poor network conditions.
 
      @param type See #NETWORK_TYPE.
      */
+    /** @~chinese 本地网络类型发生改变回调。
+
+     本地网络连接类型发生改变时，SDK 会触发该回调，并在回调中明确当前的网络连接类型。
+
+     你可以通过该回调获取正在使用的网络类型；当连接中断时，该回调能辨别引起中断的原因是网络切换还是网络条件不好。
+
+     @param type 详见： #NETWORK_TYPE 。
+     */
     virtual void onNetworkTypeChanged(NETWORK_TYPE type) {
       (void)type;
     }
-    /** Occurs when the local user successfully registers a user account by calling the \ref agora::rtc::IRtcEngine::registerLocalUserAccount "registerLocalUserAccount" method or joins a channel by calling the \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" method.This callback reports the user ID and user account of the local user.
+    /** @~english Occurs when the local user successfully registers a user account by calling the \ref agora::rtc::IRtcEngine::registerLocalUserAccount "registerLocalUserAccount" method or joins a channel by calling the \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" method.This callback reports the user ID and user account of the local user.
 
      @param uid The ID of the local user.
      @param userAccount The user account of the local user.
+     */
+    /** @~chinese 本地用户成功注册 User Account 回调。
+
+     本地用户成功调用 \ref agora::rtc::IRtcEngine::registerLocalUserAccount "registerLocalUserAccount" 方法注册用户 User Account 或
+     调用 \ref agora::rtc::IRtcEngine::joinChannelWithUserAccount "joinChannelWithUserAccount" 加入频道后，
+     SDK 会触发该回调，并告知本地用户的 UID 和 User Account。
+
+     @param uid 本地用户的 UID
+     @param userAccount 本地用户的 User Account
      */
     virtual void onLocalUserRegistered(uid_t uid, const char* userAccount) {
       (void)uid;
       (void)userAccount;
     }
-    /** Occurs when the SDK gets the user ID and user account of the remote user.
+    /** @~english Occurs when the SDK gets the user ID and user account of the remote user.
 
      After a remote user joins the channel, the SDK gets the UID and user account of the remote user,
      caches them in a mapping table object (`userInfo`), and triggers this callback on the local client.
 
      @param uid The ID of the remote user.
      @param info The `UserInfo` object that contains the user ID and user account of the remote user.
+     */
+    /** @~chinese 远端用户信息已更新回调。
+
+     远端用户加入频道后， SDK 会获取到该远端用户的 UID 和 User Account，然后缓存一个包含了远端用户 UID 和 User Account 的 Mapping 表，
+     并在本地触发该回调。
+
+     @param uid 远端用户的 UID
+     @param info 标识用户信息的 `UserInfo` 对象，包含用户 UID 和 User Account
      */
     virtual void onUserInfoUpdated(uid_t uid, const UserInfo& info) {
       (void)uid;
